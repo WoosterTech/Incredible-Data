@@ -1,0 +1,96 @@
+version: '3'
+
+volumes:
+  incredible_data_local_postgres_data: {}
+  incredible_data_local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: incredible_data_local_django
+    container_name: incredible_data_local_django
+    depends_on:
+      - postgres
+      - redis
+      - mailpit
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - '${DJANGO_PORT-8500}:8000'
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: incredible_data_production_postgres
+    container_name: incredible_data_local_postgres
+    volumes:
+      - incredible_data_local_postgres_data:/var/lib/postgresql/data
+      - incredible_data_local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: incredible_data_local_docs
+    container_name: incredible_data_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./incredible_data:/app/incredible_data:z
+    ports:
+      - '${DOCS_PORT-9500}:9000'
+    command: /start-docs
+
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: incredible_data_local_mailpit
+    env_file:
+      - ./.envs/.local/.django
+    ports:
+      - "${EMAIL_PORT-8026}:8025"
+      - "1025:1025"
+
+  redis:
+    image: docker.io/redis:6
+    container_name: incredible_data_local_redis
+
+  celeryworker:
+    <<: *django
+    image: incredible_data_local_celeryworker
+    container_name: incredible_data_local_celeryworker
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+    ports: []
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: incredible_data_local_celerybeat
+    container_name: incredible_data_local_celerybeat
+    depends_on:
+      - redis
+      - postgres
+      - mailpit
+    ports: []
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: incredible_data_local_flower
+    container_name: incredible_data_local_flower
+    ports:
+      - '5555:5555'
+    command: /start-flower

@@ -1,0 +1,6 @@
+{
+    "esbonio.sphinx.confDir": "",
+    "files.associations": {
+        "*.in": "pip-requirements",
+    }
+}

@@ -1,0 +1,6 @@
+# used by compose/production/django/Dockerfile
+
+# build using compose/build/Dockerfile
+# 1. docker build -t alleima/pip-compile-production --build-arg BUILD_ENVIRONMENT=production -f ./compose/build/Dockerfile .
+# 2. docker run alleima/pip-compile-production > ./requirements/linux-py3.11-production.txt
+-r linux-py3.11-production.txt
