@@ -1,8 +1,7 @@
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
-from django.db.models import EmailField
+from django.db.models import CharField, EmailField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -11,7 +10,7 @@ from .managers import UserManager
 
 class User(AbstractUser):
     """
-    Default custom user model for ASM Operations.
+    Default custom user model for Incredible Data.
     If adding fields that need to be filled at user signup,
     check forms.SignupForm and forms.SocialSignupForms accordingly.
     """

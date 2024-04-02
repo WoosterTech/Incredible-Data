@@ -98,6 +98,7 @@ django==5.0.3
     #   django-extensions
     #   django-import-export
     #   django-model-utils
+    #   django-phonenumber-field
     #   django-picklefield
     #   django-redis
     #   django-stubs
@@ -121,6 +122,7 @@ django-extensions==3.2.3
 django-grappelli @ git+https://github.com/sehmaschine/django-grappelli.git@8d1bc5927972f20eb0485e5e419bf5c71982dcff
 django-import-export==3.3.7
 django-model-utils==4.4.0
+django-phonenumber-field==7.3.0
 django-picklefield==3.1
     # via django-constance
 django-redis==5.4.0
@@ -233,6 +235,8 @@ pathspec==0.12.1
     # via djlint
 pexpect==4.9.0
     # via ipython
+phonenumberslite==8.13.32
+    # via django-phonenumber-field
 pillow==10.2.0
 platformdirs==4.2.0
     # via virtualenv

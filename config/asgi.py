@@ -1,6 +1,6 @@
 # ruff: noqa
 """
-ASGI config for ASM Operations project.
+ASGI config for Incredible Data project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

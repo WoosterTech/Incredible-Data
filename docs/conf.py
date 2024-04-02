@@ -28,7 +28,7 @@ django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = "ASM Operations"
+project = "Incredible Data"
 copyright = """2024, Karl Wooster"""
 author = "Karl Wooster"
 

@@ -1,8 +1,6 @@
 # ruff: noqa: E501
 from .base import *  # noqa: F403
-from .base import INSTALLED_APPS
-from .base import MIDDLEWARE
-from .base import env
+from .base import INSTALLED_APPS, MIDDLEWARE, env
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -14,13 +12,7 @@ SECRET_KEY = env(
     default="hcur9O8IEHrNhyXXJTdTtLpPZf0v4Grfgwy7zqDFhyt5tz4xjzuX6ZVURyBnvnV4",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [
-    "localhost",
-    "0.0.0.0",  # noqa: S104
-    "127.0.0.1",
-    ".ngrok-free.app",
-    ".tailafab7.ts.net",
-]
+ALLOWED_HOSTS = ["*"]
 
 # CACHES
 # ------------------------------------------------------------------------------

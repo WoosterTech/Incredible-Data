@@ -1,6 +1,6 @@
 # ruff: noqa
 """
-WSGI config for ASM Operations project.
+WSGI config for Incredible Data project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable

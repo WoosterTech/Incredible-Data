@@ -1,4 +1,4 @@
-# Translations for the ASM Operations project
+# Translations for the Incredible Data project
 # Copyright (C) 2024 Karl Wooster
 # Karl Wooster <karl.wooster@alleima.com>, 2024.
 #

@@ -87,13 +87,17 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "import_export",
+    "phonenumber_field",
 ]
 
 LOCAL_APPS = [
     "incredible_data.users",
-    "incredible_data.reports",
-    "incredible_data.business_definitions",
+    # "incredible_data.reports",
+    # "incredible_data.business_definitions",
     "incredible_data.customers",
+    "incredible_data.contacts",
+    "incredible_data.bins",
+    "incredible_data.assets",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -348,10 +352,11 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "ASM Operations API",
-    "DESCRIPTION": "Documentation of API endpoints of ASM Operations",
+    "TITLE": "Incredible Data API",
+    "DESCRIPTION": "Documentation of API endpoints of Incredible Data",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+PHONENUMBER_DEFAULT_REGION = "US"

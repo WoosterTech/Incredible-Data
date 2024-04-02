@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   incredible_data_local_postgres_data: {}
   incredible_data_local_postgres_data_backups: {}
@@ -59,7 +57,7 @@ services:
       - ./.envs/.local/.django
     ports:
       - "${EMAIL_PORT-8026}:8025"
-      - "1025:1025"
+      # - "1025:1025"
 
   redis:
     image: docker.io/redis:6
