@@ -151,7 +151,7 @@ ignore = [
 ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
-unfixable = []
+unfixable = ["F401"]
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
@@ -208,6 +208,9 @@ django-cors-headers = "^4.3.1"
 drf-spectacular = "^0.27.2"
 django-constance = {extras = ["redis"], version = "^3.1.0"}
 django-import-export = "^3.3.7"
+django-money = "^3.4.1"
+furl = "^2.1.3"
+azure-ai-documentintelligence = "^1.0.0b2"
 
 [tool.poetry.group.dev.dependencies]
 Werkzeug = {extras = ["watchdog"], version = "^3.0.2"}
