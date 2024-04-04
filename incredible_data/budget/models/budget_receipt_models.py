@@ -8,6 +8,7 @@ from djmoney.models.fields import MoneyField
 from model_utils.models import TimeStampedModel
 
 from incredible_data.budget.budget_custom_fields import SimplePercentageField
+from incredible_data.budget.receipt_services import analyze_receipt_file
 from incredible_data.customers.models import UserStampedModel
 
 
@@ -55,3 +56,8 @@ class Receipt(TimeStampedModel, UserStampedModel):
         if self.merchant is not None and self.transaction_date is not None:
             return f"Receipt({self.merchant} - {self.transaction_date:%Y%m%d} - {self.grand_total}"  # noqa: E501
         return f"uploaded file: {self.receipt_file}"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            analyze_receipt_file.delay()
+        return super().save(*args, **kwargs)
