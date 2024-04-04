@@ -97,7 +97,6 @@ LOCAL_APPS = [
     "incredible_data.customers",
     "incredible_data.contacts",
     "incredible_data.bins",
-    "incredible_data.assets",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
