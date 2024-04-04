@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from incredible_data.contacts.admin import UserStampedModelAdmin
 
-from .models import Container, ContainerStyle
+from .models.bins_container_models import Container, ContainerStyle
 
 # Register your models here.
 admin.site.register(ContainerStyle)
