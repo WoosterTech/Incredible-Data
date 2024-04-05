@@ -44,9 +44,9 @@ services:
     volumes:
       - production_traefik:/etc/traefik/acme
     ports:
-      - '0.0.0.0:80:80'
-      - '0.0.0.0:443:443'
-      - '0.0.0.0:5555:5555'
+      - '0.0.0.0:12080:80'
+      - '0.0.0.0:12443:443'
+      - '0.0.0.0:17555:5555'
 
   redis:
     image: docker.io/redis:6
