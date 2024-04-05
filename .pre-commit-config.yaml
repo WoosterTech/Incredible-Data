@@ -2,10 +2,10 @@ ci:
   autoupdate_schedule: weekly
   skip: []
   submodules: false
-default_language_version:
-  python: python3.11
+
 default_stages:
 - commit
+
 exclude: ^docs/|/migrations/|devcontainer.json
 repos:
 - hooks:
@@ -56,4 +56,4 @@ repos:
     rev: v3.15.2
     hooks:
     -   id: pyupgrade
-        args: [--py311-plus]
+        args: [--py311-plus,--py36-plus,--py37-plus,--py38-plus,--py39-plus,--py310-plus]

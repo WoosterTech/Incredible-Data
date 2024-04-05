@@ -3,7 +3,7 @@ from typing import Any
 from django.core.management.base import BaseCommand, CommandParser
 from django.utils.translation import gettext_lazy as _
 
-from incredible_data.bins.models import Container
+from incredible_data.bins.models.bins_container_models import Container
 
 
 class Command(BaseCommand):

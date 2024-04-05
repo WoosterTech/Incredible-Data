@@ -88,6 +88,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "import_export",
     "phonenumber_field",
+    "djmoney",
 ]
 
 LOCAL_APPS = [
@@ -97,7 +98,7 @@ LOCAL_APPS = [
     "incredible_data.customers",
     "incredible_data.contacts",
     "incredible_data.bins",
-    "incredible_data.assets",
+    "incredible_data.budget",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -360,3 +361,9 @@ SPECTACULAR_SETTINGS = {
 # Your stuff...
 # ------------------------------------------------------------------------------
 PHONENUMBER_DEFAULT_REGION = "US"
+
+CURRENCIES = ("USD",)
+DEFAULT_CURRENCY = "USD"
+
+AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
+AZURE_KEY = env.str("DJANGO_AZURE_KEY")
