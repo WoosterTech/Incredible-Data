@@ -365,5 +365,14 @@ PHONENUMBER_DEFAULT_REGION = "US"
 CURRENCIES = ("USD",)
 DEFAULT_CURRENCY = "USD"
 
-AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
-AZURE_KEY = env.str("DJANGO_AZURE_KEY")
+CONSTANCE_CONFIG = {
+    "AZURE_ENDPOINT": (
+        "Set Azure Endpoint",
+        "Azure Endpoint assigned to project for receipt ML.",
+        str,
+    ),
+    "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
+}
+
+# AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
+# AZURE_KEY = env.str("DJANGO_AZURE_KEY")

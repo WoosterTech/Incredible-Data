@@ -18,7 +18,7 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/about.html"),
         name="about",
     ),
-    path("grappelli/", include("grappelli.urls")),
+    # path("grappelli/", include("grappelli.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

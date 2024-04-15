@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='container',
             name='id',
-            field=models.UUIDField(default=incredible_data.bins.bins_container_models.short_uuid, primary_key=True, serialize=False),
+            field=models.UUIDField(default=incredible_data.bins.models.bins_container_models.short_uuid, primary_key=True, serialize=False),
         ),
     ]

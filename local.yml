@@ -34,21 +34,21 @@ services:
     env_file:
       - ./.envs/.local/.postgres
 
-  docs:
-    image: incredible_data_local_docs
-    container_name: incredible_data_local_docs
-    build:
-      context: .
-      dockerfile: ./compose/local/docs/Dockerfile
-    env_file:
-      - ./.envs/.local/.django
-    volumes:
-      - ./docs:/docs:z
-      - ./config:/app/config:z
-      - ./incredible_data:/app/incredible_data:z
-    ports:
-      - '${DOCS_PORT-9500}:9000'
-    command: /start-docs
+  # docs:
+  #   image: incredible_data_local_docs
+  #   container_name: incredible_data_local_docs
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/local/docs/Dockerfile
+  #   env_file:
+  #     - ./.envs/.local/.django
+  #   volumes:
+  #     - ./docs:/docs:z
+  #     - ./config:/app/config:z
+  #     - ./incredible_data:/app/incredible_data:z
+  #   ports:
+  #     - '${DOCS_PORT-9500}:9000'
+  #   command: /start-docs
 
   mailpit:
     image: docker.io/axllent/mailpit:latest
@@ -85,10 +85,10 @@ services:
     ports: []
     command: /start-celerybeat
 
-  flower:
-    <<: *django
-    image: incredible_data_local_flower
-    container_name: incredible_data_local_flower
-    ports:
-      - '5555:5555'
-    command: /start-flower
+  # flower:
+  #   <<: *django
+  #   image: incredible_data_local_flower
+  #   container_name: incredible_data_local_flower
+  #   ports:
+  #     - '5555:5555'
+  #   command: /start-flower
