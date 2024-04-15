@@ -70,7 +70,7 @@ DJANGO_APPS = [
     # constance > grappelli > django.contrib.admin
     "constance",
     # "grappelli.dashboard",
-    "grappelli",
+    # "grappelli",
     "django.contrib.admin",
     "django.forms",
 ]

@@ -22,7 +22,7 @@ COPY ./requirements /requirements
 
 # create python dependency wheels
 RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels  \
-  -r /requirements/linux-py${VERSION}-docs.txt \
+  -r /requirements/production.txt \
   && rm -rf /requirements
 
 
