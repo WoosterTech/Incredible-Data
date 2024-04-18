@@ -3,4 +3,7 @@
 # build using compose/build/Dockerfile
 # 1. docker build -t pip-compile-local --build-arg BUILD_ENVIRONMENT=local -f ./compose/build/Dockerfile .
 # 2. docker run pip-compile-local > ./requirements/linux-py3.11-local.txt
+
+# from root directory
+# poetry export --with dev,test,binary -o requirements/linux-py3.11-local.txt
 -r linux-py3.11-local.txt

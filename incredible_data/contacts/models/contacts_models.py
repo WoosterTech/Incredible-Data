@@ -5,7 +5,7 @@ from django_extensions.db.fields import AutoSlugField
 from model_utils.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from incredible_data.customers.models import UserStampedModel
+from incredible_data.contacts.models.utility_models import UserStampedModel
 
 
 class ContactPrimaryBaseModel(models.Model):

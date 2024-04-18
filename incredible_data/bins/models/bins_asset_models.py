@@ -6,7 +6,7 @@ from django_extensions.db.fields import AutoSlugField, ShortUUIDField
 from django_extensions.db.models import TitleSlugDescriptionModel
 from model_utils.models import TimeStampedModel
 
-from incredible_data.contacts.models import UserStampedModel
+from incredible_data.contacts.models.utility_models import UserStampedModel
 
 
 class Manufacturer(TitleSlugDescriptionModel):

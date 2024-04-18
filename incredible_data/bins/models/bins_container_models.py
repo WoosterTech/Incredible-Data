@@ -6,7 +6,7 @@ from django_extensions.db.fields import AutoSlugField
 from django_extensions.db.models import TitleSlugDescriptionModel
 from model_utils.models import TimeStampedModel
 
-from incredible_data.contacts.models import UserStampedModel
+from incredible_data.contacts.models.utility_models import UserStampedModel
 
 
 # Create your models here.
@@ -16,6 +16,9 @@ def short_uuid() -> str:
 
 class ContainerStyle(TitleSlugDescriptionModel):
     """For easy visual identification of bins/containers."""
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Container(TimeStampedModel, UserStampedModel):

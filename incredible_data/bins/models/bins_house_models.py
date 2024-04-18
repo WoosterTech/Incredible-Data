@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 from model_utils.models import TimeStampedModel
 
-from incredible_data.contacts.models import UserStampedModel
+from incredible_data.contacts.models.utility_models import UserStampedModel
 
 
 class JournalEntry(TimeStampedModel, UserStampedModel):

@@ -1,0 +1,203 @@
+{% load static %}
+{% load purchases_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>A simple, clean, and responsive HTML invoice template</title>
+    <style>
+      .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+      }
+
+      .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+      }
+
+      .invoice-box table td {
+        padding: 5px;
+        vertical-align: top;
+      }
+
+      .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+      }
+
+      .invoice-box table tr.top table td {
+        padding-bottom: 20px;
+      }
+
+      .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 45px;
+        color: #333;
+      }
+
+      .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+      }
+
+      .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+      }
+
+      .invoice-box table tr.details td {
+        padding-bottom: 20px;
+      }
+
+      .invoice-box table tr.item td {
+        border-bottom: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item.last td {
+        border-bottom: none;
+      }
+
+      .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+      }
+
+      .invoice-box table.terms-field {
+        border: 2px solid #eee;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+
+        .invoice-box table tr.information table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+      }
+
+      /** RTL **/
+      .invoice-box.rtl {
+        direction: rtl;
+        font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      }
+
+      .invoice-box.rtl table {
+        text-align: right;
+      }
+
+      .invoice-box.rtl table tr td:nth-child(2) {
+        text-align: left;
+      }
+
+      img.logo {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      @media print {
+        .invoice-box {
+          max-width: unset;
+          box-shadow: none;
+          border: 0px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-box">
+      <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td class="title">
+                  <img class="logo" src="{% static "/images/logo_color_300w.png" %}" alt="Messy House Creations Logo" />
+                </td>
+                <td>
+                  Invoice #: {{ invoice.number }}
+                  <br />
+                  Created: {{ invoice.created|date:"F j, Y" }}
+                  <br />
+                  Due: {{ invoice.due_date|date:"F j, Y" }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="information">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td>
+                  Messy House Creations
+                  <br />
+                  7711 Thetis Dr
+                  <br />
+                  Pasco, WA 99301
+                </td>
+                <td>
+                  {{ invoice.customer.organization_name }}
+                  <br />
+                  {{ invoice.customer.contact_name }}
+                  <br />
+                  {{ invoice.customer.contact_email }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table class="invoice-lines">
+        <tr class="heading">
+          <td></td>
+          <td>Description</td>
+          <td>Quantity</td>
+          <td>Unit Price</td>
+          <td>Extended Price</td>
+        </tr>
+        {% for line in invoice.invoiceline_set.all|dictsort:"rank" %}
+          <tr class="item">
+            <td>{{ line.rank }}</td>
+            <td>{{ line.description }}</td>
+            <td>{{ line.quantity|floatformat:"2g" }}</td>
+            <td>{{ line.unit_price|usd_accounting }}</td>
+            <td>{{ line.extended_price|usd_accounting }}</td>
+          </tr>
+        {% endfor %}
+        <tr class="total">
+          <td colspan=3></td>
+          <td>Total:</td>
+          <td>{{ invoice.grand_total|usd_accounting }}</td>
+        </tr>
+      </table>
+      <table class="terms-field">
+        <tr class="text-heading">
+          <td>Notes</td>
+        </tr>
+        <tr>
+          <td>{{ invoice.notes }}</td>
+        </tr>
+        <tr class="text-heading">
+          <td>Terms</td>
+        </tr>
+        <tr>
+          <td>{{ invoice.terms }}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

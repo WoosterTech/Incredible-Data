@@ -211,6 +211,7 @@ django-import-export = "^3.3.7"
 django-money = "^3.4.1"
 furl = "^2.1.3"
 azure-ai-documentintelligence = "^1.0.0b2"
+django-dbbackup = "^4.1.0"
 
 [tool.poetry.group.dev]
 optional=true

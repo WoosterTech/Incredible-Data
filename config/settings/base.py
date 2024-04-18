@@ -99,6 +99,7 @@ LOCAL_APPS = [
     "incredible_data.contacts",
     "incredible_data.bins",
     "incredible_data.budget",
+    "incredible_data.business",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -364,6 +365,8 @@ PHONENUMBER_DEFAULT_REGION = "US"
 
 CURRENCIES = ("USD",)
 DEFAULT_CURRENCY = "USD"
+
+CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
 
 CONSTANCE_CONFIG = {
     "AZURE_ENDPOINT": (

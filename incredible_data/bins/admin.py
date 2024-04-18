@@ -10,4 +10,4 @@ admin.site.register(ContainerStyle)
 
 @admin.register(Container)
 class ContainerAdmin(UserStampedModelAdmin):
-    list_display = ["id", "contents", "created_by"]
+    list_display = ["id", "contents", "created_by_name"]

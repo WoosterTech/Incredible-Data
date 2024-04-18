@@ -24,6 +24,10 @@ class UserStampedModelAdmin(admin.ModelAdmin):
 
         return initial
 
+    @admin.display(description="Created By")
+    def created_by_name(self, obj):
+        return obj.created_by.name
+
 
 def get_logged_in_user(request: HttpRequest) -> str:
     user = request.user

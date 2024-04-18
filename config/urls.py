@@ -25,7 +25,7 @@ urlpatterns = [
     path("users/", include("incredible_data.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    # ...
+    path("business/", include("incredible_data.business.urls", namespace="business")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
