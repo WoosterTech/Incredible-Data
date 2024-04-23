@@ -1,3 +1,13 @@
+## 0.2.1 (2024-04-23)
+
+### Fix
+
+- **receipts**: functional celery task for analyzing receipts
+
+### Refactor
+
+- **basenumberedmodel**: create and start using basenumberedmodel
+
 ## 0.2.0 (2024-04-17)
 
 ### Feat
