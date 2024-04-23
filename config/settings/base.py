@@ -68,7 +68,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
     # constance > grappelli > django.contrib.admin
-    "constance",
+    # "constance",
     # "grappelli.dashboard",
     # "grappelli",
     "django.contrib.admin",
@@ -366,16 +366,16 @@ PHONENUMBER_DEFAULT_REGION = "US"
 CURRENCIES = ("USD",)
 DEFAULT_CURRENCY = "USD"
 
-CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
+# CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
 
-CONSTANCE_CONFIG = {
-    "AZURE_ENDPOINT": (
-        "Set Azure Endpoint",
-        "Azure Endpoint assigned to project for receipt ML.",
-        str,
-    ),
-    "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
-}
+# CONSTANCE_CONFIG = {
+#     "AZURE_ENDPOINT": (
+#         "Set Azure Endpoint",
+#         "Azure Endpoint assigned to project for receipt ML.",
+#         str,
+#     ),
+#     "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
+# }
 
-# AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
-# AZURE_KEY = env.str("DJANGO_AZURE_KEY")
+AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
+AZURE_KEY = env.str("DJANGO_AZURE_KEY")

@@ -1,9 +1,12 @@
 import logging
 
-from budget_custom_form_fields import SimplePercentageField as SimplePercentageFormField
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from .budget_custom_form_fields import (
+    SimplePercentageField as SimplePercentageFormField,
+)
 
 logger = logging.getLogger(__name__)
 log_kwargs = {

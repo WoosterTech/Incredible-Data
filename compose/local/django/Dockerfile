@@ -23,7 +23,7 @@ COPY ./requirements .
 
 # Create Python Dependency and Sub-Dependency Wheels.
 RUN pip wheel --wheel-dir /usr/src/app/wheels  \
-  -r linux-py${VERSION}-${BUILD_ENVIRONMENT}.txt
+  -r ${BUILD_ENVIRONMENT}.txt
 
 
 # Python 'run' stage

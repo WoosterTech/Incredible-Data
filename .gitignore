@@ -279,3 +279,4 @@ incredible_data/media/
 .env
 .envs/*
 !.envs/.local/
+incredible_data/budget/test_receipt.json

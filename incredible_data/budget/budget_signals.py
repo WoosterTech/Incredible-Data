@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models.budget_receipt_models import Merchant, MerchantAlias
+from .models import Merchant, MerchantAlias
 
 
 @receiver(post_save, sender=Merchant)

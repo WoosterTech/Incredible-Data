@@ -1,16 +1,24 @@
+import logging
 from pathlib import Path
 
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import ShortUUIDField
 from django_extensions.db.models import TitleSlugDescriptionModel
 from djmoney.models.fields import MoneyField
-from model_utils.models import TimeStampedModel
 
-from incredible_data.budget.budget_custom_fields import SimplePercentageField
-from incredible_data.budget.receipt_services import analyze_receipt_file
-from incredible_data.customers.models import UserStampedModel
+from .budget_custom_fields import SimplePercentageField
+
+logger = logging.getLogger(__name__)
+if settings.DEBUG:
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
+
+ALLOWED_RECEIPT_EXTENSIONS = ["pdf", "png", "jpg"]
 
 
 def uploaded_receipt_path(instance: models.Model, filename: str) -> str:
@@ -38,10 +46,25 @@ class MerchantAlias(models.Model):
         return f"{self.alias} <-> {self.matched_merchant}"
 
 
-class Receipt(TimeStampedModel, UserStampedModel):
-    receipt_file = models.FileField(
-        _("receipt"), upload_to="upload/receipts/%Y/%m/", max_length=100
+class ReceiptFile(models.Model):
+    file = models.FileField(
+        _("receipt file"),
+        upload_to="upload/receipts/%Y/%m/",
+        max_length=100,
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_RECEIPT_EXTENSIONS)
+        ],
     )
+    analyze_result = models.JSONField(editable=False, null=True)
+    analyzed_datetime = models.DateTimeField(
+        _("analyzed at"), editable=False, null=True
+    )
+
+    def __str__(self) -> str:
+        return self.file.name
+
+
+class Receipt(models.Model):
     merchant = models.ForeignKey(
         Merchant,
         verbose_name=_("merchant"),
@@ -59,23 +82,32 @@ class Receipt(TimeStampedModel, UserStampedModel):
     grand_total = MoneyField(
         _("grand total"), blank=True, default=0, max_digits=19, decimal_places=4
     )
+    grand_total_confidence = SimplePercentageField(
+        _("grand total confidence"), max_digits=10, decimal_places=4
+    )
     tax_rate = SimplePercentageField(
-        _("tax rate"), help_text=_("if applicable"), default=0.089
+        _("tax rate"),
+        decimal_places=5,
+        max_digits=15,
+        help_text=_("if applicable"),
+        default=0.089,
+    )
+    receipt_file = models.ForeignKey(
+        ReceiptFile,
+        verbose_name=_("linked receipt"),
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
 
     def __str__(self) -> str:
         if self.merchant is not None and self.transaction_date is not None:
-            return f"Receipt({self.merchant} - {self.transaction_date:%Y%m%d} - {self.grand_total}"  # noqa: E501
+            return f"Receipt({self.merchant} - {self.transaction_date} - {self.grand_total})"  # noqa: E501
         return f"uploaded file: {self.receipt_file}"
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            analyze_receipt_file.delay()
-        return super().save(*args, **kwargs)
 
 
 class ReceiptItem(models.Model):
-    uuid = ShortUUIDField(primary_key=True, max_length=10)
+    uuid = ShortUUIDField(primary_key=True)
     product_code = models.CharField(_("product code or UPC"), max_length=50, blank=True)
     description = models.CharField(_("description"), max_length=100, blank=True)
     total_price = MoneyField(

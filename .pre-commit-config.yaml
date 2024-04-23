@@ -55,5 +55,6 @@ repos:
     hooks:
     - id: poetry-check
     - id: poetry-lock
+      args: [--no-update]
     - id: poetry-export
       args: [--with, "dev,production,c",-o,"requirements/production.txt"]
