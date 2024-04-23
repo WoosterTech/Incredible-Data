@@ -22,7 +22,7 @@ class Project(BaseNumberedModel):
     number_config = {
         "prefix": "PJ",
         "width": 4,
-        "start_value": 137,
+        "start_value": 100,
     }
 
     def __str__(self) -> str:

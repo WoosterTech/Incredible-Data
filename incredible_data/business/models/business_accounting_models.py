@@ -12,6 +12,7 @@ from model_utils.models import StatusModel, TimeStampedModel
 from slugify import slugify
 
 from incredible_data.contacts.models.utility_models import (
+    BaseNumberedModel,
     NumberedModel,
     UserStampedModel,
 )
@@ -25,10 +26,7 @@ def thirty_days() -> date:
     return timezone.now() + timedelta(days=30)
 
 
-class Order(TimeStampedModel, UserStampedModel, NumberedModel):
-    number = models.CharField(_("order number"), max_length=10, editable=False)
-    number_prefix = "MHC"
-    number_width = 4
+class Order(BaseNumberedModel):
     customer = models.ForeignKey(
         "customers.Customer",
         verbose_name=_("customer"),
@@ -39,6 +37,15 @@ class Order(TimeStampedModel, UserStampedModel, NumberedModel):
         default=fourteen_days,
     )
     notes = models.TextField(_("order notes"), blank=True)
+    slug = AutoSlugField(populate_from=["customer", "number"])
+    number_config = {
+        "prefix": "MHC",
+        "width": 4,
+        "start_value": 1,
+    }
+
+    def __str__(self) -> str:
+        return f"{self.number} - {self.customer}"
 
 
 class Invoice(TimeStampedModel, UserStampedModel, StatusModel, NumberedModel):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from incredible_data.contacts.models import Contact, Email, PhoneNumber
+from incredible_data.contacts.models.utility_models import DocumentNumber
 from incredible_data.customers.admin import UserStampedModelAdmin
 
 
@@ -18,3 +19,6 @@ class EmailAdmin(UserStampedModelAdmin):
 @admin.register(PhoneNumber)
 class PhoneNumberAdmin(UserStampedModelAdmin):
     list_display = ["contact", "number"]
+
+
+admin.site.register(DocumentNumber)
