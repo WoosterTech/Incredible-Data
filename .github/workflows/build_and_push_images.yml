@@ -9,9 +9,9 @@ on:
 jobs:
   push-django-image:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "./incredible_data"
+    # defaults:
+    #   run:
+    #     working-directory: "./incredible_data"
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@main
