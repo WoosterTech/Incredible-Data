@@ -43,24 +43,3 @@ jobs:
         run: |
             docker build . --file "compose/production/nginx/Dockerfile" --tag ghcr.io/woostertech/incredible_data_local_nginx:latest
             docker push ghcr.io/woostertech/incredible_data_local_nginx:latest
-
-  push-postgres-image:
-    runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: "./incredible_data"
-    steps:
-      - name: "Checkout GitHub Action"
-        uses: actions/checkout@main
-
-      - name: "Login to GitHub Container Registry"
-        uses: docker/login-action@v3
-        with:
-            registry: ghcr.io
-            username: ${{github.actor}}
-            password: ${{secrets.GITHUB_TOKEN}}
-
-      - name: "Build Inventory Image"
-        run: |
-            docker build . --file "compose/production/django/Dockerfile" --tag ghcr.io/woostertech/incredible_data_production_django:latest
-            docker push ghcr.io/woostertech/incredible_data_production_django:latest

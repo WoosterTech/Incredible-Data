@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 from decimal import Decimal
@@ -58,7 +59,10 @@ def create_receipt(receipt_file: ReceiptFile) -> tuple[Receipt, bool]:
     analyze_json = json.loads(receipt_file.analyze_result)
     analysis_b = benedict(analyze_json)
     fields = benedict()
+    items_field = benedict()
     for document in analysis_b.documents:
+        with contextlib.suppress(AttributeError):
+            items_field.merge(document.fields.Items)
         fields.merge(document.fields)
 
     merchant = fields.MerchantName
@@ -82,7 +86,7 @@ def create_receipt(receipt_file: ReceiptFile) -> tuple[Receipt, bool]:
         },
     )
 
-    items: list[benedict] = fields.Items.valueArray
+    items: list[benedict] = items_field.valueArray
 
     if not created:
         count, _ = ReceiptItem.objects.filter(parent_receipt=receipt_obj).delete()
