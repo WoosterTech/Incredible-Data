@@ -18,6 +18,3 @@ DOCS_PORT=9500
 EMAIL_PORT=8026
 
 DJANGO_DEBUG = true
-
-DJANGO_AZURE_ENDPOINT = https://power-receipt.cognitiveservices.azure.com/
-DJANGO_AZURE_KEY = 6e2337596a5b4c2ba8df413cea15eed8
