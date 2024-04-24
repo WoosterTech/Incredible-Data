@@ -25,5 +25,5 @@ jobs:
 
       - name: "Build Inventory Image"
         run: |
-            docker build . --file "./compose/production/django/Dockerfile" --tag ghcr.io/woostertech/incredible_data_production_django:latest
+            docker build . --file "compose/production/django/Dockerfile" --tag ghcr.io/woostertech/incredible_data_production_django:latest
             docker push ghcr.io/woostertech/incredible_data_production_django:latest
