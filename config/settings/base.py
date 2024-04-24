@@ -67,10 +67,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    # constance > grappelli > django.contrib.admin
     # "constance",
-    # "grappelli.dashboard",
-    # "grappelli",
     "django.contrib.admin",
     "django.forms",
 ]
@@ -86,21 +83,21 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    # added
+    "djmoney",
+    "funky_sheets",
     "import_export",
     "phonenumber_field",
-    "djmoney",
 ]
 
 LOCAL_APPS = [
+    # sorted alphabetically except for "users"
     "incredible_data.users",
-    # "incredible_data.reports",
-    # "incredible_data.business_definitions",
-    "incredible_data.customers",
-    "incredible_data.contacts",
     "incredible_data.bins",
     "incredible_data.budget",
     "incredible_data.business",
-    # Your stuff: custom apps go here
+    "incredible_data.contacts",
+    "incredible_data.customers",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

@@ -5,7 +5,7 @@ from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
-from .models import Merchant, Receipt, ReceiptFile, ReceiptItem
+from .models import ExpenseCategory, Merchant, Receipt, ReceiptFile, ReceiptItem
 from .receipt_services import analyze_receipt_file, create_receipt
 
 logger = logging.getLogger(__name__)
@@ -66,5 +66,9 @@ class ReceiptAdmin(admin.ModelAdmin):
 
 @admin.register(ReceiptItem)
 class ReceiptItemAdmin(admin.ModelAdmin):
-    list_display = ["product_code", "description", "total_price"]
-    list_filter = ["parent_receipt"]
+    list_display = ["product_code", "expense_category", "description", "total_price"]
+    list_filter = ["parent_receipt", "expense_category"]
+    list_editable = ["expense_category"]
+
+
+admin.site.register(ExpenseCategory)

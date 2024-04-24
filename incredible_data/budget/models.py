@@ -6,7 +6,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django_extensions.db.fields import ShortUUIDField
+from django_extensions.db.fields import AutoSlugField, ShortUUIDField
 from django_extensions.db.models import TitleSlugDescriptionModel
 from djmoney.models.fields import MoneyField
 
@@ -19,6 +19,33 @@ else:
     logger.setLevel(logging.INFO)
 
 ALLOWED_RECEIPT_EXTENSIONS = ["pdf", "png", "jpg"]
+
+
+class ReversableModel(models.Model):
+    """Adds a `get_absolute_url` method.
+
+    Args:
+        reverse_viewname (str): Name of the view to point to.
+        reverse_kwargs (dict[str, str]): The kwargs to pass to `reverse` with the values
+            as strings. Uses `getattr(self, value)` to get the actual value.
+            Defaults to `{"pk", "pk"}`.
+    """
+
+    reverse_viewname: str
+    reverse_kwargs: dict[str, str] = {"pk": "pk"}
+
+    class Meta:
+        abstract = True
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        viewname = self.reverse_viewname
+        reverse_kwargs = self.reverse_kwargs
+
+        kwargs = {getattr(self, reverse_kwargs[key]) for key in reverse_kwargs}
+
+        return reverse(viewname, kwargs=kwargs)
 
 
 def uploaded_receipt_path(instance: models.Model, filename: str) -> str:
@@ -34,6 +61,17 @@ class Merchant(TitleSlugDescriptionModel):
 
     def __str__(self) -> str:
         return f"{self.title}"
+
+
+class ExpenseCategory(models.Model):
+    name = models.CharField(_("name"), max_length=50)
+    slug = AutoSlugField(populate_from=["name"])
+
+    class Meta:
+        verbose_name_plural = _("expense categories")
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class MerchantAlias(models.Model):
@@ -115,6 +153,14 @@ class ReceiptItem(models.Model):
     )
     parent_receipt = models.ForeignKey(
         Receipt, verbose_name=_("parent receipt"), on_delete=models.CASCADE
+    )
+    taxable = models.BooleanField(_("taxable"), default=False)
+    expense_category = models.ForeignKey(
+        ExpenseCategory,
+        verbose_name=_("expense category"),
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
 
     def __str__(self) -> str:

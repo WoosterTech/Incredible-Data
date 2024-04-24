@@ -1039,6 +1039,35 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-extra-views"
+version = "0.14.0"
+description = "Extra class-based views for Django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-extra-views-0.14.0.tar.gz", hash = "sha256:2b9daf99c79e91035aa3f269232afcb3ccf837f0f49f2dc6da6916fe34bc1e0a"},
+]
+
+[package.dependencies]
+Django = ">=2.1"
+
+[[package]]
+name = "django-funky-sheets"
+version = "0.2.0"
+description = "Django implementation of Handsontable spreadsheets for CRUD actions."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-funky-sheets-0.2.0.tar.gz", hash = "sha256:89f80160f9b6bcacbb5185375854d9d467d6475123c9bd001c8e440e371a97f6"},
+]
+
+[package.dependencies]
+Django = ">=2.0"
+django-extra-views = ">=0.12.0"
+pytz = "*"
+six = "*"
+
+[[package]]
 name = "django-import-export"
 version = "3.3.8"
 description = "Django application and library for importing and exporting data with included admin integration."
@@ -2695,6 +2724,24 @@ tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-django"
+version = "4.8.0"
+description = "A Django plugin for pytest."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pytest-django-4.8.0.tar.gz", hash = "sha256:5d054fe011c56f3b10f978f41a8efb2e5adfc7e680ef36fb571ada1f24779d90"},
+    {file = "pytest_django-4.8.0-py3-none-any.whl", hash = "sha256:ca1ddd1e0e4c227cf9e3e40a6afc6d106b3e70868fd2ac5798a22501271cd0c7"},
+]
+
+[package.dependencies]
+pytest = ">=7.0.0"
+
+[package.extras]
+docs = ["sphinx", "sphinx-rtd-theme"]
+testing = ["Django", "django-configurations (>=2.0)"]
+
+[[package]]
 name = "pytest-sugar"
 version = "1.0.0"
 description = "pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly)."
@@ -4057,4 +4104,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "feec42e59873ad11cf876414d7aac07bf146953bb6d6de3276df7f1d711fb5ab"
+content-hash = "9f6233cdc7463dc1fe14a53603181c1988ac2de12f1139d953fe85e856fe4dba"

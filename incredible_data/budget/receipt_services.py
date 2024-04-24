@@ -51,7 +51,7 @@ def populate_receipt_model(receipt_model_id: int) -> None:
         receipt_model.save()
 
 
-def create_receipt(receipt_file: ReceiptFile) -> str:
+def create_receipt(receipt_file: ReceiptFile) -> tuple[Receipt, bool]:
     if receipt_file.analyze_result is None:
         msg = "must analyze receipt file before creating receipt object"
         raise ValueError(msg)

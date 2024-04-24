@@ -1,11 +1,13 @@
 # ==== pytest ====
 [tool.pytest.ini_options]
+# DJANGO_SETTINGS_MODULE = "config.settings.test"
 minversion = "6.0"
 addopts = "--ds=config.settings.test --reuse-db"
 python_files = [
     "tests.py",
     "test_*.py",
 ]
+log_cli = true
 
 # ==== Coverage ====
 [tool.coverage.run]
@@ -214,6 +216,7 @@ azure-ai-documentintelligence = "^1.0.0b2"
 django-dbbackup = "^4.1.0"
 shortuuid = "^1.0.13"
 python-benedict = "^0.33.2"
+django-funky-sheets = "^0.2.0"
 
 [tool.poetry.group.dev]
 optional=true
@@ -256,6 +259,7 @@ pytest-sugar = "^1.0.0"
 coverage = "^7.4.4"
 factory-boy = "^3.3.0"
 django-coverage-plugin = "^3.1.0"
+pytest-django = "^4.8.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,0 +1,15 @@
+- model: budget.ExpenseCategory
+  pk: 1
+  fields:
+    name: Groceries
+    slug: groceries
+- model: budget.ExpenseCategory
+  pk: 2
+  fields:
+    name: Clothing
+    slug: clothing
+- model: budget.ExpenseCategory
+  pk: 3
+  fields:
+    name: Household
+    slug: household

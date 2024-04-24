@@ -18,6 +18,7 @@ services:
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
+      - ./.envs/.production/.django
     ports:
       - '${DJANGO_PORT-8500}:8000'
     command: /start
