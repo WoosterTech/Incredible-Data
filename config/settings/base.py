@@ -374,5 +374,5 @@ DEFAULT_CURRENCY = "USD"
 #     "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
 # }
 
-AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT")
-AZURE_KEY = env.str("DJANGO_AZURE_KEY")
+AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT", "")
+AZURE_KEY = env.str("DJANGO_AZURE_KEY", "")
