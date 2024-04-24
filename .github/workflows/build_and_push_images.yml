@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: "Login to GitHub Container Registry"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
             registry: ghcr.io
             username: ${{github.actor}}
@@ -25,5 +25,5 @@ jobs:
 
       - name: "Build Inventory Image"
         run: |
-            docker build . --file "./incredible_data/compose/production/django/Dockerfile" --tag ghcr.io/WoosterTech/incredible_data_production_django:latest
-            docker push ghcr.io/WoosterTech/incredible_data_production_django:latest
+            docker build . --file "./incredible_data/compose/production/django/Dockerfile" --tag ghcr.io/woostertech/incredible_data_production_django:latest
+            docker push ghcr.io/woostertech/incredible_data_production_django:latest
