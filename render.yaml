@@ -5,6 +5,19 @@ databases:
     user: mysite
 
 services:
+  - type: worker
+    name: celery-worker
+    region: oregon
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery --app config.celery_app worker --loglevel info --concurrency 4"
+    autoDeploy: false
+    envVars:
+      - key: CELERY_BROKER_URL
+        fromService:
+          name: celery-redis
+          type: redis
+          property: connectionString
   - type: web
     plan: free
     name: mysite
@@ -20,3 +33,13 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: CELERY_BROKER_URL
+        from: celery-redis
+        type: redis
+        property: connectionString
+  - type: redis
+    name: celery-redis
+    region: oregon
+    plan: starter
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
