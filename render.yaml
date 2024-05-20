@@ -34,9 +34,10 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: CELERY_BROKER_URL
-        from: celery-redis
-        type: redis
-        property: connectionString
+        fromService:
+          name: celery-redis
+          type: redis
+          property: connectionString
   - type: redis
     name: celery-redis
     region: oregon
