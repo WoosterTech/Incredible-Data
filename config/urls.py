@@ -27,6 +27,8 @@ urlpatterns = [
     # Your stuff: custom urls includes go here
     path("business/", include("incredible_data.business.urls", namespace="business")),
     path("budget/", include("incredible_data.budget.budget_urls", namespace="budget")),
+    path("bins/", include("incredible_data.bins.urls", namespace="bins")),
+    path("qr_code/", include("qr_code.urls", namespace="qr_code")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

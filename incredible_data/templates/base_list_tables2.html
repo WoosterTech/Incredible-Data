@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% block content %}
+  <h1>
+    {% block title %}
+      {{ view_title }}
+    {% endblock title %}
+  </h1>
+  <div class="btn-group" role="group" aria-label="Actions">
+    {% for action in action_links %}
+      <a class="btn btn-primary" href="{{ action.href }}">{{ action.label }}</a>
+    {% endfor %}
+  </div>
+  {% render_table table %}
+{% endblock content %}

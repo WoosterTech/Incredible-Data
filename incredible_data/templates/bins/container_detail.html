@@ -1,0 +1,39 @@
+{% extends "base_detail.html" %}
+
+{% load qr_code %}
+
+{% block title %}
+  {{ object.id }}
+{% endblock title %}
+{% block content %}
+  <div class="card">
+    {% if object.image %}
+      <img class="img-thumbnail"
+           src="{{ object.image.url }}"
+           alt="{{ object.name }} Image" />
+    {% endif %}
+    <div class="card-body">
+      <h2 class="card-title text-primary">
+        <span class="fw-bolder">CONTAINER:</span>{{ object.id }}
+        <small class="text-secondary">{{ object|truncatechars:25 }}</small>
+      </h2>
+      <div class="row">
+        <div class="col">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="bold-highlight">Description:</span> {{ object.contents }}
+            </li>
+            <li class="list-group-item">
+              Created By {{ object.created_by.name }} on {{ object.created|date }} at {{ object.created|time }}
+            </li>
+          </ul>
+        </div>
+        <div class="col-3">
+          <img class="float-end" src="{% qr_url_from_text full_detail_uri size="s" version="None" error_correction="q" %}" alt={{ object.get_absolute_url }} />
+        </div>
+      </div>
+      <a href="{% url "admin:bins_container_change" object.id %}"
+         class="btn btn-secondary">Edit Container</a>
+    </div>
+  </div>
+{% endblock content %}

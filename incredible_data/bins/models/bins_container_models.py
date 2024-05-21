@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 from django_extensions.db.models import TitleSlugDescriptionModel
@@ -7,6 +8,9 @@ from model_utils.models import TimeStampedModel
 from shortuuid.django_fields import ShortUUIDField
 
 from incredible_data.contacts.models.utility_models import UserStampedModel
+
+# this is kept for a migration
+from incredible_data.helpers import short_uuid  # noqa: F401
 
 UUID_ALPHABET = settings.SHORTUUID_ALPHABET
 
@@ -38,3 +42,9 @@ class Container(TimeStampedModel, UserStampedModel):
         null=True,
     )
     slug = AutoSlugField(populate_from="id")
+
+    def __str__(self) -> str:
+        return self.contents
+
+    def get_absolute_url(self):
+        return reverse("bins:container_detail", kwargs={"slug": self.slug})

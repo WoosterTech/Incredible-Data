@@ -88,6 +88,8 @@ THIRD_PARTY_APPS = [
     "funky_sheets",
     "import_export",
     "phonenumber_field",
+    "qr_code",
+    "django_tables2",
 ]
 
 LOCAL_APPS = [
