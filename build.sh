@@ -16,6 +16,5 @@ if [[ -z "${DJANGO_CREATE_SUPERUSER}" ]]; then
   echo "No superuser created"
 else
   python manage.py createsuperuser --noinput
-  export DJANGO_SUPERUSER_PASSWORD="invalid"
-  export DJANGO_CREATE_SUPERUSER="false"
+  echo "Remove DJANGO_CREATE_SUPERUSER env var"
 fi

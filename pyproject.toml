@@ -217,7 +217,6 @@ django-dbbackup = "^4.1.0"
 shortuuid = "^1.0.13"
 python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
-django-debug-toolbar = "^4.3.0"
 
 [tool.poetry.group.dev]
 optional=true
@@ -234,10 +233,11 @@ ruff = "^0.4.1"
 djlint = "^1.34.1"
 pre-commit = "^3.7.0"
 commitizen = "^3.24.0"
+django-debug-toolbar = "^4.3.0"
 
 [tool.poetry.group.production.dependencies]
 gunicorn = "^22.0.0"
-sentry-sdk = "^2.2.0"
+sentry-sdk = "^2.2.1"
 django-anymail = {extras = ["sendgrid"], version = "^10.3"}
 
 [tool.poetry.group.c]
