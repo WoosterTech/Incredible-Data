@@ -189,11 +189,13 @@ sentry_sdk.init(
     profiles_sample_rate=env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.0),
 )
 
+PRODUCTION_URL = env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz")
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://example.com", "description": "Production server"},
+    {"url": PRODUCTION_URL, "description": "Production server"},
 ]
 # Your stuff...
 # ------------------------------------------------------------------------------
