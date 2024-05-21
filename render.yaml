@@ -43,9 +43,19 @@ services:
           name: celery-redis
           type: redis
           property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: cache-redis
+          type: redis
+          property: connectionString
   - type: redis
     name: celery-redis
     region: oregon
     plan: starter
     maxmemoryPolicy: noeviction
+    ipAllowList: []
+  - type: redis
+    name: cache-redis
+    region: oregon
+    plan: starter
     ipAllowList: []
