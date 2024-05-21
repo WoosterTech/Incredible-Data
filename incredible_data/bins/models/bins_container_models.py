@@ -1,17 +1,14 @@
-import uuid
-
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 from django_extensions.db.models import TitleSlugDescriptionModel
 from model_utils.models import TimeStampedModel
+from shortuuid.django_fields import ShortUUIDField
 
 from incredible_data.contacts.models.utility_models import UserStampedModel
 
-
-# Create your models here.
-def short_uuid() -> str:
-    return str(uuid.uuid4())[:5]
+UUID_ALPHABET = settings.SHORTUUID_ALPHABET
 
 
 class ContainerStyle(TitleSlugDescriptionModel):
@@ -22,8 +19,12 @@ class ContainerStyle(TitleSlugDescriptionModel):
 
 
 class Container(TimeStampedModel, UserStampedModel):
-    id = models.CharField(
-        primary_key=True, max_length=5, default=short_uuid, unique=True
+    id = ShortUUIDField(
+        alphabet=UUID_ALPHABET,
+        unique=True,
+        primary_key=True,
+        length=5,
+        max_length=5,
     )
     contents = models.TextField(_("contents"))
     image = models.ImageField(

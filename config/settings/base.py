@@ -377,3 +377,6 @@ DEFAULT_CURRENCY = "USD"
 
 AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT", "")
 AZURE_KEY = env.str("DJANGO_AZURE_KEY", "")
+
+# equivalent to `[2-9A-HJ-NP-Z]` in regex, `I`, `O`, `1`, `0` are excluded
+SHORTUUID_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
