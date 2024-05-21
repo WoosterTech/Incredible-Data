@@ -8,6 +8,8 @@ poetry install --with c,production
 # Convert static asset files
 python manage.py collectstatic --no-input
 
+python manage.py compress
+
 # Apply any outstanding database migrations
 python manage.py migrate
 
