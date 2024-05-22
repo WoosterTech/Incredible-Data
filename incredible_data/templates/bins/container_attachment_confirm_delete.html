@@ -3,7 +3,7 @@
 {% block content %}
   <form method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete {{ object.attachment.url|urlize }} from container "{{ object.container }}"?</p>
+    <p>Are you sure you want to delete {{ object.name }} from container "{{ object.container }}"?</p>
     {{ form }}
     <input type="submit" value="Confirm" />
   </form>

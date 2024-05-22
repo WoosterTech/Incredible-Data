@@ -38,8 +38,6 @@ CACHES = {
     },
 }
 
-QR_CODE_CACHE_ALIAS = "default"
-
 # SECURITY
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
