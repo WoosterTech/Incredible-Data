@@ -45,7 +45,7 @@ class ContainerCreateView(PermissionRequiredMixin, UserStampedCreateView):
 class ContainerAttachmentCreateView(PermissionRequiredMixin, UserStampedCreateView):
     model = ContainerAttachment
     template_name = "bins/container_attachment_form.html"
-    permission_required = "bins.containerattachment_add"
+    permission_required = "bins.add_containerattachment"
     form_class = ContainerAttachmentForm
     success_url = reverse_lazy("bins:container_list")
 
