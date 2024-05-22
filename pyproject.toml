@@ -243,6 +243,7 @@ django-debug-toolbar = "^4.3.0"
 gunicorn = "^22.0.0"
 sentry-sdk = "^2.2.1"
 django-anymail = {extras = ["sendgrid"], version = "^10.3"}
+django-storages = {extras = ["s3"], version = "^1.14.3"}
 
 [tool.poetry.group.c]
 optional = true
