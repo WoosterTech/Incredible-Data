@@ -1,3 +1,13 @@
+## 0.4.0 (2024-05-22)
+
+### Feat
+
+- **aws-s3-storage**: use django-storages to properly store production media
+
+### Fix
+
+- **permissions**: add some permissions to bins views
+
 ## 0.3.0 (2024-05-22)
 
 ### Feat
