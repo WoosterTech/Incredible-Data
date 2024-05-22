@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card w-50 mt-2">
+    <div class="card-body text-center">
+      <form>
+        {% csrf_token %}
+        {% block delete_prompt %}
+          <p>
+            Are you sure you want to delete <span class="text-secondary">
+            {% block object_name %}
+              {{ object }}
+            {% endblock object_name %}
+          </span>?
+        </p>
+      {% endblock delete_prompt %}
+      {{ form }}
+      <button type="submit" class="btn btn-danger">Confirm</button>
+      <a href="{{ object.get_absolute_url }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock content %}

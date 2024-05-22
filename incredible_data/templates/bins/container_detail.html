@@ -7,20 +7,20 @@
 {% endblock title %}
 {% block content %}
   <div class="card mt-2">
-    {% if object.image %}
+    {% if object.primary_image %}
       <div class="row justify-content-center">
         <div class="col-8 col-md-6">
           <img class="img-fluid img-thumbnail"
-               src="{{ object.image.url }}"
-               alt="{{ object.name }} Image" />
+               src="{{ object.primary_image.attachment.url }}"
+               alt="{{ object.id }} Image" />
         </div>
       </div>
     {% endif %}
     <div class="card-body">
       <div class="row justify-content-end">
         <div class="col-md col-sm-12">
-          <h2 class="card-title text-primary">
-            <span class="fw-bolder">CONTAINER:</span>{{ object.id }}
+          <h2 class="card-title">
+            <span class="fw-bolder text-primary">CONTAINER:</span><span class="text-magenta text-underline">{{ object.id }}</span>
             <small class="text-secondary">{{ object|truncatechars:25 }}</small>
           </h2>
         </div>
@@ -32,16 +32,57 @@
         <div class="col">
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="bold-highlight">Description:</span> {{ object.contents }}
+              <span class="fs-3 text-primary">Contents:</span> {{ object.contents|linebreaks }}
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item text-secondary">
               Created By {{ object.created_by.name }} on {{ object.created|date }} at {{ object.created|time }}
             </li>
           </ul>
         </div>
       </div>
-      <a href="{% url "admin:bins_container_change" object.id %}"
-         class="btn btn-secondary mt-2">Edit Container</a>
+      <h3 class="text-primary text-center mt-2">Attachments</h3>
+      <table class="table table-striped mt-2">
+        <thead class="table-light">
+          <tr>
+            <th class="text-center">Name</th>
+            <th class="text-center">Type</th>
+            <th class="text-end col-md-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for attachment in object.attachments.all %}
+            <tr class="align-middle">
+              <td>
+                {% if attachment.attachment_type == "image" %}
+                  <i class="bi bi-file-earmark-image-fill text-magenta"></i><a href="{{ attachment.attachment.url }}" target="_blank">{{ attachment.name }}</a>
+                {% elif attachment.attachment_type == "document" %}
+                  <i class="bi bi-file-earmark-richtext-fill text-magenta"></i><a href="{{ attachment.attachment.url }}" target="_blank">{{ attachment.name }}</a>
+                {% elif attachment.attachment_type == "manual" %}
+                  <i class="bi bi-book text-magenta"></i><a href="{{ attachment.attachment.url }}" target="_blank">{{ attachment.name }}</a>
+                {% elif attachment.attachment_type == "other" %}
+                  <i class="bi bi-paperclip text-magenta"></i><a href="{{ attachment.attachment.url }}" target="_blank">{{ attachment.name }}</a>
+                {% endif %}
+              </td>
+              <td>{{ attachment.attachment_type|title }}</td>
+              <td>
+                <a href="{% url "bins:container_attachment_delete" attachment.id %}"><i class="bi bi-trash-fill text-danger"></i></a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-info">No attachments found...</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div id="card-actions">
+        <a href="{% url "admin:bins_container_change" object.id %}"
+           class="btn btn-secondary">Edit Container</a>
+        <a href="{% url "bins:container_delete" object.slug %}"
+           class="btn btn-danger">Delete Container</a>
+        <a href="{% url "bins:container_attachment_add" %}?container_id__exact={{ object.id }}"
+           class="btn btn-secondary">Add Attachment</a>
+      </div>
     </div>
   </div>
 {% endblock content %}

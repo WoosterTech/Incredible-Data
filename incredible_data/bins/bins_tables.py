@@ -13,3 +13,14 @@ class ContainerTable(tables.Table):
         fields = ("id", "contents", "created_by_name")
         export_order = ("id", "contents", "created_by_name")
         attrs = {"class": "table table-striped table-bordered"}
+
+
+class ContainerAttachmentTable(tables.Table):
+    attachment = tables.Column(_("Attachment"), linkify=True)
+    created_by_name = tables.Column(_("Created By"), accessor="created_by__name")
+
+    class Meta:
+        model = Container
+        fields = ("attachment", "created_by_name")
+        export_order = ("attachment", "created_by_name")
+        attrs = {"class": "table table-striped table-bordered"}

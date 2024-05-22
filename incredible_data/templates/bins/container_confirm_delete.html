@@ -1,0 +1,5 @@
+{% extends "base_confirm_delete.html" %}
+
+{% block object_name %}
+  {{ object.id }} - "{{ object.contents|truncatechars:25 }}"
+{% endblock object_name %}

@@ -1,6 +1,8 @@
 from typing import Any
 
+from django.core.exceptions import PermissionDenied
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django_tables2 import SingleTableView
 
 
@@ -47,3 +49,20 @@ class ExtraContextDetailView(DetailView):
         super_context["full_detail_uri"] = self.request.build_absolute_uri()
 
         return super_context
+
+
+class UserStampedCreateView(CreateView):
+    """Adds created_by and modified_by to initial data for CreateView."""
+
+    def get_initial(self) -> dict[str, Any]:
+        initial = super().get_initial()
+
+        user = self.request.user
+
+        if not user.is_authenticated:
+            raise PermissionDenied
+
+        initial["created_by"] = str(user.id)
+        initial["modified_by"] = str(user.id)
+
+        return initial

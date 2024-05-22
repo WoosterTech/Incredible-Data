@@ -23,6 +23,8 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer" />
       <!-- Your stuff: Third-party CSS libraries go here -->
+      <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
       <!-- This file stores project-specific CSS -->
       {% compress css %}
         <link href="{% static 'css/project.css' %}" rel="stylesheet" />
@@ -84,4 +86,7 @@
       {% endcomment %}
     {% endblock inline_javascript %}
   </body>
+  {% if debug %}
+    <pre>{% debug %}</pre>
+  {% endif %}
 </html>

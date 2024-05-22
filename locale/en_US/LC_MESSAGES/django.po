@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 09:53-0700\n"
+"POT-Creation-Date: 2024-05-22 11:03-0700\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: incredible_data/bins/bins_views.py:18
+#: incredible_data/bins/bins_views.py:23
 msgid "New Container"
 msgstr ""
 
@@ -60,23 +60,48 @@ msgid "acquisition date"
 msgstr ""
 
 #: incredible_data/bins/models/bins_asset_models.py:30
+#: incredible_data/bins/models/bins_container_models.py:56
 msgid "container"
 msgstr ""
 
-#: incredible_data/bins/models/bins_container_models.py:27
+#: incredible_data/bins/models/bins_container_models.py:29
 msgid "container id"
 msgstr "Container ID"
 
-#: incredible_data/bins/models/bins_container_models.py:34
+#: incredible_data/bins/models/bins_container_models.py:36
 msgid "contents"
 msgstr ""
 
-#: incredible_data/bins/models/bins_container_models.py:36
-msgid "contents image"
+#: incredible_data/bins/models/bins_container_models.py:39
+msgid "container style"
 msgstr ""
 
-#: incredible_data/bins/models/bins_container_models.py:40
-msgid "container style"
+#: incredible_data/bins/models/bins_container_models.py:60
+msgid "attachment"
+msgstr ""
+
+#: incredible_data/bins/models/bins_container_models.py:62
+msgid "image"
+msgstr "Image"
+
+#: incredible_data/bins/models/bins_container_models.py:63
+msgid "document"
+msgstr "Document"
+
+#: incredible_data/bins/models/bins_container_models.py:64
+msgid "manual"
+msgstr "Warranty"
+
+#: incredible_data/bins/models/bins_container_models.py:65
+msgid "other"
+msgstr "Other"
+
+#: incredible_data/bins/models/bins_container_models.py:68
+msgid "attachment type"
+msgstr ""
+
+#: incredible_data/bins/models/bins_container_models.py:70
+msgid "primary attachment"
 msgstr ""
 
 #: incredible_data/bins/models/bins_house_models.py:14
@@ -337,19 +362,19 @@ msgid "contacts"
 msgstr ""
 
 #: incredible_data/templates/allauth/layouts/entrance.html:13
-#: incredible_data/templates/base.html:95
+#: incredible_data/templates/navbar.html:52
 msgid "Sign In"
 msgstr ""
 
-#: incredible_data/templates/base.html:80
+#: incredible_data/templates/navbar.html:37
 msgid "My Profile"
 msgstr ""
 
-#: incredible_data/templates/base.html:84
+#: incredible_data/templates/navbar.html:41
 msgid "Sign Out"
 msgstr ""
 
-#: incredible_data/templates/base.html:90
+#: incredible_data/templates/navbar.html:47
 msgid "Sign Up"
 msgstr ""
 

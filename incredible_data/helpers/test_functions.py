@@ -1,6 +1,16 @@
 import pytest
 
 from incredible_data.helpers import truncate_string
+from incredible_data.helpers.functions import create_media_name
+
+
+@pytest.fixture()
+def field_file():
+    class FieldFile:
+        def __init__(self, name: str):
+            self.name = name
+
+    return FieldFile("path/to/file.txt")
 
 
 @pytest.fixture()
@@ -27,3 +37,8 @@ def test_truncate_string(max_length: int, expected: str, long_string: str):
     new_string = truncate_string(long_string, max_length)
     assert len(new_string) <= max_length
     assert new_string == expected
+
+
+def test_file_field_stem(field_file):
+    assert field_file.name == "path/to/file.txt"
+    assert create_media_name(field_file) == "file"
