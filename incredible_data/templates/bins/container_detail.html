@@ -6,17 +6,28 @@
   {{ object.id }}
 {% endblock title %}
 {% block content %}
-  <div class="card">
+  <div class="card mt-2">
     {% if object.image %}
-      <img class="img-thumbnail"
-           src="{{ object.image.url }}"
-           alt="{{ object.name }} Image" />
+      <div class="row justify-content-center">
+        <div class="col-8 col-md-6">
+          <img class="img-fluid img-thumbnail"
+               src="{{ object.image.url }}"
+               alt="{{ object.name }} Image" />
+        </div>
+      </div>
     {% endif %}
     <div class="card-body">
-      <h2 class="card-title text-primary">
-        <span class="fw-bolder">CONTAINER:</span>{{ object.id }}
-        <small class="text-secondary">{{ object|truncatechars:25 }}</small>
-      </h2>
+      <div class="row justify-content-end">
+        <div class="col-md col-sm-12">
+          <h2 class="card-title text-primary">
+            <span class="fw-bolder">CONTAINER:</span>{{ object.id }}
+            <small class="text-secondary">{{ object|truncatechars:25 }}</small>
+          </h2>
+        </div>
+        <div class="col-2">
+          <img class="img-fluid float-end" src="{% qr_url_from_text full_detail_uri size="s" version="None" error_correction="q" %}" alt={{ object.get_absolute_url }} />
+        </div>
+      </div>
       <div class="row">
         <div class="col">
           <ul class="list-group">
@@ -28,12 +39,9 @@
             </li>
           </ul>
         </div>
-        <div class="col-3">
-          <img class="float-end" src="{% qr_url_from_text full_detail_uri size="s" version="None" error_correction="q" %}" alt={{ object.get_absolute_url }} />
-        </div>
       </div>
       <a href="{% url "admin:bins_container_change" object.id %}"
-         class="btn btn-secondary">Edit Container</a>
+         class="btn btn-secondary mt-2">Edit Container</a>
     </div>
   </div>
 {% endblock content %}
