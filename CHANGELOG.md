@@ -1,3 +1,9 @@
+## 0.5.2 (2024-05-22)
+
+### Fix
+
+- **containerattachment-permission**: containerattachment_add -> add_containerattachment
+
 ## 0.5.1 (2024-05-22)
 
 ### Fix
