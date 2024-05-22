@@ -1,3 +1,9 @@
+## 0.5.1 (2024-05-22)
+
+### Fix
+
+- **requests-update**: dealing with CVE of yanked version; "fix" storage
+
 ## 0.5.0 (2024-05-22)
 
 ### Feat
