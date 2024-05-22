@@ -24,6 +24,7 @@ class ContainerStyle(TitleSlugDescriptionModel):
 
 class Container(TimeStampedModel, UserStampedModel):
     id = ShortUUIDField(
+        _("container id"),
         alphabet=UUID_ALPHABET,
         unique=True,
         primary_key=True,

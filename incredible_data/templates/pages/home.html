@@ -7,16 +7,18 @@
   <h1>Welcome to Incredible Data</h1>
   <p>Here you can find all the data you need to make your project a success.</p>
   <div class="row">
-    <div class="col-sm-3 mb-3 mb-sm-9">
-      <div class="card">
-        <div class="card-header">Containers</div>
-        <div class="list-group list-group-flush">
-          <a class="list-group-item list-group-item-action"
-             href="{% url 'bins:container_list' %}">View Containers</a>
-          <a class="list-group-item list-group-item-action"
-             href="{% url 'admin:bins_container_add' %}">Add Container</a>
+    {% if perms.bins %}
+      <div class="col-sm-3 mb-3 mb-sm-9">
+        <div class="card">
+          <div class="card-header">Containers</div>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action"
+               href="{% url 'bins:container_list' %}">View Containers</a>
+            <a class="list-group-item list-group-item-action"
+               href="{% url 'bins:container_add' %}">Add Container</a>
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 {% endblock content %}

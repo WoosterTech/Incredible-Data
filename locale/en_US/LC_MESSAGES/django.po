@@ -6,7 +6,383 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-22 09:53-0700\n"
 "Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: incredible_data/bins/bins_tables.py:8
+msgid "ID"
+msgstr ""
+
+#: incredible_data/bins/bins_tables.py:9
+msgid "Created By"
+msgstr ""
+
+#: incredible_data/bins/bins_views.py:18
+msgid "New Container"
+msgstr ""
+
+#: incredible_data/bins/management/commands/bulk_create.py:10
+msgid "Create multiple empty containers for label creation."
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:13
+#: incredible_data/bins/models/bins_asset_models.py:22
+msgid "manufacturer"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:14
+msgid "website"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:20
+#: incredible_data/budget/models.py:67
+msgid "name"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:24
+msgid "model name"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:25
+msgid "model number"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:26
+msgid "serial number"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:27
+msgid "acquisition date"
+msgstr ""
+
+#: incredible_data/bins/models/bins_asset_models.py:30
+msgid "container"
+msgstr ""
+
+#: incredible_data/bins/models/bins_container_models.py:27
+msgid "container id"
+msgstr "Container ID"
+
+#: incredible_data/bins/models/bins_container_models.py:34
+msgid "contents"
+msgstr ""
+
+#: incredible_data/bins/models/bins_container_models.py:36
+msgid "contents image"
+msgstr ""
+
+#: incredible_data/bins/models/bins_container_models.py:40
+msgid "container style"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:14
+msgid "asset"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:19
+msgid "short title"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:20
+msgid "performed"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:22
+msgid "next due date"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:26
+msgid "broken"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:27
+msgid "scheduled"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:28
+msgid "on demand"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:31
+msgid "entry type"
+msgstr ""
+
+#: incredible_data/bins/models/bins_house_models.py:34
+#: incredible_data/business/models/business_accounting_models.py:68
+#: incredible_data/business/models/business_project_models.py:13
+msgid "notes"
+msgstr ""
+
+#: incredible_data/budget/budget_custom_fields.py:33
+#, python-brace-format
+msgid "percentage (max {max_digits} digits; {decimal_places} decimal places"
+msgstr ""
+
+#: incredible_data/budget/budget_custom_form_fields.py:68
+#, python-format
+msgid "Invalid value type: %(rtype)s"
+msgstr ""
+
+#: incredible_data/budget/models.py:59
+msgid "verified"
+msgstr ""
+
+#: incredible_data/budget/models.py:59
+msgid "checked by a human"
+msgstr ""
+
+#: incredible_data/budget/models.py:71
+msgid "expense categories"
+msgstr ""
+
+#: incredible_data/budget/models.py:78
+msgid "alias"
+msgstr ""
+
+#: incredible_data/budget/models.py:80
+msgid "matched merchant"
+msgstr ""
+
+#: incredible_data/budget/models.py:89
+msgid "receipt file"
+msgstr ""
+
+#: incredible_data/budget/models.py:98
+msgid "analyzed at"
+msgstr ""
+
+#: incredible_data/budget/models.py:108
+msgid "merchant"
+msgstr ""
+
+#: incredible_data/budget/models.py:114
+msgid "merchant confidence"
+msgstr ""
+
+#: incredible_data/budget/models.py:116
+msgid "transaction date"
+msgstr ""
+
+#: incredible_data/budget/models.py:118
+msgid "date confidence"
+msgstr ""
+
+#: incredible_data/budget/models.py:121
+#: incredible_data/business/models/business_accounting_models.py:71
+msgid "grand total"
+msgstr ""
+
+#: incredible_data/budget/models.py:124
+msgid "grand total confidence"
+msgstr ""
+
+#: incredible_data/budget/models.py:127
+msgid "tax rate"
+msgstr ""
+
+#: incredible_data/budget/models.py:130
+msgid "if applicable"
+msgstr ""
+
+#: incredible_data/budget/models.py:135
+msgid "linked receipt"
+msgstr ""
+
+#: incredible_data/budget/models.py:149
+msgid "product code or UPC"
+msgstr ""
+
+#: incredible_data/budget/models.py:150
+#: incredible_data/business/models/business_accounting_models.py:118
+msgid "description"
+msgstr ""
+
+#: incredible_data/budget/models.py:152
+msgid "total price"
+msgstr ""
+
+#: incredible_data/budget/models.py:155
+msgid "parent receipt"
+msgstr ""
+
+#: incredible_data/budget/models.py:157
+msgid "taxable"
+msgstr ""
+
+#: incredible_data/budget/models.py:160
+msgid "expense category"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:32
+#: incredible_data/business/models/business_accounting_models.py:65
+#: incredible_data/business/models/business_project_models.py:11
+#: incredible_data/customers/models.py:13
+#: incredible_data/customers/models.py:32
+msgid "customer"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:36
+msgid "expected completion date"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:39
+msgid "order notes"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:52
+msgid "invoice number"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:56
+msgid "Draft"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:57
+msgid "Estimate"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:58
+msgid "Invoiced"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:59
+msgid "Paid"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:62
+msgid "status"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:67
+msgid "terms"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:69
+msgid "subtotal"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:73
+msgid "due date"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:75
+#: incredible_data/business/models/business_project_models.py:16
+msgid "order"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:117
+msgid "rank"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:120
+msgid "quantity"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:122
+msgid "unit price"
+msgstr ""
+
+#: incredible_data/business/models/business_accounting_models.py:124
+msgid "invoice"
+msgstr ""
+
+#: incredible_data/business/models/business_project_models.py:9
+msgid "project name"
+msgstr ""
+
+#: incredible_data/contacts/models/contacts_models.py:14
+#: incredible_data/customers/models.py:35
+msgid "contact"
+msgstr ""
+
+#: incredible_data/contacts/models/contacts_models.py:18
+#: incredible_data/customers/models.py:37
+msgid "primary"
+msgstr ""
+
+#: incredible_data/contacts/models/contacts_models.py:32
+msgid "email"
+msgstr ""
+
+#: incredible_data/contacts/models/contacts_models.py:40
+msgid "phone number"
+msgstr ""
+
+#: incredible_data/contacts/models/contacts_models.py:48
+msgid "full name"
+msgstr ""
+
+#: incredible_data/contacts/models/utility_models.py:56
+msgid "number"
+msgstr ""
+
+#: incredible_data/contacts/models/utility_models.py:80
+msgid "created by"
+msgstr ""
+
+#: incredible_data/contacts/models/utility_models.py:86
+msgid "modified by"
+msgstr ""
+
+#: incredible_data/customers/models.py:16
+msgid "organization phone"
+msgstr ""
+
+#: incredible_data/customers/models.py:22
+msgid "contacts"
+msgstr ""
+
+#: incredible_data/templates/allauth/layouts/entrance.html:13
+#: incredible_data/templates/base.html:95
+msgid "Sign In"
+msgstr ""
+
+#: incredible_data/templates/base.html:80
+msgid "My Profile"
+msgstr ""
+
+#: incredible_data/templates/base.html:84
+msgid "Sign Out"
+msgstr ""
+
+#: incredible_data/templates/base.html:90
+msgid "Sign Up"
+msgstr ""
+
+#: incredible_data/users/admin.py:23
+msgid "Personal info"
+msgstr ""
+
+#: incredible_data/users/admin.py:25
+msgid "Permissions"
+msgstr ""
+
+#: incredible_data/users/admin.py:36
+msgid "Important dates"
+msgstr ""
+
+#: incredible_data/users/apps.py:9
+msgid "Users"
+msgstr ""
+
+#: incredible_data/users/forms.py:27
+#: incredible_data/users/tests/test_forms.py:35
+msgid "This email has already been taken."
+msgstr ""
+
+#: incredible_data/users/models.py:19
+msgid "Name of User"
+msgstr ""
+
+#: incredible_data/users/models.py:22
+msgid "email address"
+msgstr ""
+
+#: incredible_data/users/tests/test_views.py:72
+#: incredible_data/users/views.py:24
+msgid "Information successfully updated"
+msgstr ""
