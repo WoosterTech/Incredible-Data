@@ -1,3 +1,9 @@
+## 0.5.0 (2024-05-22)
+
+### Feat
+
+- **forms**: so many forms and screwing around with them; also container attachments instead of single field
+
 ## 0.4.0 (2024-05-22)
 
 ### Feat
