@@ -1361,6 +1361,24 @@ files = [
 ]
 
 [[package]]
+name = "environhelper"
+version = "0.2.0"
+description = "Create a .env file from a settings.py file."
+optional = false
+python-versions = "^3.10"
+files = []
+develop = true
+
+[package.dependencies]
+click = "^8.1.7"
+django-environ = "^0.11.2"
+pydantic = "^2.7.1"
+
+[package.source]
+type = "directory"
+url = "../EnvironHelper"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.1"
 description = "Backport of PEP 654 (exception groups)"
@@ -4026,4 +4044,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f6de5c9ed535e980120f128bf101b4a3bee0d5a9203aec339d4ea2591c55d5c0"
+content-hash = "b2eed472c3b4782e13183015a0b09b71c0dd17932576868a7c92abe487236adb"

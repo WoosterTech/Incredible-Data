@@ -1,0 +1,2 @@
+EMAIL_HOST="mailpit"
+USE_DOCKER=False
