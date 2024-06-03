@@ -17,10 +17,7 @@ from django.utils import timezone
 from .models import Merchant, Receipt, ReceiptFile, ReceiptItem
 
 logger = logging.getLogger(__name__)
-if settings.DEBUG:
-    logger.setLevel(logging.DEBUG)
-else:
-    logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG if settings.DEBUG else logging.INFO)
 
 AZURE_ENDPOINT = settings.AZURE_ENDPOINT
 AZURE_KEY = settings.AZURE_KEY
@@ -28,7 +25,22 @@ LOCALE = settings.LANGUAGE_CODE
 ML_MODEL = "prebuilt-receipt"
 
 
+def check_settings() -> bool:
+    if len(AZURE_ENDPOINT) == 0:
+        msg = "AZURE_ENDPOINT is not set in settings"
+        logger.error(msg)
+        return False
+    if not AZURE_KEY:
+        msg = "AZURE_KEY is not set in settings"
+        logger.error(msg)
+        return False
+    return True
+
+
 def populate_receipt_model(receipt_model_id: int) -> None:
+    if not check_settings():
+        return
+
     receipt_model = Receipt.objects.get(id=receipt_model_id)
     analyzed_receipt_result = analyze_receipt_file(receipt_model.receipt_file.path)
 
@@ -56,6 +68,9 @@ def create_receipt(receipt_file: ReceiptFile) -> tuple[Receipt, bool]:
     if receipt_file.analyze_result is None:
         msg = "must analyze receipt file before creating receipt object"
         raise ValueError(msg)
+    if not check_settings():
+        msg = "Azure settings are not set"
+        raise settings.ImproperlyConfigured(msg)
     analyze_json = json.loads(receipt_file.analyze_result)
     analysis_b = benedict(analyze_json)
     fields = benedict()

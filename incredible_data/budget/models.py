@@ -8,9 +8,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField, ShortUUIDField
 from django_extensions.db.models import TitleSlugDescriptionModel
+from django_rubble.fields.db_fields import SimplePercentageField
 from djmoney.models.fields import MoneyField
-
-from .budget_custom_fields import SimplePercentageField
 
 logger = logging.getLogger(__name__)
 if settings.DEBUG:

@@ -1,10 +1,10 @@
-from datetime import date
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_extensions.db.fields import AutoSlugField, ShortUUIDField
+from django_extensions.db.fields import AutoSlugField
 from django_extensions.db.models import TitleSlugDescriptionModel
+from django_rubble.utils import default_funcs
 from model_utils.models import TimeStampedModel
+from shortuuid.django_fields import ShortUUIDField
 
 from incredible_data.contacts.models.utility_models import UserStampedModel
 
@@ -24,7 +24,9 @@ class Asset(TimeStampedModel, UserStampedModel):
     model_name = models.CharField(_("model name"), max_length=50)
     model_number_str = models.CharField(_("model number"), max_length=50)
     serial_number_str = models.CharField(_("serial number"), max_length=50)
-    acquisition_date = models.DateField(_("acquisition date"), default=date.today)
+    acquisition_date = models.DateField(
+        _("acquisition date"), default=default_funcs.django_today
+    )
     location_container = models.ForeignKey(
         "bins.Container",
         verbose_name=_("container"),

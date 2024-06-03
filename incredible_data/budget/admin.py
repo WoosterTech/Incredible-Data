@@ -9,10 +9,7 @@ from .models import ExpenseCategory, Merchant, Receipt, ReceiptFile, ReceiptItem
 from .receipt_services import analyze_receipt_file, create_receipt
 
 logger = logging.getLogger(__name__)
-if settings.DEBUG:
-    logger.setLevel(logging.DEBUG)
-else:
-    logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG if settings.DEBUG else logging.INFO)
 
 
 @admin.register(ReceiptFile)
@@ -47,6 +44,9 @@ class ReceiptFileAdmin(admin.ModelAdmin):
             except ValueError:
                 msg = f"Receipt {file} must be analyzed before creating receipt model."
                 self.message_user(request, msg, messages.WARNING)
+            except settings.ImproperlyConfigured:
+                msg = "Azure settings are not set."
+                self.message_user(request, msg, messages.ERROR)
             else:
                 msg = f"'{receipt}' created." if created else f"'{receipt}' updated."
                 self.message_user(request, msg, messages.SUCCESS)

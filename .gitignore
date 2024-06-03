@@ -280,3 +280,5 @@ incredible_data/media/
 .envs/*
 !.envs/.local/
 incredible_data/budget/test_receipt.json
+
+*.sqlite3
