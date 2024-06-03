@@ -1,4 +1,6 @@
 # ruff: noqa: E501
+# from bridge import django
+
 from .base import *  # noqa: F403
 from .base import INSTALLED_APPS, MIDDLEWARE, env
 
@@ -67,3 +69,8 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# bridge
+# must be at the *end* of the file
+# ------------------------------------------------------------------------------
+# django.configure(locals())
