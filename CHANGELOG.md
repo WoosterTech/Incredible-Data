@@ -1,3 +1,13 @@
+## 0.6.0 (2024-06-05)
+
+### Feat
+
+- **properties**: starting the process of adding some propety management models
+
+### Refactor
+
+- **django-rubble**: rename django-utils to django-rubble
+
 ## 0.5.2 (2024-05-22)
 
 ### Fix
