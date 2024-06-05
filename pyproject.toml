@@ -262,7 +262,8 @@ pytest-django = "^4.8.0"
 optional = true
 
 [tool.poetry.group.bridge.dependencies]
-python-bridge = {path = "../bridge", develop = true}
+# python-bridge = {path = "../bridge", develop = true}
+python-bridge = "^0.1.0"
 
 [build-system]
 requires = ["poetry-core"]
