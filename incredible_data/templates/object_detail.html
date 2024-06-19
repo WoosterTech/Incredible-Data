@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Object Detail
+{% endblock title %}
+{% block content %}
+  <h1>{{ object.name }}</h1>
+  <div>
+    <span class="bold-highlight">{{ object.name }}</span>
+    {{ object.description }}
+  </div>
+{% endblock content %}

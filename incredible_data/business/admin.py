@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django_rubble.admin.stamped_admin import StampedAdmin
 
 from incredible_data.contacts.admin import UserStampedModelAdmin
 
@@ -23,7 +24,7 @@ class OrderAdmin(UserStampedModelAdmin):
 
 
 @admin.register(Invoice)
-class InvoiceAdmin(UserStampedModelAdmin):
+class InvoiceAdmin(StampedAdmin):
     list_display = ["number", "customer", "status"]
     list_filter = ["customer"]
     date_hierarchy = "created"

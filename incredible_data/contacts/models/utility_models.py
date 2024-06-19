@@ -2,12 +2,13 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
+from pydantic import BaseModel
 
 
 class DocumentNumber(models.Model):
     document = models.CharField(max_length=50, primary_key=True, unique=True)
     prefix = models.CharField(max_length=10, blank=True)
-    padding_digits = models.IntegerField(blank=True, null=True)
+    padding_digits = models.IntegerField(default=0)
     next_counter = models.IntegerField(default=1)
     last_number = models.CharField(max_length=50, editable=False)
     last_generated_date = models.DateTimeField(auto_now=True)
@@ -27,6 +28,12 @@ class DocumentNumber(models.Model):
         self.save()
 
         return number
+
+
+class NumberConfig(BaseModel):
+    prefix: str = ""
+    width: int = 0
+    start_value: int = 1
 
 
 class NumberedModel(models.Model):
@@ -54,7 +61,7 @@ class NumberedModel(models.Model):
     """
 
     number = models.CharField(_("number"), unique=True, max_length=10, editable=False)
-    number_config: dict[str, str | int] = {"prefix": "", "width": 0, "start_value": 1}
+    number_config: NumberConfig = NumberConfig()
 
     class Meta:
         abstract = True
@@ -65,9 +72,9 @@ class NumberedModel(models.Model):
             project_number, _ = DocumentNumber.objects.get_or_create(
                 document=self.__class__.__name__,
                 defaults={
-                    "prefix": config["prefix"],
-                    "padding_digits": config["width"],
-                    "next_counter": config["start_value"],
+                    "prefix": config.prefix,
+                    "padding_digits": config.width,
+                    "next_counter": config.start_value,
                 },
             )
             self.number = project_number.get_next_number()

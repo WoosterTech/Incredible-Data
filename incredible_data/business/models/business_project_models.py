@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 
@@ -27,3 +28,6 @@ class Project(BaseNumberedModel):
 
     def __str__(self) -> str:
         return f"{self.number} {self.name}"
+
+    def get_absolute_url(self):
+        return reverse("project-detail", kwargs={"slug": self.slug})

@@ -3,18 +3,20 @@ from decimal import Decimal
 
 from django.db import models
 from django.db.models import Count, F, Max, Sum
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
+from django_rubble.models.stamped_models import StampedModel
 from djmoney.models.fields import MoneyField
 from model_utils.choices import Choices
-from model_utils.models import StatusModel, TimeStampedModel
+from model_utils.models import StatusModel
 from slugify import slugify
 
 from incredible_data.contacts.models.utility_models import (
     BaseNumberedModel,
+    NumberConfig,
     NumberedModel,
-    UserStampedModel,
 )
 
 
@@ -38,28 +40,19 @@ class Order(BaseNumberedModel):
     )
     notes = models.TextField(_("order notes"), blank=True)
     slug = AutoSlugField(populate_from=["customer", "number"])
-    number_config = {
-        "prefix": "MHC",
-        "width": 4,
-        "start_value": 1,
-    }
+    number_config = NumberConfig(prefix="MHC", width=4, start_value=1)
 
     def __str__(self) -> str:
         return f"{self.number} - {self.customer}"
 
 
-class Invoice(TimeStampedModel, UserStampedModel, StatusModel, NumberedModel):
-    number = models.CharField(_("invoice number"), max_length=10, editable=False)
-    number_prefix = "INV-"
-    number_width = 4
+class Invoice(StampedModel, StatusModel, NumberedModel):
+    number_config = NumberConfig(prefix="INV-", width=4, start_value=10)
     STATUS = Choices(
         ("draft", _("Draft")),
         ("stimate", _("Estimate")),
         ("invoiced", _("Invoiced")),
         ("paid", _("Paid")),
-    )
-    status = models.CharField(
-        _("status"), choices=STATUS, max_length=50, default=STATUS.draft
     )
     customer = models.ForeignKey(
         "customers.Customer", verbose_name=_("customer"), on_delete=models.PROTECT
@@ -112,6 +105,9 @@ class Invoice(TimeStampedModel, UserStampedModel, StatusModel, NumberedModel):
             line.rank = idx + 1
         qs.bulk_update(qs, ["rank"])
 
+    def get_absolute_url(self):
+        return reverse("invoice-detail", kwargs={"slug": self.slug})
+
 
 class InvoiceLine(models.Model):
     rank = models.PositiveSmallIntegerField(_("rank"))
@@ -142,9 +138,7 @@ class InvoiceLine(models.Model):
         return deleted
 
     def get_next_rank(self) -> int:
-        results = self.__class__.objects.filter(invoice=self.invoice).aggregate(
-            Max("rank")
-        )
+        results = self.objects.filter(invoice=self.invoice).aggregate(Max("rank"))
 
         return results["rank__max"] + 1 if results["rank__max"] is not None else 1
 

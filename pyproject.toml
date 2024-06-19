@@ -225,7 +225,11 @@ psycopg = [
   {version = "^3.1.10", extras = ["c"], platform = "linux"},
   {version = "^3.1.10", extras = ["binary"], platform = "win32"}
 ]
-django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
+# django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
+# django-rubble = { path = "../django_utils", develop = true }
+django-rubble = "^0.2.3"
+neapolitan = "^24.4"
+loguru = "^0.7.2"
 
 [tool.poetry.group.dev]
 optional=true
