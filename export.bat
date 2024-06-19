@@ -23,19 +23,14 @@ exit /b 0
 setlocal
 set "option=%~1"
 
-if not "%option%"=="--prod" if not "%option%"=="--dev-binary" (
+if not "%option%"=="--prod" (
     echo Exporting development dependencies using Poetry...
-    poetry export --with dev,test,c -f requirements.txt -o requirements\local.txt
-)
-
-if "%option%"=="--dev-binary" (
-    echo Exporting non-C development dependencies using Poetry...
-    poetry export --with dev,test,binary -f requirements.txt -o requirements\local.txt
+    poetry export --with dev,test -f requirements.txt -o requirements\local.txt
 )
 
 if not "%option%"=="--dev" if not "%option%"=="--dev-binary" (
     echo Exporting production dependencies using Poetry...
-    poetry export --with production,c -f requirements.txt -o requirements\production.txt
+    poetry export --with production -f requirements.txt -o requirements\production.txt
 )
 
 endlocal
