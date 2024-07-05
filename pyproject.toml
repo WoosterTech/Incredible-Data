@@ -230,6 +230,8 @@ psycopg = [
 django-rubble = "^0.2.3"
 neapolitan = "^24.4"
 loguru = "^0.7.2"
+django-colorfield = "^0.11.0"
+django-simple-history = "^3.7.0"
 
 [tool.poetry.group.dev]
 optional=true
@@ -267,7 +269,7 @@ optional = true
 
 [tool.poetry.group.bridge.dependencies]
 # python-bridge = {path = "../bridge", develop = true}
-python-bridge = "^0.1.0"
+python-bridge = {git = "https://github.com/WoosterInitiative/bridge.git"}
 
 [build-system]
 requires = ["poetry-core"]
