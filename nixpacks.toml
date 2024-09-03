@@ -1,8 +1,14 @@
-[phase.setup]
+[variables]
+NIXPACKS_POETRY_VERSION = "1.8.3"
+
+[phases.setup]
 nixPkgs = ["...", "poetry"]
 
-[phase.install]
-cmds = ["poetry install --with production --no-interactive --no-ansi"]
+[phases.install]
+cmds = ['python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install poetry==$NIXPACKS_POETRY_VERSION && poetry install --with production --no-interaction --no-ansi']
+
+[phases.release]
+cmds = ["python manage.py migrate"]
 
 [start]
-cmd = "python manage.py migrate && ./compose/production/django/start"
+cmd = "./compose/production/django/start"
