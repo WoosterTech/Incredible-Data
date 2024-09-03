@@ -1,5 +1,2 @@
-[phases.setup]
-aptPkgs = ["...", "build-essential", "libpq-dev"]
-
 [start]
-cmd = "python manage.py migrate && ../compose/production/django/start"
+cmd = "docker compose -f production.yml run --rm django python manage.py migrate"

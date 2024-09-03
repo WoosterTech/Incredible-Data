@@ -790,6 +790,21 @@ files = [
 dev = ["polib"]
 
 [[package]]
+name = "croniter"
+version = "3.0.3"
+description = "croniter provides iteration for datetime object with cron like format"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.6"
+files = [
+    {file = "croniter-3.0.3-py2.py3-none-any.whl", hash = "sha256:b3bd11f270dc54ccd1f2397b813436015a86d30ffc5a7a9438eec1ed916f2101"},
+    {file = "croniter-3.0.3.tar.gz", hash = "sha256:34117ec1741f10a7bd0ec3ad7d8f0eb8fa457a2feb9be32e6a2250e158957668"},
+]
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = ">2021.1"
+
+[[package]]
 name = "cryptography"
 version = "42.0.8"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
@@ -1339,20 +1354,24 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rubble"
-version = "0.4.2"
+version = "0.5.2"
 description = "Extend django-model-utils and django-extensions."
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "django_rubble-0.4.2-py3-none-any.whl", hash = "sha256:b915255ccfc176b0f278959e8c9323370d8d1f6c9de722fcf7529f9c7e1da7ef"},
-    {file = "django_rubble-0.4.2.tar.gz", hash = "sha256:6d767ed3bd2ecbcad3580f39aac2efe0f29581368043ef4674e0a0477167288a"},
+    {file = "django_rubble-0.5.2-py3-none-any.whl", hash = "sha256:6d11a8cfb95d443213245203741fedd69215f05b4fe0e534d26f14d60e613e7c"},
+    {file = "django_rubble-0.5.2.tar.gz", hash = "sha256:9aa8213f34aa872f95830a63c2f20c35b09dafb436d1807ebac7959e356a3118"},
 ]
 
 [package.dependencies]
-django = ">4,<5.1"
+croniter = ">=3.0.3,<4.0.0"
+django = ">4,<5.3"
 django-model-utils = ">=4.5.1,<5.0.0"
 loguru = ">=0.7.2,<0.8.0"
 pydantic = ">=2.6.4,<3.0.0"
+
+[package.extras]
+project = ["neapolitan (>=24.6,<25.0)"]
 
 [[package]]
 name = "django-simple-history"
@@ -5049,4 +5068,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7b7daca03a628e0343463b45304da67bdc6950759ba56a356b2a5b9453de4ced"
+content-hash = "41be5c85b1a619c37f65c3629a72a66e774cc4d25de5ce39dd17387a4ffedd8a"

@@ -245,6 +245,9 @@ crispy-bootstrap5==2024.2 ; python_version >= "3.10" and python_version < "4.0" 
 cron-descriptor==1.4.3 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:7b1a00d7d25d6ae6896c0da4457e790b98cba778398a3d48e341e5e0d33f0488 \
     --hash=sha256:a67ba21804983b1427ed7f3e1ec27ee77bf24c652b0430239c268c5ddfbf9dc0
+croniter==3.0.3 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:34117ec1741f10a7bd0ec3ad7d8f0eb8fa457a2feb9be32e6a2250e158957668 \
+    --hash=sha256:b3bd11f270dc54ccd1f2397b813436015a86d30ffc5a7a9438eec1ed916f2101
 cryptography==42.0.8 ; python_version >= "3.10" and python_version < "4.0" and sys_platform == "linux" \
     --hash=sha256:013629ae70b40af70c9a7a5db40abe5d9054e6f4380e50ce769947b73bf3caad \
     --hash=sha256:2346b911eb349ab547076f47f2e035fc8ff2c02380a7cbbf8d87114fa0f1c583 \
@@ -346,9 +349,9 @@ django-qr-code==4.1.0 ; python_version >= "3.10" and python_version < "4.0" \
 django-redis==5.4.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:6a02abaa34b0fea8bf9b707d2c363ab6adc7409950b2db93602e6cb292818c42 \
     --hash=sha256:ebc88df7da810732e2af9987f7f426c96204bf89319df4c6da6ca9a2942edd5b
-django-rubble==0.4.2 ; python_version >= "3.10" and python_version < "4.0" \
-    --hash=sha256:6d767ed3bd2ecbcad3580f39aac2efe0f29581368043ef4674e0a0477167288a \
-    --hash=sha256:b915255ccfc176b0f278959e8c9323370d8d1f6c9de722fcf7529f9c7e1da7ef
+django-rubble==0.5.2 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:6d11a8cfb95d443213245203741fedd69215f05b4fe0e534d26f14d60e613e7c \
+    --hash=sha256:9aa8213f34aa872f95830a63c2f20c35b09dafb436d1807ebac7959e356a3118
 django-simple-history==3.7.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:282cb2c4aa63f51547f17da7f2130abaa81ba01694676d19b88d52c94a57a52c \
     --hash=sha256:ac3b7ca8b0d33f7ea6be8fe7fc98cf43415efa500ff5dfe736fbd1ebc0cf39f9
