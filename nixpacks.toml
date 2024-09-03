@@ -1,2 +1,8 @@
+[phase.setup]
+nixPkgs = ["...", "poetry"]
+
+[phase.install]
+cmds = ["poetry install --with production --no-interactive --no-ansi"]
+
 [start]
-cmd = "docker compose -f production.yml run --rm django python manage.py migrate"
+cmd = "python manage.py migrate && ./compose/production/django/start"

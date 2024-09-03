@@ -221,10 +221,7 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-psycopg = [
-  {version = "^3.1.10", extras = ["c"], platform = "linux"},
-  {version = "^3.1.10", extras = ["binary"], platform = "win32"}
-]
+psycopg = {extras = ["binary"], version = "^3.2.1"}
 # django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
 # django-rubble = { path = "../django_utils", develop = true }
 django-rubble = "^0.5.2"
@@ -264,13 +261,6 @@ coverage = "^7.4.4"
 factory-boy = "^3.3.0"
 django-coverage-plugin = "^3.1.0"
 pytest-django = "^4.8.0"
-
-[tool.poetry.group.bridge]
-optional = true
-
-[tool.poetry.group.bridge.dependencies]
-# python-bridge = {path = "../bridge", develop = true}
-python-bridge = {git = "https://github.com/WoosterInitiative/bridge.git"}
 
 [build-system]
 requires = ["poetry-core"]
