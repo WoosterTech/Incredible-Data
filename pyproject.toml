@@ -195,16 +195,16 @@ hiredis = "^2.3.2"
 celery = {extras = ["redis"], version = "^5.3.6"}
 django-celery-beat = "^2.6.0"
 flower = "^2.0.1"
-uvicorn = {extras = ["standard"], version = "^0.29.0"}
-pydantic = "^2.6.4"
-django = "^5.0.4"
+uvicorn = {extras = ["standard"], version = "^0.30.6"}
+pydantic = "^2.8.2"
+django = "^5.1.1"
 django-environ = "^0.11.2"
-django-model-utils = "^4.5.1"
+django-model-utils = "^4.5.0"
 django-extensions = "^3.2.3"
-django-allauth = {extras = ["mfa"], version = "^0.63.1"}
+django-allauth = {extras = ["mfa"], version = "^64.2.0"}
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2024.2"
-django-phonenumber-field = "^8.0.0"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "^8.0.0"}
 django-compressor = "^4.4"
 django-redis = "^5.4.0"
 djangorestframework = "^3.15.1"
@@ -221,15 +221,11 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-psycopg = {extras = ["binary"], version = "^3.2.1"}
-# django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
-# django-rubble = { path = "../django_utils", develop = true }
-django-rubble = "^0.5.2"
-neapolitan = "^24.4"
-loguru = "^0.7.2"
-django-colorfield = "^0.11.0"
-django-simple-history = "^3.7.0"
-poetry = "^1.8.3"
+psycopg = [
+  {version = "^3.1.18", extras = ["c"], platform = "linux"},
+  {version = "^3.1.18", extras = ["binary"], platform = "win32"}
+]
+django-rubble = {version = "^0.5.2", extras = ["project"]}
 
 [tool.poetry.group.dev]
 optional=true
@@ -241,26 +237,37 @@ watchfiles = "^0.21.0"
 mypy = "^1.7.0"
 django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.14.5"}
-ruff = "^0.5.0"
+ruff = "^0.6.3"
 djlint = "^1.34.1"
 pre-commit = "^3.7.0"
 commitizen = "^3.24.0"
-django-debug-toolbar = "^4.3.0"
+# django-debug-toolbar = "^4.3.0"
+# django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
+
+[tool.poetry.group.production]
+optional = true
 
 [tool.poetry.group.production.dependencies]
-gunicorn = "^22.0.0"
+gunicorn = "^23.0.0"
 sentry-sdk = "^2.2.1"
 django-anymail = {extras = ["sendgrid"], version = "^10.3"}
 django-storages = {extras = ["s3"], version = "^1.14.3"}
 
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.1.1"
+pytest = "^8.3.2"
 pytest-sugar = "^1.0.0"
 coverage = "^7.4.4"
 factory-boy = "^3.3.0"
 django-coverage-plugin = "^3.1.0"
-pytest-django = "^4.8.0"
+pytest-django = "^4.9.0"
+
+[tool.poetry.group.bridge]
+optional = true
+
+[tool.poetry.group.bridge.dependencies]
+# python-bridge = {path = "../bridge", develop = true}
+python-bridge = {git = "git@github.com:WoosterInitiative/bridge.git", develop = true}
 
 [build-system]
 requires = ["poetry-core"]
