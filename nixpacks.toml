@@ -11,4 +11,4 @@ cmds = ['python -m venv --copies /opt/venv && . /opt/venv/bin/activate && poetry
 cmds = ["python manage.py migrate"]
 
 [start]
-cmd = "./compose/production/django/start"
+cmd = "./start.sh"
