@@ -337,7 +337,7 @@ django-model-utils==4.5.1 ; python_version >= "3.10" and python_version < "4.0" 
 django-money==3.5.2 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:161f79dc523b1f57c21b5f46b345f5e5f5b9c5bb40965fd3f6cfe3e41d7dce35 \
     --hash=sha256:ef51437178e0e15fb1072776556614828ce6239a49ca5b3c3b9bf1370e46d03d
-django-phonenumber-field==8.0.0 ; python_version >= "3.10" and python_version < "4.0" \
+django-phonenumber-field[phonenumberslite]==8.0.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:196c917b70c01a98e327f482eb8a4a4a55a29891db551f99078585397370b3ba \
     --hash=sha256:8a560fe1b01b94c9de8cde22bc373b695f023cc6df4baba00264cb079da9f631
 django-picklefield==3.2 ; python_version >= "3.10" and python_version < "4.0" \
@@ -725,6 +725,9 @@ packaging==24.1 ; python_version >= "3.10" and python_version < "4.0" \
 pexpect==4.9.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523 \
     --hash=sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f
+phonenumberslite==8.13.45 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:d0028e76664e4c702db7e08352863f903042563bb0b97db9fce9291ed2c5e5d9 \
+    --hash=sha256:f393d3a90a800ae1796c4c9a844a433bdefc18b97a5fb8c10976c973517e37b8
 pillow==10.4.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:02a2be69f9c9b8c1e97cf2713e789d4e398c751ecfd9967c18d0ce304efbf885 \
     --hash=sha256:030abdbe43ee02e0de642aee345efa443740aa4d828bfe8e2eb11922ea6a21ea \

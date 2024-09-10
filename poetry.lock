@@ -1281,6 +1281,7 @@ files = [
 
 [package.dependencies]
 Django = ">=3.2"
+phonenumberslite = {version = ">=7.0.2", optional = true, markers = "extra == \"phonenumberslite\""}
 
 [package.extras]
 phonenumbers = ["phonenumbers (>=7.0.2)"]
@@ -2675,6 +2676,17 @@ files = [
 
 [package.dependencies]
 ptyprocess = ">=0.5"
+
+[[package]]
+name = "phonenumberslite"
+version = "8.13.45"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumberslite-8.13.45-py2.py3-none-any.whl", hash = "sha256:f393d3a90a800ae1796c4c9a844a433bdefc18b97a5fb8c10976c973517e37b8"},
+    {file = "phonenumberslite-8.13.45.tar.gz", hash = "sha256:d0028e76664e4c702db7e08352863f903042563bb0b97db9fce9291ed2c5e5d9"},
+]
 
 [[package]]
 name = "pillow"
@@ -4880,4 +4892,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8d9173c567ade28f9f41c99e5ebf3e9f26a8c7fea742dfc22e261b9388fc704b"
+content-hash = "52da5444048a7e4b5eeaeb0c0ae8a2eba07e665f4c52c081397204a201984d34"
