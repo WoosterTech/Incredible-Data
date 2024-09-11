@@ -68,6 +68,6 @@ CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-from bridge import django  # noqa: E402
+# from bridge import django  # noqa: E402, ERA001, RUF100
 
-django.configure(locals())
+# django.configure(locals())  # noqa: ERA001

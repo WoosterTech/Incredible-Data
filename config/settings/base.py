@@ -94,6 +94,7 @@ THIRD_PARTY_APPS = [
     "qr_code",
     "django_tables2",
     "django_rubble",
+    "dbbackup",
 ]
 
 LOCAL_APPS = [
@@ -126,6 +127,17 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
+
+# STORAGES
+# ----------------------------------------------------------------------------
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    "dbbackup": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": BASE_DIR / "backup"},
+    },
+}
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
