@@ -3,11 +3,16 @@ To understand why this file is here, please read:
 
 http://cookiecutter-django.readthedocs.io/en/latest/faq.html#why-is-there-a-django-contrib-sites-directory-in-cookiecutter-django
 """
+from typing import TYPE_CHECKING
 from django.conf import settings
 from django.db import migrations
 
+if TYPE_CHECKING:
+    from django.apps.registry import Apps
+    from django.db.models import Model
 
-def _update_or_create_site_with_sequence(site_model, connection, domain, name):
+
+def _update_or_create_site_with_sequence(site_model: type["Model"], connection, domain, name):
     """Update or create the site with default ID and keep the DB sequence in sync."""
     site, created = site_model.objects.update_or_create(
         id=settings.SITE_ID,
@@ -34,7 +39,7 @@ def _update_or_create_site_with_sequence(site_model, connection, domain, name):
                 )
 
 
-def update_site_forward(apps, schema_editor):
+def update_site_forward(apps: "Apps", schema_editor):
     """Set site domain and name."""
     Site = apps.get_model("sites", "Site")
     _update_or_create_site_with_sequence(

@@ -228,13 +228,14 @@ psycopg = [
   {version = "^3.1.18", extras = ["c"], platform = "linux"},
   {version = "^3.1.18", extras = ["binary"], platform = "win32"}
 ]
-django-rubble = {path = "../django-rubble", extras = ["all"]}
-google-api-python-client = "^2.145.0"
-google-auth-httplib2 = "^0.2.0"
-google-auth-oauthlib = "^1.2.1"
-email-validator = "^2.2.0"
-humanize = "^4.10.0"
-geopy = "^2.4.1"
+# django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
+# django-rubble = { path = "../django_utils", develop = true }
+django-rubble = "^0.5.2"
+neapolitan = "^24.4"
+loguru = "^0.7.2"
+django-colorfield = "^0.11.0"
+django-simple-history = "^3.7.0"
+poetry = "^1.8.3"
 
 [tool.poetry.group.dev]
 optional=true

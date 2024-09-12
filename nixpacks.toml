@@ -1,2 +1,14 @@
+[variables]
+NIXPACKS_POETRY_VERSION = "1.8.3"
+
+[phases.setup]
+nixPkgs = ["...", "poetry"]
+
+[phases.install]
+cmds = ['python -m venv --copies /opt/venv && . /opt/venv/bin/activate && poetry install --with production --no-interaction --no-ansi']
+
+[phases.release]
+cmds = ["python manage.py migrate --settings config.settings.production"]
+
 [start]
-cmd = "docker compose -f production.yml run --rm django python manage.py migrate"
+cmd = "./compose/production/django/start"
