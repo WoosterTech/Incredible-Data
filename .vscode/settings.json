@@ -11,5 +11,10 @@
             "source.organizeImports": "explicit"
         },
         "editor.formatOnSave": true,
-    }
+    },
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

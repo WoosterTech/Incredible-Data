@@ -102,6 +102,7 @@ LOCAL_APPS = [
     "incredible_data.bins",
     "incredible_data.budget",
     "incredible_data.business",
+    "incredible_data.events",
     "incredible_data.contacts",
     "incredible_data.customers",
 ]
