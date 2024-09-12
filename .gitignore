@@ -282,3 +282,5 @@ incredible_data/media/
 incredible_data/budget/test_receipt.json
 
 *.sqlite3
+credentials.json
+token.json
