@@ -1,3 +1,10 @@
+## 0.7.0.dev20240912658 (2024-09-12)
+
+### Feat
+
+- **events**: add events app, incomplete
+- **views**: neapolitan and other views; mostly working invoice
+
 ## 0.6.0 (2024-06-05)
 
 ### Feat
