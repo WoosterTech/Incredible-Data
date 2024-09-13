@@ -2,24 +2,29 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
+from typing import Any
 
 import environ
 from django.contrib.messages import constants as message_constants
+from loguru import logger
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
 APPS_DIR = BASE_DIR / "incredible_data"
-env = environ.Env()
+env = environ.Env(
+    SOCIALACCOUNT_PROVIDERS=(dict, {}),
+)
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
+    logger.info("Loading .env file to get environment variables")
     env.read_env(str(BASE_DIR / ".env"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 MESSAGE_LEVEL = message_constants.DEBUG if DEBUG else message_constants.INFO
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -94,6 +99,7 @@ THIRD_PARTY_APPS = [
     "qr_code",
     "django_tables2",
     "django_rubble",
+    "dbbackup",
 ]
 
 LOCAL_APPS = [
@@ -126,6 +132,17 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
+
+# STORAGES
+# ----------------------------------------------------------------------------
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    "dbbackup": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": BASE_DIR / "backup"},
+    },
+}
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -357,7 +374,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS = {
+SPECTACULAR_SETTINGS: dict[str, Any] = {
     "TITLE": "Incredible Data API",
     "DESCRIPTION": "Documentation of API endpoints of Incredible Data",
     "VERSION": "1.0.0",
