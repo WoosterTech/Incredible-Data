@@ -173,7 +173,7 @@ tag_format = "$version"
 version_scheme = "pep440"
 version_provider = "poetry"
 # version = "0.3.0"
-update_changelog_on_bump = true
+# update_changelog_on_bump = true
 major_version_zero = true
 version_files = ["incredible_data/__init__.py:__version__"]
 

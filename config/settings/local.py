@@ -71,6 +71,6 @@ CELERY_TASK_EAGER_PROPAGATES = True
 BRIDGE = env.bool("DJANGO_BRIDGE", default=False)
 
 if BRIDGE:
-    from bridge import django  # type: ignore[import-not-found]
+    from bridge import django  # type: ignore[reportMissingImports]
 
     django.configure(locals())
