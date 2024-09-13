@@ -221,11 +221,8 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-psycopg = [
-  {version = "^3.1.18", extras = ["c"], platform = "linux"},
-  {version = "^3.1.18", extras = ["binary"], platform = "win32"}
-]
 django-rubble = {version = "^0.5.2", extras = ["project"]}
+psycopg = {extras = ["binary"], version = "^3.2.1"}
 
 [tool.poetry.group.dev]
 optional=true
@@ -265,12 +262,12 @@ factory-boy = "^3.3.0"
 django-coverage-plugin = "^3.1.0"
 pytest-django = "^4.9.0"
 
-[tool.poetry.group.bridge]
-optional = true
+# [tool.poetry.group.bridge]
+# optional = true
 
-[tool.poetry.group.bridge.dependencies]
-# python-bridge = {path = "../bridge", develop = true}
-python-bridge = {path = "../bridge", develop = true}
+# [tool.poetry.group.bridge.dependencies]
+# # python-bridge = {path = "../bridge", develop = true}
+# # python-bridge = {git = "git@github.com:WoosterInitiative/bridge.git", develop = true}
 # python-bridge = {git = "git@github.com:WoosterInitiative/bridge.git", develop = true}
 
 [build-system]
