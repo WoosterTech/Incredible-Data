@@ -172,7 +172,7 @@ LOGGING = {
 
 # allauth
 # ------------------------------------------------------------------------------
-SOCIALACCOUNT_PROVIDERS = env.parse_value("DJANGO_SOCIALACCOUNT_PROVIDERS")
+SOCIALACCOUNT_PROVIDERS = env.parse_value("DJANGO_SOCIALACCOUNT_PROVIDERS", cast=dict)
 
 # Sentry
 # ------------------------------------------------------------------------------
