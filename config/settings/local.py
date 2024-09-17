@@ -68,6 +68,9 @@ CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-# from bridge import django  # noqa: ERA001
+BRIDGE = env.bool("DJANGO_BRIDGE", default=False)
 
-# django.configure(locals())  # noqa: ERA001
+if BRIDGE:
+    from bridge import django  # type: ignore[reportMissingImports]
+
+    django.configure(locals())

@@ -1,4 +1,5 @@
 # ruff: noqa: E501
+import contextlib
 import logging
 
 import sentry_sdk
@@ -169,6 +170,13 @@ LOGGING = {
         },
     },
 }
+
+# allauth
+# ------------------------------------------------------------------------------
+with contextlib.suppress(ValueError):
+    SOCIALACCOUNT_PROVIDERS = env.parse_value(
+        "DJANGO_SOCIALACCOUNT_PROVIDERS", cast=dict
+    )
 
 # Sentry
 # ------------------------------------------------------------------------------

@@ -1,3 +1,9 @@
+## 0.7.0.dev20240910001 (2024-09-10)
+
+### Feat
+
+- **views**: neapolitan and other views; mostly working invoice
+
 ## 0.6.0 (2024-06-05)
 
 ### Feat
