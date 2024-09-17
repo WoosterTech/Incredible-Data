@@ -18,7 +18,7 @@ plugins = ["django_coverage_plugin"]
 
 # ==== mypy ====
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 check_untyped_defs = true
 ignore_missing_imports = true
 warn_unused_ignores = true
@@ -158,14 +158,17 @@ unfixable = ["F401"]
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
+[tool.ruff.lint.isort]
+force-single-line = false
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
-
-[tool.ruff.lint.isort]
-force-single-line = false
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -221,7 +224,14 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-django-rubble = {version = "^0.5.2", extras = ["project"]}
+# django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
+# django-rubble = { path = "../django_utils", develop = true }
+django-rubble = "^0.5.2"
+neapolitan = "^24.4"
+loguru = "^0.7.2"
+django-colorfield = "^0.11.0"
+django-simple-history = "^3.7.0"
+poetry = "^1.8.3"
 psycopg = {extras = ["binary"], version = "^3.2.1"}
 django-debug-toolbar = "^4.4.6"
 
