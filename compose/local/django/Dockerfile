@@ -58,6 +58,7 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/home/$USERNA
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # psycopg2 dependencies
   libpq-dev \
+  postgresql-client \
   # Translations dependencies
   gettext \
   # cleaning up unused files
