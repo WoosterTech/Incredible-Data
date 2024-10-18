@@ -1,2 +1,5 @@
 enable_postgres: true
 enable_worker: false
+
+postgres_image: "postgres:15"
+postgres_name: "bridge_incredible_data_postgres"

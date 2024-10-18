@@ -1,3 +1,27 @@
+## Unreleased
+
+## 0.7.0.dev20240913646 (2024-09-13)
+
+## 0.7.0.dev20240913635 (2024-09-13)
+
+## 0.7.0.dev20240913608 (2024-09-13)
+
+## 0.7.0.dev20240913595 (2024-09-13)
+
+### Fix
+
+- **psycopg**: remove "c" extra and use "binary" always
+
+## 0.7.0.dev20240913583 (2024-09-13)
+
+## 0.7.0.dev20240910001 (2024-09-10)
+
+### Feat
+
+- **allauth**: add socialaccount_providers variable
+- **fuel**: add new app with basic models
+- **views**: neapolitan and other views; mostly working invoice
+
 ## 0.6.0 (2024-06-05)
 
 ### Feat
