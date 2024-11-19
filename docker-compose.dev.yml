@@ -1,0 +1,22 @@
+services:
+  db:
+    image: docker.io/postgres:15
+    container_name: incredibles_data_db
+    ports:
+      - "31245:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - incredibles_data_pgdata:/var/lib/postgresql/data
+
+  mail:
+    image: docker.io/axllent/mailpit:latest
+    container_name: incredibles_data_mail
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  incredibles_data_pgdata:

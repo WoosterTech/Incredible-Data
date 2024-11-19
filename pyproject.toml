@@ -185,7 +185,7 @@ authors = ["Karl Wooster <karl@woostertech.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<4.0"
 python-slugify = "^8.0.4"
 pillow = "^10.3.0"
 argon2-cffi = "^23.1.0"
@@ -204,7 +204,7 @@ django-extensions = "^3.2.3"
 django-allauth = {extras = ["mfa"], version = "^0.63.1"}
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2024.2"
-django-phonenumber-field = "^8.0.0"
+django-phonenumber-field = {version = "^8.0.0", extras = ["phonenumberslite"]}
 django-compressor = "^4.4"
 django-redis = "^5.4.0"
 djangorestframework = "^3.15.1"
@@ -221,10 +221,7 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-psycopg = [
-  {version = "^3.1.10", extras = ["c"], platform = "linux"},
-  {version = "^3.1.10", extras = ["binary"], platform = "win32"}
-]
+psycopg = {version = "^3.2.3", extras = ["binary"]}
 django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", extras = ["secrets"]}
 neapolitan = "^24.4"
 loguru = "^0.7.2"
