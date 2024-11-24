@@ -10,5 +10,8 @@ cmds = ['python -m venv --copies /opt/venv && . /opt/venv/bin/activate && poetry
 [phases.release]
 cmds = ["python manage.py migrate && python manage.py collectstatic --no-input && python manage.py compress"]
 
+[phases.deploy]
+cmds = ["python manage.py createsuperuser --noinput"]
+
 [start]
 cmd = "gunicorn config.wsgi --bind 0.0.0.0:8000"

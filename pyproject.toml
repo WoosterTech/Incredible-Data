@@ -235,7 +235,6 @@ poetry = "^1.8.3"
 psycopg = {extras = ["binary"], version = "^3.2.1"}
 django-debug-toolbar = "^4.4.6"
 geopy = "^2.4.1"
-django-createsuperuser-signal = "^0.0.1"
 
 [tool.poetry.group.dev]
 optional=true

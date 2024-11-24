@@ -211,4 +211,3 @@ SPECTACULAR_SETTINGS["SERVERS"] = [
 ]
 # Your stuff...
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ["createsuperuser"]
