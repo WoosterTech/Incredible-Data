@@ -226,7 +226,7 @@ django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
 # django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", develop = true}
 # django-rubble = { path = "../django_utils", develop = true }
-django-rubble = "^0.5.2"
+django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", extras = ["all"]}
 neapolitan = "^24.4"
 loguru = "^0.7.2"
 django-colorfield = "^0.11.0"

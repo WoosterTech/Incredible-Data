@@ -1376,24 +1376,37 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rubble"
-version = "0.5.2"
+version = "0.7.0b6"
 description = "Extend django-model-utils and django-extensions."
 optional = false
-python-versions = "<4.0,>=3.10"
-files = [
-    {file = "django_rubble-0.5.2-py3-none-any.whl", hash = "sha256:6d11a8cfb95d443213245203741fedd69215f05b4fe0e534d26f14d60e613e7c"},
-    {file = "django_rubble-0.5.2.tar.gz", hash = "sha256:9aa8213f34aa872f95830a63c2f20c35b09dafb436d1807ebac7959e356a3118"},
-]
+python-versions = "^3.10"
+files = []
+develop = false
 
 [package.dependencies]
-croniter = ">=3.0.3,<4.0.0"
+croniter = ">=3.0.3"
 django = ">4,<5.3"
-django-model-utils = ">=4.5.1,<5.0.0"
-loguru = ">=0.7.2,<0.8.0"
-pydantic = ">=2.6.4,<3.0.0"
+django-model-utils = ">=4.5.1"
+django-simple-history = {version = ">=3.7.0", optional = true}
+infisical-python = {version = "^2.3.5", optional = true}
+loguru = ">=0.7.2"
+neapolitan = {version = ">=24.6", optional = true}
+pydantic = ">=2.6.4"
+rich = ">=13.7.0"
+typer = {version = "^0.12.5", optional = true}
 
 [package.extras]
-project = ["neapolitan (>=24.6,<25.0)"]
+all = ["django-simple-history (>=3.7.0)", "infisical-python (>=2.3.5,<3.0.0)", "neapolitan (>=24.6)", "typer (>=0.12.5,<0.13.0)"]
+cli = ["typer (>=0.12.5,<0.13.0)"]
+history = ["django-simple-history (>=3.7.0)"]
+project = ["neapolitan (>=24.6)"]
+secrets = ["infisical-python (>=2.3.5,<3.0.0)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/WoosterTech/django-rubble.git"
+reference = "HEAD"
+resolved_reference = "469b2dae27f10eab9edaf0b2e4e373e65449324b"
 
 [[package]]
 name = "django-simple-history"
@@ -2155,6 +2168,53 @@ test = ["flufl.flake8", "importlib-resources (>=1.3)", "jaraco.test (>=5.4)", "p
 type = ["pytest-mypy"]
 
 [[package]]
+name = "infisical-python"
+version = "2.3.5"
+description = "Official Infisical SDK for Python (New)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "infisical_python-2.3.5-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:8f5fd5992cc0de4a8e571bb659c7685d995142735e77fe1d3e7e5329a90703b5"},
+    {file = "infisical_python-2.3.5-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:1fd04582f4742d64b4b0755a5351efc270bccdc36f91d84f98de0e12de36ca52"},
+    {file = "infisical_python-2.3.5-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:afd254045ceddeb136c393d4d9e2d0c0a6889c10dc478d921b7154fd4d94420a"},
+    {file = "infisical_python-2.3.5-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:6a115854bb4ef2b8470898ff18bcc5832307a6cdd7a96fa9872125ab11b9a2f0"},
+    {file = "infisical_python-2.3.5-cp310-none-win_amd64.whl", hash = "sha256:b1ccb66916698a0cd78c3451877511f7657e6ff0b902c5986d256c9f53d02863"},
+    {file = "infisical_python-2.3.5-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:7bc60217246e5da71747ca27d55768fb812dd8bc32ca0b5123fa69153777e461"},
+    {file = "infisical_python-2.3.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:8cccf41df5a2b24664d6f610a50b1a19bdf6991cc95b2187ad0b8e5f7c3deca3"},
+    {file = "infisical_python-2.3.5-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:386f717f400cfb020b4cc53b66f763c860523e3be6ba9d8525d33b22b17a5afa"},
+    {file = "infisical_python-2.3.5-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:4d68e63142c57f9beea3498425f220495288c36e9189f8d2818040d34621d753"},
+    {file = "infisical_python-2.3.5-cp311-none-win_amd64.whl", hash = "sha256:2c3026268301e4d56bfb8edf9c61e06653f60b8bbf8c0d0d6bad493974df05ef"},
+    {file = "infisical_python-2.3.5-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:d1d5c4797bee9c83cf34b39b088d32b1302f964973e38642868bf676c334dcae"},
+    {file = "infisical_python-2.3.5-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:d86c9f6bfc88cc4694e2850da80c82b05c1479995337ba650971752aacc1c0fa"},
+    {file = "infisical_python-2.3.5-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:87f166ce9fee1ac316412a7f019189a6485e93e53a0d29bec4eccece591f0511"},
+    {file = "infisical_python-2.3.5-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:8d426713143ec49edc77e059059d97bb47f371c56e8de8ab83d60d2d3b7f239f"},
+    {file = "infisical_python-2.3.5-cp312-none-win_amd64.whl", hash = "sha256:f52ca7f6a63150eb0ebf0eda5f350cb3b2519e7a0b4a88f2b74827f72e8cae06"},
+    {file = "infisical_python-2.3.5-cp37-cp37m-macosx_10_12_x86_64.whl", hash = "sha256:1bf56cca416ae0230c339fc4ec1ab26d3c0fc3c6299fbdd35baef2ef2c4a3797"},
+    {file = "infisical_python-2.3.5-cp37-cp37m-macosx_11_0_arm64.whl", hash = "sha256:914f4517f3501a70c3795429e4a710b5d5d9cdbbf4b7799b35b92d38aec7d1d1"},
+    {file = "infisical_python-2.3.5-cp37-cp37m-manylinux_2_28_aarch64.whl", hash = "sha256:fa69e60a9bd4cbe8be54f3d6c2f702af45889c5edaab2c29fef5b921d2bb4429"},
+    {file = "infisical_python-2.3.5-cp37-cp37m-manylinux_2_28_x86_64.whl", hash = "sha256:1ba7a43212c703ff0ec23d99810381c0c49ab5b305908300cc0f37a9d90739fa"},
+    {file = "infisical_python-2.3.5-cp37-none-win_amd64.whl", hash = "sha256:be6457a13f9726cbecc36f7af193e3201d949522ee765d48d6ad754469ea4535"},
+    {file = "infisical_python-2.3.5-cp38-cp38-macosx_10_12_x86_64.whl", hash = "sha256:4965e61dd2371bedf0bb8d5c13c6d500a7c18aafbf9bede469517ce0689eb9b0"},
+    {file = "infisical_python-2.3.5-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:52c870e378c856acce52321bdb48d3928f812bc0575ee1ea407ae58cbd7252bd"},
+    {file = "infisical_python-2.3.5-cp38-cp38-manylinux_2_28_aarch64.whl", hash = "sha256:4cb67f1ac3eca62e3f09f73d03725b94a6c42c71a10b81b10ea86e21a192d4ec"},
+    {file = "infisical_python-2.3.5-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:4aa64a28a9284cf1d46328aed806fbf9ea8a19a57753758c0a7b7a7d698d916a"},
+    {file = "infisical_python-2.3.5-cp38-none-win_amd64.whl", hash = "sha256:f386c937832a60f8a408ad64a21ab2f101add3b1d68b2e5dd203203ca73d4fcb"},
+    {file = "infisical_python-2.3.5-cp39-cp39-macosx_10_12_x86_64.whl", hash = "sha256:fd29431212acf0420a5c6f659c19cc026ea2a7edcbc050067666ba52c9df3a0a"},
+    {file = "infisical_python-2.3.5-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:c2daafb2e8d2a97e890b03212899a55d3061f51330cd65a7a6febf42b8686e3b"},
+    {file = "infisical_python-2.3.5-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:01020f7cf1c8784e1d29e9b7c7a00a7818f8af548f45e0db0fc5ab871dc6e05a"},
+    {file = "infisical_python-2.3.5-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:b3d537a6f18fcebcfa0f1ac0207c3f8370a78db6b37944364953fa5f729b2c18"},
+    {file = "infisical_python-2.3.5-cp39-none-win_amd64.whl", hash = "sha256:dbd99805c2baf4b62f3d2181f2f180b086b39ddefc03e25150cee11bd222cc42"},
+    {file = "infisical_python-2.3.5-pp310-pypy310_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:819c8819b1a3ca46627328a36b8375d22649864a85516f23c1ff81289b2a5900"},
+    {file = "infisical_python-2.3.5-pp37-pypy37_pp73-manylinux_2_28_aarch64.whl", hash = "sha256:24eba5423cf06a599870d749ea7b65ba9a1b5779fdaa139e7b5e5dc5f6187ad4"},
+    {file = "infisical_python-2.3.5-pp37-pypy37_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:4ef5d400b2e69bc7133bc520bdd23b09a73cd280b5b152f575c03f08763e4905"},
+    {file = "infisical_python-2.3.5-pp38-pypy38_pp73-manylinux_2_28_aarch64.whl", hash = "sha256:7557f4933f14b0f020fa23ab60e7e3e4fde319f9b51860749bc9405f560ebf1c"},
+    {file = "infisical_python-2.3.5-pp38-pypy38_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:d72b1ea9a5a5ee00d8ec3a0402ac2e55cd35baece482ed79e8aefbcffda6a506"},
+    {file = "infisical_python-2.3.5-pp39-pypy39_pp73-manylinux_2_28_aarch64.whl", hash = "sha256:13ffbfc5dafc555e9fb2e040e05f6b3f28bb5982a0ed4a6c0e650d71ed2f3e16"},
+    {file = "infisical_python-2.3.5-pp39-pypy39_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:b4904eb825ad3ed3dd3efa08e4a9ba2393fa22fabb0f4298d1b0cfaac3a1e58d"},
+    {file = "infisical_python-2.3.5.tar.gz", hash = "sha256:68437d7178c220948166726d6ca8ca544e8e7f9fa960230e0ea9b39ea440a40a"},
+]
+
+[[package]]
 name = "inflection"
 version = "0.5.1"
 description = "A port of Ruby on Rails inflector to Python"
@@ -2465,6 +2525,30 @@ win32-setctime = {version = ">=1.0.0", markers = "sys_platform == \"win32\""}
 dev = ["Sphinx (==7.2.5)", "colorama (==0.4.5)", "colorama (==0.4.6)", "exceptiongroup (==1.1.3)", "freezegun (==1.1.0)", "freezegun (==1.2.2)", "mypy (==v0.910)", "mypy (==v0.971)", "mypy (==v1.4.1)", "mypy (==v1.5.1)", "pre-commit (==3.4.0)", "pytest (==6.1.2)", "pytest (==7.4.0)", "pytest-cov (==2.12.1)", "pytest-cov (==4.1.0)", "pytest-mypy-plugins (==1.9.3)", "pytest-mypy-plugins (==3.0.0)", "sphinx-autobuild (==2021.3.14)", "sphinx-rtd-theme (==1.3.0)", "tox (==3.27.1)", "tox (==4.11.0)"]
 
 [[package]]
+name = "markdown-it-py"
+version = "3.0.0"
+description = "Python port of markdown-it. Markdown parsing, done right!"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "markdown-it-py-3.0.0.tar.gz", hash = "sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb"},
+    {file = "markdown_it_py-3.0.0-py3-none-any.whl", hash = "sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1"},
+]
+
+[package.dependencies]
+mdurl = ">=0.1,<1.0"
+
+[package.extras]
+benchmarking = ["psutil", "pytest", "pytest-benchmark"]
+code-style = ["pre-commit (>=3.0,<4.0)"]
+compare = ["commonmark (>=0.9,<1.0)", "markdown (>=3.4,<4.0)", "mistletoe (>=1.0,<2.0)", "mistune (>=2.0,<3.0)", "panflute (>=2.3,<3.0)"]
+linkify = ["linkify-it-py (>=1,<3)"]
+plugins = ["mdit-py-plugins"]
+profiling = ["gprof2dot"]
+rtd = ["jupyter_sphinx", "mdit-py-plugins", "myst-parser", "pyyaml", "sphinx", "sphinx-copybutton", "sphinx-design", "sphinx_book_theme"]
+testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
+
+[[package]]
 name = "markupsafe"
 version = "3.0.2"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -2547,6 +2631,17 @@ files = [
 
 [package.dependencies]
 traitlets = "*"
+
+[[package]]
+name = "mdurl"
+version = "0.1.2"
+description = "Markdown URL utilities"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"},
+    {file = "mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba"},
+]
 
 [[package]]
 name = "more-itertools"
@@ -3952,6 +4047,25 @@ files = [
 requests = ">=2.0.1,<3.0.0"
 
 [[package]]
+name = "rich"
+version = "13.9.4"
+description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "rich-13.9.4-py3-none-any.whl", hash = "sha256:6049d5e6ec054bf2779ab3358186963bac2ea89175919d699e378b99738c2a90"},
+    {file = "rich-13.9.4.tar.gz", hash = "sha256:439594978a49a09530cff7ebc4b5c7103ef57baf48d5ea3184f21d9a2befa098"},
+]
+
+[package.dependencies]
+markdown-it-py = ">=2.2.0"
+pygments = ">=2.13.0,<3.0.0"
+typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.11\""}
+
+[package.extras]
+jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
 name = "rjsmin"
 version = "1.2.2"
 description = "Javascript Minifier"
@@ -4483,6 +4597,23 @@ files = [
     {file = "trove_classifiers-2024.10.16-py3-none-any.whl", hash = "sha256:9b02a4cb49bd2e85c13e728ee461f4f332d6334736b18d61254c964643687144"},
     {file = "trove_classifiers-2024.10.16.tar.gz", hash = "sha256:8a3570c880f7ca2ffebbc91806aee3e8f5cd221422dfc8cd2cad4b48789ac69b"},
 ]
+
+[[package]]
+name = "typer"
+version = "0.12.5"
+description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "typer-0.12.5-py3-none-any.whl", hash = "sha256:62fe4e471711b147e3365034133904df3e235698399bc4de2b36c8579298d52b"},
+    {file = "typer-0.12.5.tar.gz", hash = "sha256:f592f089bedcc8ec1b974125d64851029c3b1af145f04aca64d69410f0c9b722"},
+]
+
+[package.dependencies]
+click = ">=8.0.0"
+rich = ">=10.11.0"
+shellingham = ">=1.3.0"
+typing-extensions = ">=3.7.4.3"
 
 [[package]]
 name = "types-pytz"
@@ -5054,4 +5185,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "563c27f49c5105c4b5441d4e0b82ddfdba71c2deb246ff3d74866ac42ec5f1c9"
+content-hash = "d7698cce99d024bc934cd97c41ebcd4f9ef62d040483c22c2a75d9900e56104b"
