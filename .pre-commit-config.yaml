@@ -9,7 +9,7 @@ default_stages:
 exclude: ^docs/|/migrations/|devcontainer.json|/users/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
     - id: trailing-whitespace
     - id: end-of-file-fixer
@@ -22,7 +22,7 @@ repos:
     - id: check-docstring-first
     - id: detect-private-key
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.21.0
+    rev: 1.22.1
     hooks:
     - id: django-upgrade
       args: [--target-version, "5.1"]
@@ -31,29 +31,29 @@ repos:
     hooks:
     - id: check-json5
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.4
+    rev: v0.8.0
     hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
     - id: ruff-format
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.35.2
+    rev: v1.36.1
     hooks:
     - id: djlint-reformat-django
     - id: djlint-django
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.29.0
+    rev: v4.0.0
     hooks:
     - id: commitizen
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
+    rev: v3.19.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus,--py37-plus,--py38-plus,--py39-plus,--py310-plus,--py311-plus,--py312-plus]
   - repo: https://github.com/python-poetry/poetry
     #! does not update properly
-    # 1.8.3 as of 2024-05-27
-    rev: 1.8.3
+    # 1.8.4 as of 2024-11-26
+    rev: 1.8.4
     hooks:
     - id: poetry-check
     - id: poetry-lock
