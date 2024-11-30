@@ -3,7 +3,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 
-from incredible_data.contacts.models.utility_models import BaseNumberedModel
+from incredible_data.contacts.models.utility_models import (
+    BaseNumberedModel,
+    NumberConfig,
+)
 
 
 class Project(BaseNumberedModel):
@@ -20,11 +23,7 @@ class Project(BaseNumberedModel):
         null=True,
     )
     slug = AutoSlugField(populate_from=["pk", "name"])
-    number_config = {
-        "prefix": "PJ",
-        "width": 4,
-        "start_value": 100,
-    }
+    number_config = NumberConfig(prefix="PJ", width=4, start_value=100)
 
     def __str__(self) -> str:
         return f"{self.number} {self.name}"

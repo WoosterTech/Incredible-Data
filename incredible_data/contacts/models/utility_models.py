@@ -43,16 +43,11 @@ class NumberedModel(models.Model):
 
     `f"{number_prefix}{str(self.id).zfill(number_width)}`
 
-    Args:
-        number_config: A dictionary with the following key:value pairs:
-            "prefix": str,
-            "width": int,
-            "start_value": 1
-        number_prefix: A string prefix, case-sensitive
-        number_width: An int representing how wide the numeric part of the string
-        should be.
-        number_start_value: An int used to set initial value. Only used for
-        initial creation.
+    Attributes:
+        number_config: a NumberConfig instance with the following attributes:
+            - prefix: str = ""
+            - width: int = 0
+            - start_value: int = 1
 
 
     Example:
