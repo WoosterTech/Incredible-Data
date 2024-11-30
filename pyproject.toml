@@ -128,9 +128,8 @@ select = [
   "SLOT",
   "SIM",
   "TID",
-  "TCH",
+  "TC",
   "INT",
-  # "ARG", # Unused function argument
   "PTH",
   "ERA",
   "PD",
@@ -138,11 +137,7 @@ select = [
   "PL",
   "TRY",
   "FLY",
-  # "NPY",
-  # "AIR",
   "PERF",
-  # "FURB",
-  # "LOG",
   "RUF"
 ]
 ignore = [
@@ -246,7 +241,7 @@ watchfiles = "^0.21.0"
 mypy = "^1.7.0"
 django-stubs = {extras = ["compatible-mypy"], version = "^4.2.7"}
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.14.5"}
-ruff = "^0.6.4"
+ruff = "^0.8.1"
 djlint = "^1.34.1"
 pre-commit = "^3.7.0"
 commitizen = "^3.24.0"
