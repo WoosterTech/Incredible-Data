@@ -246,6 +246,7 @@ djlint = "^1.34.1"
 pre-commit = "^3.7.0"
 commitizen = "^3.24.0"
 django-upgrade = "^1.21.0"
+deptry = "^0.21.1"
 
 [tool.poetry.group.production]
 optional=true
@@ -258,6 +259,27 @@ django-storages = {extras = ["s3"], version = "^1.14.3"}
 
 [tool.poetry.group.test]
 optional=true
+
+[tool.deptry]
+extend_exclude = [".*/tests/", ".*/conftest.py", ".*/helpers/test_functions.py"]
+
+[tool.deptry.per_rule_ignores]
+DEP002 = [  # used in settings.INSTALLED_APPS (and others)
+    "gunicorn",
+    "django-compressor",
+    "django-redis",
+    "django-cors-headers",
+    "hiredis",
+    "django-storages",
+    "django-anymail",
+    "pillow",
+    "argon2-cffi",
+    "whitenoise",
+    "redis",
+    "psycopg",
+    "django-cotton"
+]
+DEP004 = ["sentry_sdk"]
 
 
 [tool.poetry.group.test.dependencies]
