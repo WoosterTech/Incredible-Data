@@ -18,10 +18,13 @@ class GeoLocate:
 
 
 if __name__ == "__main__":
+    from rich import print  # noqa: A004
     from rich.pretty import pprint
 
     latitude = 38.8977
     longitude = -77.0365
+
+    print(f"(Latitude: {latitude}, Longitude: {longitude})")
 
     lat_lon_location = GeoLocate.from_lat_long(latitude, longitude)
 
