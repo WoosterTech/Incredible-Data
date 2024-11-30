@@ -177,7 +177,7 @@ version_files = ["incredible_data/__init__.py:__version__"]
 
 [tool.poetry]
 name = "incredible-data"
-version = "0.7.0.dev20240913646"
+version = "0.7.0b0"
 description = ""
 authors = ["Karl Wooster <karl@woostertech.com>"]
 readme = "README.md"
