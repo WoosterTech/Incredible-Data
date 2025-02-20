@@ -67,10 +67,3 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
-
-BRIDGE = env.bool("DJANGO_BRIDGE", default=False)
-
-if BRIDGE:
-    from bridge import django  # type: ignore[reportMissingImports]
-
-    django.configure(locals())

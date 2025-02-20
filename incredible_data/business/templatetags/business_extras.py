@@ -5,9 +5,9 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaultfilters import stringfilter
 from django.urls import reverse
 from django.utils.html import conditional_escape, format_html
+from djmoney.money import Money
 from furl import furl
 from loguru import logger
-from moneyed import Money
 
 register = template.Library()
 

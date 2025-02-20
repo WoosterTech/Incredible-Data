@@ -4,7 +4,7 @@ ci:
   submodules: false
 
 default_stages:
-- commit
+- pre-commit
 
 exclude: ^docs/|/migrations/|devcontainer.json|/users/
 repos:
@@ -22,7 +22,7 @@ repos:
     - id: check-docstring-first
     - id: detect-private-key
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.22.1
+    rev: 1.23.1
     hooks:
     - id: django-upgrade
       args: [--target-version, "5.1"]
@@ -30,33 +30,27 @@ repos:
     rev: v1.0.0
     hooks:
     - id: check-json5
+  - repo: https://github.com/fpgmaas/deptry.git
+    rev: 0.23.0
+    hooks:
+    - id: deptry
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    rev: v0.9.7
     hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
     - id: ruff-format
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.36.1
+    rev: v1.36.4
     hooks:
     - id: djlint-reformat-django
     - id: djlint-django
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.0.0
+    rev: v4.2.2
     hooks:
     - id: commitizen
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.0
-    hooks:
-    -   id: pyupgrade
-        args: [--py36-plus,--py37-plus,--py38-plus,--py39-plus,--py310-plus,--py311-plus,--py312-plus]
   - repo: https://github.com/python-poetry/poetry
-    #! does not update properly
-    # 1.8.4 as of 2024-11-26
-    rev: 1.8.4
+    rev: 2.1.1
     hooks:
     - id: poetry-check
     - id: poetry-lock
-      args: [--no-update]
-    # - id: poetry-export
-    #   args: [--with, "production",-o,"requirements/production.txt"]
