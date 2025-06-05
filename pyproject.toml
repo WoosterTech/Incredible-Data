@@ -4,7 +4,6 @@
 minversion = "6.0"
 addopts = "--ds=config.settings.test --reuse-db"
 python_files = ["tests.py", "test_*.py"]
-python_files = ["tests.py", "test_*.py"]
 log_cli = true
 log_cli_level = "DEBUG"
 
