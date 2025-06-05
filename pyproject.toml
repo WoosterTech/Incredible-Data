@@ -107,7 +107,7 @@ django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
 # django-rubble = { path = "../django_utils", develop = true }
 django-rubble = { git = "https://github.com/WoosterTech/django-rubble.git", extras = [
-  "all",
+  "neapolitan,cli,history",
 ] }
 neapolitan = "^24.4"
 loguru = "^0.7.2"
@@ -177,6 +177,20 @@ DEP002 = [ # used in settings.INSTALLED_APPS (and others)
 [tool.deptry.package_module_name_map]
 django-dbbackup = "dbbackup"
 django-qr-code = "qr_code"
+djangorestframework = "rest_framework"
+django-environ = "environ"
+django-debug-toolbar = "debug_toolbar"
+case-converter = "caseconverter"
+django-import-export = "import_export"
+django-crispy-forms = "crispy_forms"
+django-model-utils = "model_utils"
+django-funky-sheets = "funky_sheets"
+django-money = "djmoney"
+azure-ai-documentintelligence = "azure"
+python-benedict = "benedict"
+python-slugify = "slugify"
+django-phonenumber-field = "phonenumber_field"
+django-allauth = "allauth"
 
 
 [tool.poetry.group.test.dependencies]
@@ -187,13 +201,12 @@ factory-boy = "^3.3.0"
 django-coverage-plugin = "^3.1.0"
 pytest-django = "^4.9.0"
 
-# [tool.poetry.group.bridge]
-# optional = true
+[tool.poetry.group.bridge]
+optional = true
 
-# [tool.poetry.group.bridge.dependencies]
+[tool.poetry.group.bridge.dependencies]
 # # python-bridge = {path = "../bridge", develop = true}
-# # python-bridge = {git = "git@github.com:WoosterInitiative/bridge.git", develop = true}
-# python-bridge = {git = "git@github.com:WoosterInitiative/bridge.git", develop = true}
+# python-bridge = { git = "git@github.com:WoosterInitiative/bridge.git", develop = true }
 
 [build-system]
 requires = ["poetry-core"]
