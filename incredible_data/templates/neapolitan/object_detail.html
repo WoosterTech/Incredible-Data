@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load neapolitan %}
+
+{% block title %}
+{{ object|title }} Detail
+{% endblock title %}
+{% block content %}
+<h1>{{ object }}</h1>
+{% include "actions_partial.html" %}
+
+<div>
+  <span class="bold-highlight">{{ object.name }}</span>
+  {{ object.description }}
+
+  {% object_detail object view.fields %}
+</div>
+{% endblock content %}

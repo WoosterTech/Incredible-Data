@@ -110,7 +110,7 @@ class Invoice(StampedModel, StatusModel, NumberedModel):
 
 
 class InvoiceLine(models.Model):
-    rank = models.PositiveSmallIntegerField(_("rank"))
+    rank = models.PositiveSmallIntegerField(_("rank"), default=1)
     description = models.CharField(_("description"), max_length=100)
     quantity = models.DecimalField(
         _("quantity"), max_digits=15, decimal_places=5, default=1
@@ -124,8 +124,8 @@ class InvoiceLine(models.Model):
         return f"{self.description}|{self.invoice.number} - Line {self.rank}"
 
     def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.rank = self.get_next_rank()
+        # if self._state.adding:
+        #     self.rank = self.get_next_rank()
         super().save(*args, **kwargs)
 
         self.invoice.update_totals()

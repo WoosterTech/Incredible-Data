@@ -67,3 +67,7 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+from bridge import django  # noqa: E402
+
+django.configure(locals())

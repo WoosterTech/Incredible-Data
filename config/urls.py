@@ -1,24 +1,24 @@
-# ruff: noqa
+# ruff: noqa: E501, ERA001
+import logging
+
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import static  # pyright: ignore[reportUnknownVariableType]
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include
-from django.urls import path
+from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
-from drf_spectacular.views import SpectacularAPIView
-from drf_spectacular.views import SpectacularSwaggerView
-from rest_framework.authtoken.views import obtain_auth_token
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from neapolitan.views import Role
+from rest_framework.authtoken.views import obtain_auth_token
 
 from incredible_data.business.views import (
-    InvoiceListView,
     InvoiceView,
-    ProjectListView,
+    OrderView,
     ProjectView,
-    printable_invoice,
 )
+
+logger = logging.getLogger(__name__)
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -29,7 +29,7 @@ urlpatterns = [
     ),
     # path("grappelli/", include("grappelli.urls")),
     # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),  # pyright: ignore[reportAny]
     # User management
     path("users/", include("incredible_data.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
@@ -39,9 +39,9 @@ urlpatterns = [
     path("bins/", include("incredible_data.bins.urls", namespace="bins")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
     # Media files
-    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),  # pyright: ignore[reportAny]
 ]
-if settings.DEBUG:
+if settings.DEBUG:  # pyright: ignore[reportAny]
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
 
@@ -59,7 +59,7 @@ urlpatterns += [
     ),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG:  # pyright: ignore[reportAny]
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
@@ -80,17 +80,21 @@ if settings.DEBUG:
         ),
         path("500/", default_views.server_error),
     ]
-    if "debug_toolbar" in settings.INSTALLED_APPS:
-        import debug_toolbar
+    if "debug_toolbar" in settings.INSTALLED_APPS:  # pyright: ignore[reportAny]
+        import debug_toolbar  # pyright: ignore[reportMissingTypeStubs]
 
-        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls)), *urlpatterns]
 
 neapolitan_urlpatterns = [
     *ProjectView.get_urls(roles=[Role.CREATE, Role.DELETE, Role.DETAIL, Role.LIST]),
+    *OrderView.get_urls(roles=[Role.DELETE, Role.DETAIL, Role.LIST, Role.UPDATE]),
     # path("project/", ProjectListView.as_view(), name="project-list"),
-    path("invoice/", InvoiceListView.as_view(), name="invoice-create"),
-    *InvoiceView.get_urls(roles=[Role.CREATE, Role.UPDATE, Role.DETAIL, Role.DELETE]),
-    path("invoice/<slug:slug>/printable/", printable_invoice, name="invoice-print"),
+    # path("invoice/", InvoiceListView.as_view(), name="invoice-create"),
+    *InvoiceView.get_urls(
+        roles=[Role.CREATE, Role.UPDATE, Role.DETAIL, Role.DELETE, Role.LIST]
+    ),
+    # path("invoice/<slug:slug>/printable/", printable_invoice, name="invoice-print"),
 ]
+
 
 urlpatterns.extend(neapolitan_urlpatterns)

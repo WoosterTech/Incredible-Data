@@ -1,0 +1,5 @@
+<div class="btn-group mb-2" role="group" aria-label="Actions">
+    {% for action in action_links %}
+    <a class="btn btn-primary" href="{{ action.href }}">{{ action.label }}</a>
+    {% endfor %}
+</div>
