@@ -1,5 +1,5 @@
 [phases.install]
-cmds = ["poetry sync --no-interactive --no-ansi"]
+cmds = ["poetry sync --no-ansi"]
 
 [phases.release]
 cmds = [
