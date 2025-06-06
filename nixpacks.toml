@@ -1,5 +1,10 @@
+[phases.install]
+cmds = ["poetry sync --no-interactive --no-ansi"]
+
 [phases.release]
-cmds = ["python manage.py migrate && python manage.py collectstatic --no-input && python manage.py compress"]
+cmds = [
+    "python manage.py migrate && python manage.py collectstatic --no-input && python manage.py compress",
+]
 
 [start]
 cmd = "gunicorn config.wsgi --bind 0.0.0.0:8000"

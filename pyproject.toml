@@ -1,3 +1,11 @@
+[project]
+authors = [{ "name" = "Karl Wooster", "email" = "karl@woostertech.com" }]
+name = "incredible-data"
+dynamic = ["version"]
+description = ""
+readme = "README.md"
+
+
 # ==== pytest ====
 [tool.pytest.ini_options]
 # DJANGO_SETTINGS_MODULE = "config.settings.test"
@@ -62,11 +70,9 @@ major_version_zero = true
 version_files = ["incredible_data/__init__.py:__version__"]
 
 [tool.poetry]
-name = "incredible-data"
+
 version = "0.7.0b0"
-description = ""
-authors = ["Karl Wooster <karl@woostertech.com>"]
-readme = "README.md"
+
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
@@ -173,6 +179,7 @@ DEP002 = [ # used in settings.INSTALLED_APPS (and others)
   "django-dbbackup",
   "django-qr-code",
 ]
+DEP004 = ["bridge"]
 
 [tool.deptry.package_module_name_map]
 django-dbbackup = "dbbackup"
