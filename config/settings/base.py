@@ -8,6 +8,9 @@ import environ
 from django.contrib.messages import constants as message_constants
 from loguru import logger
 
+from config.settings.drf_models import Spectacular
+from config.settings.settings_models import Logging
+
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
 APPS_DIR = BASE_DIR / "incredible_data"
@@ -298,6 +301,8 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
+logging_obj = Logging.model_validate(LOGGING)
+
 # Celery
 # ------------------------------------------------------------------------------
 if USE_TZ:
@@ -376,12 +381,13 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS = {
+SPECTACULAR_SETTINGS: dict[str, str | list[str]] = {
     "TITLE": "Incredible Data API",
     "DESCRIPTION": "Documentation of API endpoints of Incredible Data",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
 }
+spectacular_settings_obj = Spectacular.model_validate(SPECTACULAR_SETTINGS)
 # Your stuff...
 # ------------------------------------------------------------------------------
 PHONENUMBER_DEFAULT_REGION = "US"

@@ -1,3 +1,6 @@
+# pyright: reportUnknownVariableType=false, reportUnknownMemberType=false, reportIncompatibleVariableOverride=false
+from typing import final, override
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -5,6 +8,7 @@ from model_utils.models import TimeStampedModel
 from pydantic import BaseModel
 
 
+@final
 class DocumentNumber(models.Model):
     document = models.CharField(max_length=50, primary_key=True, unique=True)
     prefix = models.CharField(max_length=10, blank=True)
@@ -13,13 +17,14 @@ class DocumentNumber(models.Model):
     last_number = models.CharField(max_length=50, editable=False)
     last_generated_date = models.DateTimeField(auto_now=True)
 
+    @override
     def __str__(self) -> str:
         return f"Document({self.document}) | Last: {self.last_number}"
 
     def get_next_number(self):
         prefix = self.prefix
         next_counter = self.next_counter
-        padded_counter = str(next_counter).zfill(self.padding_digits)
+        padded_counter = str(next_counter).zfill(self.padding_digits)  # pyright: ignore[reportUnknownArgumentType]
         number = f"{prefix}{padded_counter}"
 
         self.next_counter += 1
@@ -55,13 +60,14 @@ class NumberedModel(models.Model):
         `INV0002`, etc.
     """
 
-    number = models.CharField(_("number"), unique=True, max_length=10, editable=False)
+    number = models.CharField(_("number"), unique=True, max_length=10, editable=False)  # pyright: ignore[reportUnannotatedClassAttribute]
     number_config: NumberConfig = NumberConfig()
 
     class Meta:
-        abstract = True
+        abstract = True  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    def save(self, *args, **kwargs) -> None:
+    @override
+    def save(self, *args, **kwargs) -> None:  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
         if self._state.adding:
             config = self.number_config
             project_number, _ = DocumentNumber.objects.get_or_create(
@@ -73,29 +79,29 @@ class NumberedModel(models.Model):
                 },
             )
             self.number = project_number.get_next_number()
-        return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)  # pyright: ignore[reportUnknownArgumentType]
 
 
 class UserStampedModel(models.Model):
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+    created_by = models.ForeignKey(  # pyright: ignore[reportUnannotatedClassAttribute]
+        settings.AUTH_USER_MODEL,  # pyright: ignore[reportAny]
         verbose_name=_("created by"),
         on_delete=models.CASCADE,
         related_name="%(class)s_created_by",
     )
-    modified_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+    modified_by = models.ForeignKey(  # pyright: ignore[reportUnannotatedClassAttribute]
+        settings.AUTH_USER_MODEL,  # pyright: ignore[reportAny]
         verbose_name=_("modified by"),
         on_delete=models.CASCADE,
         related_name="%(class)s_modified_by",
     )
 
     class Meta:
-        abstract = True
+        abstract = True  # pyright: ignore[reportUnannotatedClassAttribute]
 
 
 class BaseNumberedModel(TimeStampedModel, UserStampedModel, NumberedModel):
     """Base class for Numbered models that include time and user stamps."""
 
     class Meta:
-        abstract = True
+        abstract = True  # pyright: ignore[reportUnannotatedClassAttribute]

@@ -56,6 +56,8 @@ class OrderListView(SingleTableListView):
 class OrderView(CustomCRUDView):
     model = Order
     fields = ["customer", "expected_date", "notes"]
+    lookup_field = "slug"
+    path_converter = "slug"
     list_view = OrderListView
 
 

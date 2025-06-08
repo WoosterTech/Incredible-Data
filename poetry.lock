@@ -179,12 +179,13 @@ develop = false
 
 [package.dependencies]
 pydantic = ">=2.7"
+typing-extensions = {version = ">=4.5", markers = "python_full_version < \"3.12.0\""}
 
 [package.source]
 type = "git"
 url = "https://github.com/WoosterTech/AttrMagic.git"
 reference = "HEAD"
-resolved_reference = "e94e653b3992905bb5502d5332755ec5c708c1c4"
+resolved_reference = "b7e9fd2144fab213fff386dfcdece3965c0aed03"
 
 [[package]]
 name = "attrs"
@@ -5102,4 +5103,4 @@ dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4.0"
-content-hash = "61b35aea0a949a1629d1afafac98d8895d975576d8ed7df9c28ea966d460efd6"
+content-hash = "634a19b5a2e4b06a8829d77b4d2c782e2fbeaabd3eb069263ec5ce82c11fae55"
