@@ -2,7 +2,7 @@
 # pyright: reportConstantRedefinition=false, reportUnknownVariableType=false
 import contextlib
 import logging
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -22,6 +22,9 @@ from .base import (
     logging_obj,
     spectacular_settings_obj,
 )
+
+if TYPE_CHECKING:
+    from urllib.parse import ParseResult
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -219,15 +222,16 @@ _ = sentry_sdk.init(
     ),
 )
 
-PRODUCTION_URL = (
-    str(env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz"))  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
+PRODUCTION_URL = cast(
+    "ParseResult",
+    env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz"),  # pyright: ignore[reportUnknownMemberType]
 )
 
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
-prod_server = Server(url=PRODUCTION_URL, description="Production server")  # pyright: ignore[reportArgumentType]
+prod_server = Server(url=PRODUCTION_URL.geturl(), description="Production server")  # pyright: ignore[reportArgumentType]
 spectacular_settings_obj.servers.append(prod_server)
 SPECTACULAR_SETTINGS = spectacular_settings_obj.render()
 # Your stuff...
