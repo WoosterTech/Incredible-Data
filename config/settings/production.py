@@ -219,10 +219,10 @@ _ = sentry_sdk.init(
     ),
 )
 
-PRODUCTION_URL = cast(
-    "str",
-    env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz"),  # pyright: ignore[reportUnknownMemberType]
+PRODUCTION_URL = (
+    str(env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz"))  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
 )
+
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
