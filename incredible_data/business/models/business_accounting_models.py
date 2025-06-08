@@ -53,6 +53,9 @@ class Order(BaseNumberedModel):
     slug = AutoSlugField(populate_from=["customer", "number"])
     number_config = NumberConfig(prefix="MHC", width=4, start_value=1)
 
+    class Meta:
+        ordering: list[str] = ["-created"]
+
     @override
     def __str__(self) -> str:
         return f"{self.number} - {self.customer}"
@@ -91,6 +94,9 @@ class Invoice(StampedModel, StatusModel, NumberedModel):
         @property
         def invoiceline_set(self) -> models.QuerySet["InvoiceLine"]:
             return self.invoiceline_set
+
+    class Meta:
+        ordering: list[str] = ["-created"]
 
     @override
     def __str__(self):

@@ -1,3 +1,6 @@
+# pyright: reportUnknownVariableType=false, reportUnknownMemberType=false, reportIncompatibleVariableOverride=false
+from typing import final, override
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +12,7 @@ from incredible_data.contacts.models.utility_models import (
 )
 
 
+@final
 class Project(BaseNumberedModel):
     name = models.CharField(_("project name"), max_length=50)
     customer = models.ForeignKey(
@@ -25,6 +29,10 @@ class Project(BaseNumberedModel):
     slug = AutoSlugField(populate_from=["pk", "name"])
     number_config = NumberConfig(prefix="PJ", width=4, start_value=100)
 
+    class Meta:
+        ordering: list[str] = ["number"]
+
+    @override
     def __str__(self) -> str:
         return f"{self.number} {self.name}"
 
