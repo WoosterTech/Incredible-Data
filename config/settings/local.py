@@ -74,6 +74,9 @@ logging_obj.handlers["console"].level = Levels.DEBUG if DEBUG else Levels.INFO
 logging_obj.root.level = Levels.DEBUG if DEBUG else Levels.WARNING
 LOGGING = logging_obj.render()
 
-from bridge import django  # noqa: E402  # pyright: ignore[reportMissingTypeStubs]
+use_bridge = env.bool("DJANGO_USE_BRIDGE", default=False)
 
-django.configure(locals())
+if use_bridge:
+    from bridge import django  # pyright: ignore[reportMissingTypeStubs]
+
+    django.configure(locals())

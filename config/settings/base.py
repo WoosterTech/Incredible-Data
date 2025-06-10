@@ -9,7 +9,7 @@ from django.contrib.messages import constants as message_constants
 from loguru import logger
 
 from config.settings.drf_models import Spectacular
-from config.settings.settings_models import Logging
+from config.settings.settings_models import Databases, Logging
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
@@ -56,8 +56,13 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+databases_obj = Databases.model_validate(
+    {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+)
+databases_obj["default"].atomic_requests = True
+# DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES = databases_obj.render()
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
