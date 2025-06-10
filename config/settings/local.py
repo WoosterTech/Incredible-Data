@@ -1,14 +1,20 @@
 # ruff: noqa: ERA001, E501
 # pyright: reportConstantRedefinition=false
+from loguru import logger
+
 from config.settings.settings_models import Levels
 
 from .base import *  # noqa: F403
-from .base import INSTALLED_APPS, MIDDLEWARE, env, logging_obj
+from .base import DEBUG, INSTALLED_APPS, MIDDLEWARE, env, logging_obj
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+if not DEBUG:
+    logger.warning(
+        "You are running with DEBUG=False in local.py. This is not recommended for local development. Please set DEBUG=True in local.py."
+    )
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
