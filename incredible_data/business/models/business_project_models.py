@@ -37,4 +37,4 @@ class Project(BaseNumberedModel):
         return f"{self.number} {self.name}"
 
     def get_absolute_url(self):
-        return reverse("project-detail", kwargs={"slug": self.slug})
+        return reverse("business:project-detail", kwargs={"slug": self.slug})

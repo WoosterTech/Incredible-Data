@@ -11,14 +11,7 @@ from django.urls.resolvers import URLPattern, URLResolver
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from neapolitan.views import Role
 from rest_framework.authtoken.views import obtain_auth_token
-
-from incredible_data.business.views import (
-    InvoiceView,
-    OrderView,
-    ProjectView,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +28,7 @@ urlpatterns: list[URLPattern | URLResolver] = [
     # Your stuff: custom urls includes go here
     # path("business/", include("incredible_data.business.urls", namespace="business")),
     path("budget/", include("incredible_data.budget.budget_urls", namespace="budget")),
+    path("business/", include("incredible_data.business.urls", namespace="business")),
     path("bins/", include("incredible_data.bins.urls", namespace="bins")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
     # Media files
@@ -68,14 +62,7 @@ if settings.DEBUG:  # pyright: ignore[reportAny]
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls)), *urlpatterns]
 
-neapolitan_urlpatterns = [
-    *ProjectView.get_urls(roles=[Role.CREATE, Role.DELETE, Role.DETAIL, Role.LIST]),
-    *OrderView.get_urls(roles=[Role.DELETE, Role.DETAIL, Role.LIST, Role.UPDATE]),
-    # path("project/", ProjectListView.as_view(), name="project-list"),
-    # path("invoice/", InvoiceListView.as_view(), name="invoice-create"),
-    *InvoiceView.get_urls(roles=[Role.CREATE, Role.UPDATE, Role.DETAIL, Role.DELETE, Role.LIST]),
-    # path("invoice/<slug:slug>/printable/", printable_invoice, name="invoice-print"),
-]
+neapolitan_urlpatterns = []
 
 
 urlpatterns.extend(neapolitan_urlpatterns)

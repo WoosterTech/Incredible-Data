@@ -61,7 +61,7 @@ class Order(BaseNumberedModel):
         return f"{self.number} - {self.customer}"
 
     def get_absolute_url(self):
-        return reverse("order-detail", kwargs={"slug": self.slug})
+        return reverse("business:order-detail", kwargs={"slug": self.slug})
 
 
 @final
@@ -146,7 +146,7 @@ class Invoice(StampedModel, StatusModel, NumberedModel):
         return result["rank__max"] if result["rank__max"] is not None else 0
 
     def get_absolute_url(self):
-        return reverse("invoice-detail", kwargs={"slug": self.slug})
+        return reverse("business:invoice-detail", kwargs={"slug": self.slug})
 
 
 class InvoiceLineManager(models.Manager["InvoiceLine"]):

@@ -3,14 +3,14 @@
 {% load neapolitan %}
 
 {% block title %}
-  {{ object|title }} Detail
+  {{ project|title }} Detail
 {% endblock title %}
 {% block content %}
-  <h1>{{ object }}</h1>
+  <h1>{{ project }}</h1>
   {% include "actions_partial.html" %}
   <div>
-    <span class="bold-highlight">{{ object.name }}</span>
-    {{ object.description }}
-    {% object_detail object view.fields %}
+    <span class="bold-highlight">{{ project.name }}</span>
+    {{ project.description }}
+    {% object_detail project view.fields %}
   </div>
 {% endblock content %}

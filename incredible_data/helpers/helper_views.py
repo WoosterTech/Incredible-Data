@@ -1,4 +1,5 @@
 import abc
+import logging
 from collections.abc import Iterable, Iterator
 from typing import Any, cast, override
 
@@ -9,6 +10,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django_tables2 import SingleTableView
 from neapolitan.views import CRUDView, Role
+
+logger = logging.getLogger(__name__)
 
 
 class SingleTableListView(SingleTableView):
@@ -123,4 +126,6 @@ class CustomCRUDView(CRUDView, abc.ABC):
             common.append(list_pattern)
         common.extend(cls.additional_urls())
 
+        msg = f"{cls.__name__} URLS: {common}"
+        logger.debug(msg)
         return common
