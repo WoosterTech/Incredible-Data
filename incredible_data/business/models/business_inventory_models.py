@@ -1,7 +1,11 @@
+# pyright: reportUnknownVariableType=false, reportUnknownMemberType=false, reportIncompatibleVariableOverride=false
+from typing import final, override
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+@final
 class Manufacturer(models.Model):
     name = models.CharField(_("manufacturer name"), max_length=50)
     sku_code = models.CharField(
@@ -11,13 +15,18 @@ class Manufacturer(models.Model):
         max_length=10,
     )
 
+    class Meta:
+        ordering: list[str] = ["name"]
+
+    @override
     def __str__(self) -> str:
         return f"{self.name} | {self.sku_code}"
 
-    def natural_key(self):
+    def natural_key(self) -> str:
         return self.sku_code
 
 
+@final
 class ItemCategory(models.Model):
     name = models.CharField(_("category name"), max_length=50)
     sku_code = models.CharField(
@@ -27,20 +36,27 @@ class ItemCategory(models.Model):
         max_length=50,
     )
 
+    class Meta:
+        ordering: list[str] = ["name"]
+
+    @override
     def __str__(self) -> str:
         return f"{self.name} | {self.sku_code}"
 
-    def natural_key(self):
+    def natural_key(self) -> str:
         return self.sku_code
 
 
+@final
 class SkuColor(models.Model):
     name = models.CharField(_("color name"), max_length=50)
 
-    def __str__(self, *args, **kwargs):
+    @override
+    def __str__(self, *args, **kwargs):  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
         return self.name
 
 
+@final
 class Item(models.Model):
     sku = models.CharField(
         _("internal stock keeping unit"),
@@ -57,5 +73,6 @@ class Item(models.Model):
         null=True,
     )
 
+    @override
     def __str__(self) -> str:
         return f"{self.description} | {self.sku}"

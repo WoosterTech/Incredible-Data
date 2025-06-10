@@ -1,6 +1,8 @@
-# ruff: noqa: E501
+# ruff: noqa: ERA001, E501
+# pyright: reportConstantRedefinition=false, reportUnknownVariableType=false
 import contextlib
 import logging
+from typing import TYPE_CHECKING, cast
 
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -8,8 +10,21 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
+from config.settings.drf_models import Server
+from config.settings.settings_models import Levels
+
 from .base import *  # noqa: F403
-from .base import DATABASES, INSTALLED_APPS, SPECTACULAR_SETTINGS, env
+from .base import (
+    DATABASES,
+    DEBUG,
+    INSTALLED_APPS,
+    env,
+    logging_obj,
+    spectacular_settings_obj,
+)
+
+if TYPE_CHECKING:
+    from urllib.parse import ParseResult
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -18,11 +33,11 @@ SECRET_KEY = env("SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
 
-ALLOWED_HOSTS += env.url("RENDER_EXTERNAL_HOSTNAME", default="")
+ALLOWED_HOSTS += env.url("RENDER_EXTERNAL_HOSTNAME", default="")  # pyright: ignore[reportUnknownMemberType]
 
 # DATABASES
 # ------------------------------------------------------------------------------
-DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # pyright: ignore[reportUnknownMemberType]
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -174,14 +189,14 @@ LOGGING = {
 # allauth
 # ------------------------------------------------------------------------------
 with contextlib.suppress(ValueError):
-    SOCIALACCOUNT_PROVIDERS = env.parse_value(
+    SOCIALACCOUNT_PROVIDERS = env.parse_value(  # pyright: ignore[reportUnknownMemberType]
         "DJANGO_SOCIALACCOUNT_PROVIDERS", cast=dict
     )
 
 # Sentry
 # ------------------------------------------------------------------------------
-SENTRY_DSN = env("SENTRY_DSN")
-SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+SENTRY_DSN = cast("str | None", env("SENTRY_DSN"))
+SENTRY_LOG_LEVEL = cast("int", env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO))  # pyright: ignore[reportUnknownMemberType]
 
 sentry_logging = LoggingIntegration(
     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
@@ -193,21 +208,34 @@ integrations = [
     CeleryIntegration(),
     RedisIntegration(),
 ]
-sentry_sdk.init(
+_ = sentry_sdk.init(
     dsn=SENTRY_DSN,
     integrations=integrations,
-    environment=env("SENTRY_ENVIRONMENT", default="production"),
-    traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
-    profiles_sample_rate=env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.0),
+    environment=cast("str | None", env("SENTRY_ENVIRONMENT", default="production")),
+    traces_sample_rate=cast(
+        "float",
+        env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),  # pyright: ignore[reportUnknownMemberType]
+    ),
+    profiles_sample_rate=cast(
+        "float",
+        env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.0),  # pyright: ignore[reportUnknownMemberType]
+    ),
 )
 
-PRODUCTION_URL = env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz")
+PRODUCTION_URL = cast(
+    "ParseResult",
+    env.url("EXTERNAL_HOSTNAME", default="https://data.wooster.xyz"),  # pyright: ignore[reportUnknownMemberType]
+)
+
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
-SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": PRODUCTION_URL, "description": "Production server"},
-]
+prod_server = Server(url=PRODUCTION_URL.geturl(), description="Production server")  # pyright: ignore[reportArgumentType]
+spectacular_settings_obj.servers.append(prod_server)
+SPECTACULAR_SETTINGS = spectacular_settings_obj.render()
 # Your stuff...
 # ------------------------------------------------------------------------------
+logging_obj.handlers["console"].level = Levels.DEBUG if DEBUG else Levels.INFO
+logging_obj.root.level = Levels.DEBUG if DEBUG else Levels.WARNING
+LOGGING = logging_obj.render()

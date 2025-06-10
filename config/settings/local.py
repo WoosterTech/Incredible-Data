@@ -1,6 +1,9 @@
-# ruff: noqa: E501
+# ruff: noqa: ERA001, E501
+# pyright: reportConstantRedefinition=false
+from config.settings.settings_models import Levels
+
 from .base import *  # noqa: F403
-from .base import INSTALLED_APPS, MIDDLEWARE, env
+from .base import INSTALLED_APPS, MIDDLEWARE, env, logging_obj
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -67,3 +70,10 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
+logging_obj.handlers["console"].level = Levels.DEBUG if DEBUG else Levels.INFO
+logging_obj.root.level = Levels.DEBUG if DEBUG else Levels.WARNING
+LOGGING = logging_obj.render()
+
+from bridge import django  # noqa: E402  # pyright: ignore[reportMissingTypeStubs]
+
+django.configure(locals())

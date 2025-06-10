@@ -33,6 +33,14 @@ class InvoiceAdmin(StampedAdmin):
     inlines = [InvoiceLineInline]
 
 
+@admin.register(InvoiceLine)
+class InvoiceLineAdmin(admin.ModelAdmin):
+    list_display = ["rank", "description", "quantity", "unit_price", "extended_price"]
+    readonly_fields = ["extended_price"]
+    search_fields = ["description", "invoice__customer"]
+    list_filter = ["invoice__customer"]
+
+
 @admin.register(Project)
 class ProjectAdmin(UserStampedModelAdmin):
     list_display = ["number", "customer", "name"]

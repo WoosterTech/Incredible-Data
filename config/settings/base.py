@@ -1,12 +1,15 @@
 # ruff: noqa: ERA001, E501
+# pyright: reportConstantRedefinition=false
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
-from typing import Any
 
 import environ
 from django.contrib.messages import constants as message_constants
 from loguru import logger
+
+from config.settings.drf_models import Spectacular
+from config.settings.settings_models import Logging
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
@@ -16,10 +19,11 @@ env = environ.Env(
 )
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     logger.info("Loading .env file to get environment variables")
-    env.read_env(str(BASE_DIR / ".env"))
+    env.read_env(BASE_DIR / ".env")
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -84,7 +88,7 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
-    "allauth.mfa",
+    # "allauth.mfa",
     "allauth.socialaccount",
     "django_celery_beat",
     "rest_framework",
@@ -297,6 +301,8 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
+logging_obj = Logging.model_validate(LOGGING)
+
 # Celery
 # ------------------------------------------------------------------------------
 if USE_TZ:
@@ -375,12 +381,13 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS: dict[str, Any] = {
+SPECTACULAR_SETTINGS: dict[str, str | list[str]] = {
     "TITLE": "Incredible Data API",
     "DESCRIPTION": "Documentation of API endpoints of Incredible Data",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
 }
+spectacular_settings_obj = Spectacular.model_validate(SPECTACULAR_SETTINGS)
 # Your stuff...
 # ------------------------------------------------------------------------------
 PHONENUMBER_DEFAULT_REGION = "US"
@@ -404,3 +411,10 @@ AZURE_KEY = env.str("DJANGO_AZURE_KEY", "")
 
 # equivalent to `[2-9A-HJ-NP-Z]` in regex, `I`, `O`, `1`, `0` are excluded
 SHORTUUID_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+
+DJANGO_TABLES2_TABLE_ATTRS = {
+    "class": "table table-hover",
+    "thead": {
+        "class": "table-light",
+    },
+}
