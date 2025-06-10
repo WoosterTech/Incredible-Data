@@ -13,7 +13,6 @@ minversion = "6.0"
 addopts = "--ds=config.settings.test --reuse-db"
 python_files = ["tests.py", "test_*.py"]
 log_cli = true
-log_cli_level = "DEBUG"
 
 # ==== Coverage ====
 [tool.coverage.run]
@@ -111,7 +110,6 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-# django-rubble = { path = "../django_utils", develop = true }
 django-rubble = { git = "https://github.com/WoosterTech/django-rubble.git", extras = [
   "neapolitan,cli,history",
 ] }
