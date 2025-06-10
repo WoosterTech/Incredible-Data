@@ -4,8 +4,10 @@ import logging
 from django.conf import settings
 from django.conf.urls.static import static  # pyright: ignore[reportUnknownVariableType]
 from django.contrib import admin
+from django.contrib.auth.decorators import login_not_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+from django.urls.resolvers import URLPattern, URLResolver
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -20,13 +22,10 @@ from incredible_data.business.views import (
 
 logger = logging.getLogger(__name__)
 
-urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
+# fmt: off
+urlpatterns: list[URLPattern | URLResolver] = [
+    path("", login_not_required(TemplateView.as_view(template_name="pages/home.html")), name="home"),
+    path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # path("grappelli/", include("grappelli.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),  # pyright: ignore[reportAny]
@@ -52,32 +51,16 @@ urlpatterns += [
     # DRF auth token
     path("auth-token/", obtain_auth_token),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
-    path(
-        "api/docs/",
-        SpectacularSwaggerView.as_view(url_name="api-schema"),
-        name="api-docs",
-    ),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="api-schema"), name="api-docs"),
 ]
 
 if settings.DEBUG:  # pyright: ignore[reportAny]
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
     urlpatterns += [
-        path(
-            "400/",
-            default_views.bad_request,
-            kwargs={"exception": Exception("Bad Request!")},
-        ),
-        path(
-            "403/",
-            default_views.permission_denied,
-            kwargs={"exception": Exception("Permission Denied")},
-        ),
-        path(
-            "404/",
-            default_views.page_not_found,
-            kwargs={"exception": Exception("Page not Found")},
-        ),
+        path("400/", default_views.bad_request, kwargs={"exception": Exception("Bad Request!")}),
+        path("403/", default_views.permission_denied, kwargs={"exception": Exception("Permission Denied")}),
+        path("404/", default_views.page_not_found, kwargs={"exception": Exception("Page not Found")}),
         path("500/", default_views.server_error),
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:  # pyright: ignore[reportAny]
@@ -90,11 +73,10 @@ neapolitan_urlpatterns = [
     *OrderView.get_urls(roles=[Role.DELETE, Role.DETAIL, Role.LIST, Role.UPDATE]),
     # path("project/", ProjectListView.as_view(), name="project-list"),
     # path("invoice/", InvoiceListView.as_view(), name="invoice-create"),
-    *InvoiceView.get_urls(
-        roles=[Role.CREATE, Role.UPDATE, Role.DETAIL, Role.DELETE, Role.LIST]
-    ),
+    *InvoiceView.get_urls(roles=[Role.CREATE, Role.UPDATE, Role.DETAIL, Role.DELETE, Role.LIST]),
     # path("invoice/<slug:slug>/printable/", printable_invoice, name="invoice-print"),
 ]
 
 
 urlpatterns.extend(neapolitan_urlpatterns)
+# fmt:on
