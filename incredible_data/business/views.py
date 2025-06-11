@@ -206,7 +206,11 @@ def order_detail_view(request: HttpRequest, slug: str) -> HttpResponse:
     ]
     order_view = OrderDetailView(
         Order,
-        ["customer", "expected_date", "notes"],
+        [
+            "customer",
+            "expected_date",
+            DetailWidget("notes", template="field_textarea.html"),
+        ],
         action_links,
     )
     context = order_view.get_context(order)
