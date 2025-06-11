@@ -14,7 +14,7 @@ class ProjectTable(tables.Table):
 
     class Meta:
         model: type[models.Model] = Project
-        fields: list[str] = ["number", "name"]
+        fields: list[str] = ["number", "name", "order__customer"]
 
 
 @final

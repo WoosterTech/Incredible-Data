@@ -1,17 +1,35 @@
 import abc
 import logging
 from collections.abc import Iterable, Iterator
-from typing import Any, cast, override
+from typing import TYPE_CHECKING, Any, Generic, NamedTuple, TypeVar, override
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
+from django.db import models
 from django.urls import URLPattern, URLResolver, path
+from django.utils.functional import Promise
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django_tables2 import SingleTableView
-from neapolitan.views import CRUDView, Role
+from neapolitan.views import Role
+
+if not TYPE_CHECKING:
+    # HACK: dirty hack for better type checking
+    from neapolitan.views import CRUDView as _CRUDView
+
+    _T = TypeVar("_T")
+
+    class CRUDView(_CRUDView, Generic[_T]): ...
+else:
+    from neapolitan.views import CRUDView
+
 
 logger = logging.getLogger(__name__)
+
+
+class ActionTuple(NamedTuple):
+    label: str | Promise
+    href: str
 
 
 class SingleTableListView(SingleTableView):
@@ -86,7 +104,10 @@ class UserStampedCreateView(CreateView):  # pyright: ignore[reportMissingTypeArg
         return initial
 
 
-class CustomCRUDView(CRUDView, abc.ABC):
+_ModelT = TypeVar("_ModelT", bound=models.Model)
+
+
+class CustomCRUDView(CRUDView[_ModelT], Generic[_ModelT], abc.ABC):
     """Custom CRUDView that can be extended for specific models."""
 
     list_view: type[SingleTableListView] | None = None
@@ -120,7 +141,7 @@ class CustomCRUDView(CRUDView, abc.ABC):
         if cls.list_view is not None and Role.LIST in roles:
             list_pattern = cls._get_list_pattern()
             roles = [role for role in roles if role != Role.LIST]
-        common = cast("list[URLPattern | URLResolver]", super().get_urls(roles=roles))  # pyright: ignore[reportUnknownMemberType]
+        common = super().get_urls(roles=roles)
 
         if list_pattern is not None:
             common.append(list_pattern)

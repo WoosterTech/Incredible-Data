@@ -1,0 +1,3 @@
+from django.db import models
+
+def get_all_model_fields(model: type[models.Model]) -> list[str]: ...

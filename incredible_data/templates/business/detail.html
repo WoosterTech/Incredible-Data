@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load render_table from django_tables2 %}
+{% load i18n %}
+
+{% block title %}
+  {{ object_context_name|title }} {{ object }}
+{% endblock title %}
+{% block content %}
+  <h1 class="title">
+    {% block card_title %}
+      <span class="bold-secondary">{{ object_context_name|title }}</span> {{ object }}
+    {% endblock card_title %}
+  </h1>
+  {% include "actions_partial.html" %}
+  {% block fields %}
+    <ul class="list-group mt-3">
+      {% for field in fields %}<li class="list-group-item">{{ field }}</li>{% endfor %}
+      {% if object.created %}
+        <li class="list-group-item">
+          Created By {{ object.created_by }} on {{ object.created|date }} at {{ object.created|time }} ({{ object.created|timesince }} ago)
+        </li>
+      {% endif %}
+      {% if object.modified %}
+        <li class="list-group-item">
+          Modified By {{ object.modified_by }} on {{ object.modified|date }} at {{ object.modified|time }} ({{ object.modified|timesince }} ago)
+        </li>
+      {% endif %}
+    </ul>
+  {% endblock fields %}
+  {% if inlines %}
+    <div>
+      <ul class="list-group list-group-flush tables-related">
+        {% for inline in inlines %}
+          <li class="list-group-item">{% include "related_list.html" %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endblock content %}

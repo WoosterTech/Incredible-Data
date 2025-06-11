@@ -15,3 +15,94 @@
 .text-magenta {
   color: mediumvioletred;
 }
+
+.bold-highlight {
+    font-weight: bold;
+    color: darkblue;
+}
+
+.bold-secondary {
+    font-weight: bold;
+    color: lightseagreen;
+}
+
+.related-table-label {
+    color: var(--colorsecondary);
+}
+
+.check-mark {
+    color: #33cc33;
+}
+
+.x-mark {
+    color: black;
+}
+
+.header-table {
+    border: none;
+    padding: 5px;
+}
+
+.request-frontmatter-header {
+    --bs-text-opacity: 1;
+    color: #ff5532;
+    text-align: center;
+}
+
+.table-request-frontmatter th {
+    --bs-text-opacity: 1;
+    color: #ff5532;
+    text-align: center;
+}
+
+.table-request-footer th {
+    --bs-text-opacity: 1;
+    color: #ff5532;
+    text-align: start;
+}
+
+.table-request-footer td {
+    text-align: center;
+    font-family: 'Brush Script MT', cursive;
+    font-size: x-large;
+}
+
+.table-request th {
+    text-align: center;
+    color: #ff5532
+}
+
+.title {
+    color: var(--colorprimary);
+}
+
+.field-label {
+    font-weight: bold;
+    color: crimson;
+}
+
+.table-container th a {
+    color: var(--colorprimary);
+}
+
+.table-container td a {
+    color: var(--colorprimary);
+}
+
+.card-app {
+    border-color: darkcyan;
+}
+
+.card-app-header {
+    color: var(--colorprimary);
+    text-align: center;
+    font-weight: bold;
+}
+
+.footer {
+    width: 100%;
+}
+
+.navbar-padding {
+    padding-top: 59px;
+}

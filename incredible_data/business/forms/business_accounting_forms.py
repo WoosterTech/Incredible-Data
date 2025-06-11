@@ -45,8 +45,8 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = ["name", "customer", "notes", "order", "created_by", "modified_by"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
+        super().__init__(*args, **kwargs)  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
         self.helper = FormHelper()
         self.helper.form_class = "blueForms"
         self.helper.form_method = "post"
