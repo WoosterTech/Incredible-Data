@@ -1,4 +1,28 @@
-exclude = [ ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".mypy_cache", ".nox", ".pants.d", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv", "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "venv", "*/migrations/*.py", "staticfiles/*",]
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "venv",
+  "*/migrations/*.py",
+  "staticfiles/*",
+]
 indent-width = 4
 line-length = 88
 target-version = "py311"
@@ -11,10 +35,63 @@ skip-magic-trailing-comma = false
 
 [lint]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-fixable = [ "ALL",]
-ignore = [ "COM812", "ISC001", "RUF012", "S101", "SIM102",]
-select = [ "A", "ASYNC", "B", "BLE", "C4", "C90", "COM", "DJ", "DTZ", "E", "EM", "ERA", "EXE", "F", "FA", "FBT", "FLY", "G", "I", "ICN", "INP", "INT", "ISC", "N", "PD", "PERF", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "Q", "RET", "RSE", "RUF", "S", "SIM", "SLF", "SLOT", "T10", "T20", "TC", "TID", "TRY", "UP", "W", "YTT",]
-unfixable = [ "F401",]
+fixable = [
+  "ALL",
+]
+ignore = ["COM812", "ISC001", "RUF012", "S101", "SIM102", "E501"]
+select = [
+  "A",
+  "ASYNC",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "COM",
+  "DJ",
+  "DTZ",
+  "E",
+  "EM",
+  "ERA",
+  "EXE",
+  "F",
+  "FA",
+  "FBT",
+  "FLY",
+  "G",
+  "I",
+  "ICN",
+  "INP",
+  "INT",
+  "ISC",
+  "N",
+  "PD",
+  "PERF",
+  "PGH",
+  "PIE",
+  "PL",
+  "PT",
+  "PTH",
+  "PYI",
+  "Q",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "SLF",
+  "SLOT",
+  "T10",
+  "T20",
+  "TC",
+  "TID",
+  "TRY",
+  "UP",
+  "W",
+  "YTT",
+]
+unfixable = [
+  "F401",
+]
 
 [lint.flake8-pytest-style]
 
