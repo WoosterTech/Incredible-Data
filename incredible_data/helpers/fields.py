@@ -14,11 +14,9 @@ if TYPE_CHECKING:
     from django.db.models.expressions import Combinable
     from django.utils.functional import _Getter  # pyright: ignore[reportPrivateUsage]
 
-    PositiveSmallIntegerField = models.PositiveSmallIntegerField[
-        float | int | str | Combinable, int
-    ]
+    PositiveSmallIntegerField = models.IntegerField[float | int | str | Combinable, int]
 else:
-    PositiveSmallIntegerField = models.PositiveSmallIntegerField
+    PositiveSmallIntegerField = models.IntegerField
 
 logger = logging.getLogger(__name__)
 
@@ -68,11 +66,15 @@ class RatingField(PositiveSmallIntegerField):
         self.allow_zero = allow_zero
         self.scale_maximum = scale_maximum
 
+    @override
+    def get_internal_type(self) -> str:
+        return "PositiveSmallIntegerField"
+
     @cached_property
     def validators(self) -> list[validators.BaseValidator]:
         validators_ = super().validators
 
-        msg = f"PostiveSmallIntegerField validators: {validators_}"
+        msg = f"IntegerField validators: {validators_}"
         logger.debug(msg)
 
         if not self.allow_zero:
@@ -97,15 +99,14 @@ class RatingField(PositiveSmallIntegerField):
         choices_form_class: type[forms.Field] | None = None,
         **kwargs: Any,  # pyright: ignore[reportAny, reportExplicitAny]
     ) -> forms.Field:
-        kwargs["form_class"] = form_class
-        kwargs["choices_form_class"] = choices_form_class
+        kwargs["form_class"] = forms.ChoiceField
+        kwargs["choices_form_class"] = None
 
         start_value = 1 if not self.allow_zero else 0
         choices_tuple = tuple(
             (i, str(i)) for i in range(start_value, self.scale_maximum + 1)
         )
-        kwargs.setdefault("choices", choices_tuple)
-        kwargs.setdefault("min_value", start_value)
-        kwargs.setdefault("max_value", self.scale_maximum)
+        kwargs["choices"] = choices_tuple
+        kwargs["widget"] = forms.Select
 
-        return super().formfield(**{"form_class": forms.ChoiceField, **kwargs})
+        return super().formfield(**kwargs)  # pyright: ignore[reportAny]

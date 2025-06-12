@@ -1,0 +1,9 @@
+{% load loop_extras %}
+
+{% for i in ratings %}
+  <button hx-get="{% url 'mood:rating_widget' %}?name={{ name }}&value={{ value }}"
+          hx-target="#{{ name }}-rating"
+          hx-swap="outerHTML"
+          class="star{% if i <= value %} selected{% endif %}"
+          type="button">{{ emoji }}</button>
+{% endfor %}

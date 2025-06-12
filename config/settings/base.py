@@ -1,4 +1,4 @@
-# ruff: noqa: ERA001, E501
+# ruff: noqa: ERA001
 # pyright: reportConstantRedefinition=false
 """Base settings to build other settings files upon."""
 
@@ -120,6 +120,7 @@ LOCAL_APPS = [
     "incredible_data.contacts",
     "incredible_data.customers",
     "incredible_data.fuel",
+    "incredible_data.mood",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
