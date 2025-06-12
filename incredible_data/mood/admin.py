@@ -22,8 +22,9 @@ else:
 class MoodAdmin(MoodModelAdmin):
     """Admin interface for the Mood model."""
 
-    list_display = ("timestamp", "anxiety", "energy")
+    list_display = ("timestamp", "anxiety", "energy", "entered_by")
     search_fields = ("notes",)
+    list_filter = ("entered_by",)
     ordering = ("-timestamp",)
     readonly_fields = ("timestamp", "entered_by")
     date_hierarchy = "timestamp"
