@@ -3,95 +3,96 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>{{ invoice }}</title>
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-    <link rel="stylesheet" href="{% static "css/invoice.css" %}" />
-  </head>
-  <body>
-    <div class="invoice-box">
-      <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td class="title">
-                  <img class="logo"
-                       src="{% static 'images/logo_color_300w.png' %}"
-                       alt="Messy House Creations Logo" />
-                </td>
-                <td>
-                  Invoice #: {{ invoice.number }}
-                  <br />
-                  Created: {{ invoice.created|date:"F j, Y" }}
-                  <br />
-                  Due: {{ invoice.due_date|date:"F j, Y" }}
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr class="information">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td>
-                  Messy House Creations
-                  <br />
-                  7711 Thetis Dr
-                  <br />
-                  Pasco, WA 99301
-                </td>
-                <td>
-                  {{ invoice.customer.organization_name }}
-                  <br />
-                  {{ invoice.customer.contact_name }}
-                  <br />
-                  {{ invoice.customer.contact_email }}
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-      <table class="invoice-lines">
-        <tr class="heading">
-          <td></td>
-          <td>Description</td>
-          <td>Quantity</td>
-          <td>Unit Price</td>
-          <td>Extended Price</td>
-        </tr>
-        {% for line in invoice.invoiceline_set.all|dictsort:"rank" %}
-          <tr class="item">
-            <td>{{ line.rank }}</td>
-            <td>{{ line.description }}</td>
-            <td>{{ line.quantity|floatformat:"2g" }}</td>
-            <td>{{ line.unit_price|usd_accounting }}</td>
-            <td>{{ line.extended_price|usd_accounting }}</td>
-          </tr>
-        {% endfor %}
-        <tr class="total">
-          <td colspan=3></td>
-          <td>Total:</td>
-          <td>{{ invoice.grand_total|usd_accounting }}</td>
-        </tr>
-      </table>
-      <table class="terms-field">
-        <tr class="text-heading">
-          <td>Notes</td>
-        </tr>
-        <tr>
-          <td>{{ invoice.notes }}</td>
-        </tr>
-        <tr class="text-heading">
-          <td>Terms</td>
-        </tr>
-        <tr>
-          <td>{{ invoice.terms }}</td>
-        </tr>
-      </table>
-    </div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>{{ invoice }}</title>
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+  <link rel="stylesheet" href="{% static " css/invoice.css" %}" />
+</head>
+
+<body>
+  <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+      <tr class="top">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td class="title">
+                <img class="logo" src="{% static 'images/logo_color_300w.png' %}" alt="Messy House Creations Logo" />
+              </td>
+              <td>
+                Invoice #: {{ invoice.number }}
+                <br />
+                Created: {{ invoice.created|date:"F j, Y" }}
+                <br />
+                Due: {{ invoice.due_date|date:"F j, Y" }}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="information">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td>
+                Messy House Creations
+                <br />
+                7711 Thetis Dr
+                <br />
+                Pasco, WA 99301
+              </td>
+              <td>
+                {{ invoice.customer.name }}
+                <br />
+                {{ invoice.customer.primary_contact__contact__name }}
+                <br />
+                {{ invoice.customer.contact_email }}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table class="invoice-lines">
+      <tr class="heading">
+        <td></td>
+        <td>Description</td>
+        <td>Quantity</td>
+        <td>Unit Price</td>
+        <td>Extended Price</td>
+      </tr>
+      {% for line in invoice.invoiceline_set.all|dictsort:"rank" %}
+      <tr class="item">
+        <td>{{ line.rank }}</td>
+        <td>{{ line.description }}</td>
+        <td>{{ line.quantity|floatformat:"2g" }}</td>
+        <td>{{ line.unit_price|usd_accounting }}</td>
+        <td>{{ line.extended_price|usd_accounting }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="total">
+        <td colspan=3></td>
+        <td>Total:</td>
+        <td>{{ invoice.grand_total|usd_accounting }}</td>
+      </tr>
+    </table>
+    <table class="terms-field">
+      <tr class="text-heading">
+        <td>Notes</td>
+      </tr>
+      <tr>
+        <td>{{ invoice.notes }}</td>
+      </tr>
+      <tr class="text-heading">
+        <td>Terms</td>
+      </tr>
+      <tr>
+        <td>{{ invoice.terms }}</td>
+      </tr>
+    </table>
+  </div>
+</body>
+
 </html>
