@@ -3,29 +3,20 @@
 
 import logging
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, override
+from typing import Any, final, override
 
 from django import forms
 from django.core import checks, validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-if TYPE_CHECKING:
-    from django.db.models.expressions import Combinable
-    from django.utils.functional import _Getter  # pyright: ignore[reportPrivateUsage]
-
-    PositiveSmallIntegerField = models.IntegerField[float | int | str | Combinable, int]
-else:
-    PositiveSmallIntegerField = models.IntegerField
-
 logger = logging.getLogger(__name__)
 
 
-class RatingField(PositiveSmallIntegerField):
+@final
+class RatingField(models.PositiveSmallIntegerField):  # pyright: ignore[reportMissingTypeArgument]
     # a Promise is used here in Django fields
-    description: "str | _Getter[str]" = _(  # pyright: ignore[reportAssignmentType]
-        "A field for storing ratings on a user-specified scale."
-    )
+    description = _("A field for storing ratings on a user-specified scale.")
     allow_zero: bool = False
     scale_maximum: int = 10
 
@@ -61,7 +52,7 @@ class RatingField(PositiveSmallIntegerField):
         scale_maximum: int = 10,
         **kwargs: Any,  # pyright: ignore[reportExplicitAny, reportAny]
     ) -> None:
-        super().__init__(**kwargs)  # pyright: ignore[reportAny]
+        super().__init__(**kwargs)
 
         self.allow_zero = allow_zero
         self.scale_maximum = scale_maximum
@@ -71,7 +62,8 @@ class RatingField(PositiveSmallIntegerField):
         return "PositiveSmallIntegerField"
 
     @cached_property
-    def validators(self) -> list[validators.BaseValidator]:
+    @override
+    def validators(self):  # pyright: ignore[reportIncompatibleMethodOverride]
         validators_ = super().validators
 
         msg = f"IntegerField validators: {validators_}"
@@ -90,7 +82,7 @@ class RatingField(PositiveSmallIntegerField):
             )
         )
 
-        return validators_  # pyright: ignore[reportReturnType]  # super call has weird type?
+        return validators_
 
     @override
     def formfield(

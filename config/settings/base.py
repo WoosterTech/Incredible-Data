@@ -56,13 +56,13 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-databases_obj = Databases.model_validate(
-    {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-)
-databases_obj["default"].atomic_requests = True
-# DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-# DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DATABASES = databases_obj.render()
+# databases_obj = Databases.model_validate(
+#     {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+# )
+# databases_obj["default"].atomic_requests = True
+DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+logger.debug(f"Databases settings: {DATABASES}")
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

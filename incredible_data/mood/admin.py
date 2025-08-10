@@ -22,7 +22,7 @@ else:
 class MoodAdmin(MoodModelAdmin):
     """Admin interface for the Mood model."""
 
-    list_display = ("timestamp", "anxiety", "energy", "entered_by")
+    list_display = ("timestamp", "entered_by")
     search_fields = ("notes",)
     list_filter = ("entered_by",)
     ordering = ("-timestamp",)
@@ -31,13 +31,13 @@ class MoodAdmin(MoodModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("timestamp", "entered_by")}),
-        (
-            "Mood Ratings",
-            {
-                "fields": ("anxiety", "energy"),
-                "description": "Rate your anxiety and energy levels on a scale of 1-10.",
-            },
-        ),
+        # (
+        #     "Mood Ratings",
+        #     {
+        #         "fields": ("anxiety", "energy"),
+        #         "description": "Rate your anxiety and energy levels on a scale of 1-10.",
+        #     },
+        # ),
         (None, {"fields": ("notes",)}),
     )
 
@@ -53,3 +53,14 @@ class MoodAdmin(MoodModelAdmin):
         if not change:
             obj.entered_by = cast("AbstractBaseUser", request.user)
         super().save_model(request, obj, form, change)
+
+
+@final
+@admin.register(mood_models.MetricType)
+class MetricTypeAdmin(MoodModelAdmin):
+    """Admin interface for the MetricType model."""
+
+    list_display = ("name", "is_score")
+    search_fields = ("name",)
+    ordering = ("name",)
+    list_filter = ("is_score",)
