@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "dependabot"
+      include: "scope"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "uv"
+        versions: ["*"]
