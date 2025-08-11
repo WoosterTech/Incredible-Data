@@ -1,12 +1,13 @@
 import abc
 import logging
 from collections.abc import Iterable, Iterator
-from typing import TYPE_CHECKING, Any, Generic, NamedTuple, TypeVar, override
+from typing import TYPE_CHECKING, Any, Generic, NamedTuple, TypeVar, cast, override
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.urls import URLPattern, URLResolver, path
+from django.utils.decorators import classonlymethod
 from django.utils.functional import Promise
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -54,7 +55,7 @@ class SingleTableListView(SingleTableView):
 
     view_title: str | None = None
     actions: list[tuple[str, str]] | None = None
-    template_name: str | None = "base_list_tables2.html"
+    template_name: str = "base_list_tables2.html"
 
     @override
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:  # pyright: ignore[reportAny, reportExplicitAny]
@@ -72,7 +73,7 @@ class SingleTableListView(SingleTableView):
         return super_context
 
 
-class ExtraContextDetailView(DetailView):  # pyright: ignore[reportMissingTypeArgument]
+class ExtraContextDetailView(DetailView):
     """Adds context to DetailView for full detail URI."""
 
     @override
@@ -84,7 +85,7 @@ class ExtraContextDetailView(DetailView):  # pyright: ignore[reportMissingTypeAr
         return super_context
 
 
-class UserStampedCreateView(CreateView):  # pyright: ignore[reportMissingTypeArgument]
+class UserStampedCreateView(CreateView):
     """Adds created_by and modified_by to initial data for CreateView."""
 
     @override
@@ -130,10 +131,11 @@ class CustomCRUDView(CRUDView[_ModelT], Generic[_ModelT], abc.ABC):
 
         return path(route_pattern, cls.list_view.as_view(), name=pattern_name)
 
+    @classonlymethod  # pyright: ignore[reportArgumentType]
     @override
-    @classmethod
     def get_urls(
-        cls, roles: Iterable[Role] | None = None
+        cls,  # noqa: N805
+        roles: Iterable[Role] | None = None,
     ) -> list[URLPattern | URLResolver]:
         if roles is None:
             roles = cls._all_roles()
@@ -141,7 +143,7 @@ class CustomCRUDView(CRUDView[_ModelT], Generic[_ModelT], abc.ABC):
         if cls.list_view is not None and Role.LIST in roles:
             list_pattern = cls._get_list_pattern()
             roles = [role for role in roles if role != Role.LIST]
-        common = super().get_urls(roles=roles)
+        common = cast("list[URLPattern | URLResolver]", super().get_urls(roles=roles))
 
         if list_pattern is not None:
             common.append(list_pattern)
