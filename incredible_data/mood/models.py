@@ -1,10 +1,10 @@
+import datetime as dt
 from typing import TYPE_CHECKING, TypeAlias, cast, final, override
 
 from django.conf import settings
+from django.contrib import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-# from incredible_data.helpers.fields import RatingField
 
 if TYPE_CHECKING:
     from incredible_data.users.models import User
@@ -26,9 +26,6 @@ class Mood(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT
     )
 
-    # anxiety = RatingField(scale_maximum=10)
-    # energy = RatingField(scale_maximum=10)
-
     notes = models.TextField(blank=True, help_text="Optional notes.")
 
     @final
@@ -43,7 +40,12 @@ class Mood(models.Model):
 @final
 class MetricType(models.Model):
     name = models.CharField(_("name"), max_length=100, unique=True)
+    help_text = models.TextField(_("help text"), blank=True)
     is_score = models.BooleanField(default=True)
+    higher_is_better = models.BooleanField(
+        default=True,
+        help_text="Indicates if a higher score is better (True) or a lower score is better (False).",
+    )
 
     @override
     def __str__(self) -> str:
@@ -56,10 +58,33 @@ class Entry(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, editable=False
     )
     created_on = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True, help_text="Optional notes.")
+    effective_date = models.DateField(
+        default=dt.date.today,
+        help_text="The date this entry is effective for.",
+    )
+
+    if TYPE_CHECKING:
+        metric_set: "models.QuerySet[Metric]"  # pyright: ignore[reportUninitializedInstanceVariable]
+
+    @final
+    class Meta:
+        ordering = ["-created_on"]
+        verbose_name_plural = "Entries"
 
     @override
     def __str__(self) -> str:
-        return f"Entry by {self.created_by} on {self.created_on}"
+        return f"Entry by {self.created_by} on {self.effective_date}"
+
+    @admin.display(description=_("Metric Values"))
+    def value_display(self) -> str:
+        metric_strs = [
+            f"{metric.metric_type.name}: {metric.score_value}"
+            for metric in self.metric_set.all()
+        ]
+        if not metric_strs:
+            return ""
+        return ", ".join(metric_strs)
 
 
 @final
@@ -78,4 +103,4 @@ class Metric(models.Model):
 
     @override
     def __str__(self) -> str:
-        return f"Metric for {self.entry} - {self.metric_type}: {self.score_value}"
+        return f"{self.metric_type.name}({self.score_value})"
