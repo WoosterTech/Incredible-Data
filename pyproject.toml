@@ -188,7 +188,7 @@ authors = ["Karl Wooster <karl@woostertech.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.11,<4.0"
 python-slugify = "^8.0.4"
 pillow = "^10.3.0"
 argon2-cffi = "^23.1.0"
@@ -224,16 +224,12 @@ python-benedict = "^0.33.2"
 django-funky-sheets = "^0.2.0"
 django-qr-code = "^4.0.1"
 django-tables2 = "^2.7.0"
-psycopg = [
-  {version = "^3.1.18", extras = ["c"], platform = "linux"},
-  {version = "^3.1.18", extras = ["binary"], platform = "win32"}
-]
-django-rubble = {path = "../django-rubble", extras = ["all"]}
-google-api-python-client = "^2.145.0"
-google-auth-httplib2 = "^0.2.0"
-google-auth-oauthlib = "^1.2.1"
-email-validator = "^2.2.0"
-humanize = "^4.10.0"
+psycopg = {version = "^3.2.3", extras = ["binary"]}
+django-rubble = {git = "https://github.com/WoosterTech/django-rubble.git", extras = ["secrets"]}
+neapolitan = "^24.4"
+loguru = "^0.7.2"
+django-colorfield = "^0.11.0"
+django-simple-history = "^3.7.0"
 
 [tool.poetry.group.dev]
 optional=true

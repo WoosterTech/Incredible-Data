@@ -1,2 +1,16 @@
+[variables]
+NIXPACKS_POETRY_VERSION = "1.8.3"
+
+[phases.setup]
+nixPkgs = ["...", "poetry"]
+aptPkgs = ["...", "build-essential", "libpq-dev", "postgresql-client"]
+
+[phases.install]
+cmds = ['python -m venv --copies /opt/venv && . /opt/venv/bin/activate && poetry install --with prod --no-interaction --no-ansi']
+
+[phases.release]
+dependsOn = ["install"]
+cmds = ["python manage.py migrate && python manage.py collectstatic --no-input && python manage.py compress"]
+
 [start]
-cmd = "docker compose -f production.yml run --rm django python manage.py migrate"
+cmd = "gunicorn config.wsgi --bind 0.0.0.0:8000"
