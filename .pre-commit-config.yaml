@@ -8,8 +8,16 @@ default_stages:
 
 exclude: ^docs/|/migrations/|devcontainer.json|/users/
 repos:
+  - repo: local
+    hooks:
+      - id: update-build-info
+        name: Update build_info.py
+        entry: python devtools/bump_build.py
+        language: system
+        pass_filenames: false
+        stages: [commit]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
     - id: trailing-whitespace
     - id: end-of-file-fixer
@@ -31,11 +39,11 @@ repos:
     hooks:
     - id: check-json5
   - repo: https://github.com/fpgmaas/deptry.git
-    rev: 0.23.0
+    rev: 0.23.1
     hooks:
     - id: deptry
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.13
+    rev: v0.12.8
     hooks:
     - id: ruff-check
       args: [--fix]

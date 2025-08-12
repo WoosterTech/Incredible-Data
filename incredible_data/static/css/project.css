@@ -106,3 +106,7 @@
 .navbar-padding {
     padding-top: 59px;
 }
+
+.navbar-version {
+    padding-right: 10px;
+}

@@ -3,6 +3,7 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
+from typing import cast
 
 import environ
 from django.contrib.messages import constants as message_constants
@@ -10,6 +11,10 @@ from loguru import logger
 
 from config.settings.drf_models import Spectacular
 from config.settings.settings_models import Databases, Logging
+from devtools.bump_build import BUILD_INFO_FILE, GitInfo
+from incredible_data import (
+    __version__,  # pyright: ignore[reportAttributeAccessIssue, reportUnknownVariableType]
+)
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
@@ -17,6 +22,22 @@ APPS_DIR = BASE_DIR / "incredible_data"
 env = environ.Env(
     SOCIALACCOUNT_PROVIDERS=(dict, {}),
 )
+
+
+def get_git_info() -> GitInfo:
+    """Attempts to use git to collect versioning info, falling back to the build info file."""
+    try:
+        return GitInfo.get_info()
+    except RuntimeError:
+        return GitInfo.from_file(BUILD_INFO_FILE)
+
+
+git_info = get_git_info()
+
+VERSION = cast("str", __version__)
+BUILD_NUMBER = git_info.commit_hash
+
+logger.debug(f"Current version: {VERSION}+{BUILD_NUMBER}")
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 
@@ -56,13 +77,14 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# databases_obj = Databases.model_validate(
-#     {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-# )
-# databases_obj["default"].atomic_requests = True
-DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-logger.debug(f"Databases settings: {DATABASES}")
+databases_obj = Databases.model_validate(
+    {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+)
+databases_obj.default.atomic_requests = True
+DATABASES = databases_obj.render()
+# DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+logger.debug(f"Default database engine: {databases_obj.default.engine_name}")
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -83,7 +105,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    # "constance",
+    "constance",
     "django.contrib.admin",
     "django.forms",
 ]
@@ -238,6 +260,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                "incredible_data.helpers.context_processors.version",
                 "incredible_data.users.context_processors.allauth_settings",
             ],
         },
@@ -402,15 +425,24 @@ PHONENUMBER_DEFAULT_REGION = "US"
 CURRENCIES = ("USD",)
 DEFAULT_CURRENCY = "USD"
 
-# CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
+## Constance
 
-# CONSTANCE_CONFIG = {
-#     "AZURE_ENDPOINT": (
-#         "Set Azure Endpoint",
-#         "Azure Endpoint assigned to project for receipt ML.",
-#         str,
-#     ),
-#     "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
+# CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+CONSTANCE_CONFIG = {
+    # "Morning Start": (dt.time(6, 0), "hello"),
+    # "Morning End": (dt.time(12, 0), "hello"),
+    # "Afternoon Start": (dt.time(12, 0), "hello"),
+    # "Afternoon End": (dt.time(18, 0), "hello"),
+    # "Evening Start": (dt.time(18, 0), "hello"),
+    # "Evening End": (dt.time(21, 0), "hello"),
+}
+
+# CONSTANCE_CONFIG_FIELDSETS = {
+#     "Morning": ("Morning Start", "Morning End"),
+#     "Afternoon": ("Afternoon Start", "Afternoon End"),
+#     "Evening": ("Evening Start", "Evening End"),
 # }
 
 AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT", "")

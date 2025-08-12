@@ -4,7 +4,8 @@ from typing import Annotated, Any, ClassVar
 
 from attrmagic import ClassBase, SimpleDict
 from attrmagic.sentinels import MISSING, Missing
-from pydantic import ConfigDict, Field, SecretStr, model_serializer
+from loguru import logger
+from pydantic import ConfigDict, Field, SecretStr, field_validator, model_serializer
 
 
 def serialize_missing(self: ClassBase) -> dict[str, Any]:  # pyright: ignore[reportExplicitAny]
@@ -108,11 +109,28 @@ class Database(ClassBase):
     conn_health_checks: bool | Missing = MISSING
     options: DatabaseOptions | Missing = MISSING
     password: SecretStr | Missing = MISSING
-    port: Annotated[int | Missing, Field(ge=0, le=65535)] = MISSING
+    port: Annotated[int, Field(ge=0, le=65535)] | Missing = MISSING
     time_zone: str | Missing = MISSING
     disable_server_side_cursors: bool | Missing = MISSING
     user: str | Missing = MISSING
     test: TestDatabase | Missing = MISSING
+
+    @field_validator("engine", mode="before")
+    @classmethod
+    def validate_builtin_engine(cls, v: Any) -> Any:  # pyright: ignore[reportAny, reportExplicitAny]
+        try:
+            return BuiltInEngine(v)
+        except KeyError:
+            logger.warning(f"Unknown database engine: {v}")
+
+        return v  # pyright: ignore[reportAny]
+
+    @field_validator("port", mode="before")
+    @classmethod
+    def validate_empty_port(cls, v: Any) -> Any:  # pyright: ignore[reportAny, reportExplicitAny]
+        if v in ("",):
+            return MISSING
+        return v  # pyright: ignore[reportAny]
 
     @model_serializer
     def serialize_missing(self) -> dict[str, Any]:  # pyright: ignore[reportExplicitAny]
@@ -128,6 +146,16 @@ class Database(ClassBase):
 
         return output
 
+    @property
+    def engine_name(self) -> str | None:
+        try:
+            return self.engine.name  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+
+        except AttributeError:
+            if self.engine is MISSING:
+                return None
+            return self.engine
+
 
 class Databases(SimpleDict[str, Database]):
     def render(self) -> dict[str, dict[str, Any]]:  # pyright: ignore[reportExplicitAny]
@@ -135,6 +163,11 @@ class Databases(SimpleDict[str, Database]):
         Render the databases to a format suitable for Django's DATABASES setting.
         """
         return {db_name: db.model_dump(by_alias=True) for db_name, db in self.items()}
+
+    @property
+    def default(self) -> Database:
+        assert "default" in self.root
+        return self["default"]
 
 
 if __name__ == "__main__":
