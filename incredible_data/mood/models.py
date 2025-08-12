@@ -64,6 +64,17 @@ class Entry(models.Model):
         help_text="The date this entry is effective for.",
     )
 
+    class TimeOfDay(models.IntegerChoices):
+        MORNING = 1, _("Morning")
+        AFTERNOON = 2, _("Afternoon")
+        EVENING = 3, _("Evening")
+
+        __empty__ = _("Unspecified")
+
+    time_of_day = models.IntegerField(
+        choices=TimeOfDay.choices, default=None, null=True, blank=True
+    )
+
     if TYPE_CHECKING:
         metric_set: "models.QuerySet[Metric]"  # pyright: ignore[reportUninitializedInstanceVariable]
 

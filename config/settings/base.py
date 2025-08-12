@@ -56,13 +56,14 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# databases_obj = Databases.model_validate(
-#     {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-# )
-# databases_obj["default"].atomic_requests = True
-DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-logger.debug(f"Databases settings: {DATABASES}")
+databases_obj = Databases.model_validate(
+    {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+)
+databases_obj.default.atomic_requests = True
+DATABASES = databases_obj.render()
+# DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+logger.debug(f"Default database engine: {databases_obj.default.engine_name}")
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -83,7 +84,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    # "constance",
+    "constance",
     "django.contrib.admin",
     "django.forms",
 ]
@@ -402,15 +403,24 @@ PHONENUMBER_DEFAULT_REGION = "US"
 CURRENCIES = ("USD",)
 DEFAULT_CURRENCY = "USD"
 
-# CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
+## Constance
 
-# CONSTANCE_CONFIG = {
-#     "AZURE_ENDPOINT": (
-#         "Set Azure Endpoint",
-#         "Azure Endpoint assigned to project for receipt ML.",
-#         str,
-#     ),
-#     "AZURE_KEY": ("must set azure key", "Unique Key for receipt ML", str),
+# CONSTANCE_REDIS_CONNECTION = env.cache_url("REDIS_URL")
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+CONSTANCE_CONFIG = {
+    # "Morning Start": (dt.time(6, 0), "hello"),
+    # "Morning End": (dt.time(12, 0), "hello"),
+    # "Afternoon Start": (dt.time(12, 0), "hello"),
+    # "Afternoon End": (dt.time(18, 0), "hello"),
+    # "Evening Start": (dt.time(18, 0), "hello"),
+    # "Evening End": (dt.time(21, 0), "hello"),
+}
+
+# CONSTANCE_CONFIG_FIELDSETS = {
+#     "Morning": ("Morning Start", "Morning End"),
+#     "Afternoon": ("Afternoon Start", "Afternoon End"),
+#     "Evening": ("Evening Start", "Evening End"),
 # }
 
 AZURE_ENDPOINT = env.str("DJANGO_AZURE_ENDPOINT", "")
