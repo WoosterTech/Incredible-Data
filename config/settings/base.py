@@ -3,6 +3,7 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
+from typing import cast
 
 import environ
 from django.contrib.messages import constants as message_constants
@@ -10,6 +11,10 @@ from loguru import logger
 
 from config.settings.drf_models import Spectacular
 from config.settings.settings_models import Databases, Logging
+from devtools.bump_build import BUILD_INFO_FILE, GitInfo
+from incredible_data import (
+    __version__,  # pyright: ignore[reportAttributeAccessIssue, reportUnknownVariableType]
+)
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # incredible_data/
@@ -17,6 +22,22 @@ APPS_DIR = BASE_DIR / "incredible_data"
 env = environ.Env(
     SOCIALACCOUNT_PROVIDERS=(dict, {}),
 )
+
+
+def get_git_info() -> GitInfo:
+    """Attempts to use git to collect versioning info, falling back to the build info file."""
+    try:
+        return GitInfo.get_info()
+    except RuntimeError:
+        return GitInfo.from_file(BUILD_INFO_FILE)
+
+
+git_info = get_git_info()
+
+VERSION = cast("str", __version__)
+BUILD_NUMBER = git_info.commit_hash
+
+logger.debug(f"Current version: {VERSION}+{BUILD_NUMBER}")
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 
@@ -239,6 +260,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                "incredible_data.helpers.context_processors.version",
                 "incredible_data.users.context_processors.allauth_settings",
             ],
         },
