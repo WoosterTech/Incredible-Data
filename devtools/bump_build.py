@@ -69,17 +69,19 @@ class GitInfo(ClassBase):
 
     @classmethod
     def _build_build_number_pattern(cls) -> "re.Pattern[str]":
-        return re.compile(rf"^{cls.build_number_variable_name}\s*=\s*(\d+)")
+        return re.compile(rf"{cls.build_number_variable_name}\s*=\s*(\d+)")
 
     @classmethod
     def _build_commit_hash_pattern(cls) -> "re.Pattern[str]":
-        return re.compile(rf"^{cls.commit_hash_variable_name}\s*=\s*\"([0-9a-f]+)\"")
+        return re.compile(rf"{cls.commit_hash_variable_name}\s*=\s*\"([0-9a-f]+)\"")
 
     @classmethod
     def from_file(cls, file_path: Path) -> Self:
         content = file_path.read_text()
-        build_number_matches = cls._build_build_number_pattern().search(content)
-        commit_hash_matches = cls._build_commit_hash_pattern().search(content)
+        build_number_pattern = cls._build_build_number_pattern()
+        build_number_matches = build_number_pattern.search(content)
+        commit_hash_pattern = cls._build_commit_hash_pattern()
+        commit_hash_matches = commit_hash_pattern.search(content)
 
         if not build_number_matches or not commit_hash_matches:
             msg = "Failed to parse build info file"
