@@ -4,7 +4,7 @@ from incredible_data.helpers import truncate_string
 from incredible_data.helpers.functions import create_media_name
 
 
-@pytest.fixture()
+@pytest.fixture
 def field_file():
     class FieldFile:
         def __init__(self, name: str):
@@ -13,9 +13,9 @@ def field_file():
     return FieldFile("path/to/file.txt")
 
 
-@pytest.fixture()
+@pytest.fixture
 def long_string():
-    return "This is a long string that needs to be truncated to fit within a certain length."  # noqa: E501
+    return "This is a long string that needs to be truncated to fit within a certain length."
 
 
 @pytest.mark.parametrize(
@@ -29,7 +29,7 @@ def long_string():
         (50, "This is a long string that needs to be..."),
         (
             100,
-            "This is a long string that needs to be truncated to fit within a certain length.",  # noqa: E501
+            "This is a long string that needs to be truncated to fit within a certain length.",
         ),
     ],
 )

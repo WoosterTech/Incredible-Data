@@ -1,5 +1,3 @@
-# ruff: noqa
-import os
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -12,15 +10,18 @@ PRODUCTION_DOTENV_FILES = [
 DOTENV_FILE = BASE_DIR / ".env"
 
 
-def merge(
-    output_file: Path,
-    files_to_merge: Sequence[Path],
-) -> None:
-    merged_content = ""
-    for merge_file in files_to_merge:
-        merged_content += merge_file.read_text()
-        merged_content += os.linesep
-    output_file.write_text(merged_content)
+def merge(output_file: Path, files_to_merge: Sequence[Path]) -> None:
+    content: list[str] = []
+    for file in files_to_merge:
+        text = file.read_text()
+        # Strip trailing newline to avoid doubling, then add consistent newline
+        content.append(text.rstrip("\n"))
+
+    # Join with newlines and add final newline if content exists
+    if content and any(content):
+        _ = output_file.write_text("\n".join(content) + "\n")
+    else:
+        _ = output_file.write_text("\n")
 
 
 if __name__ == "__main__":

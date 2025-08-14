@@ -7,9 +7,9 @@ from .contacts_models import (
 from .utility_models import NumberedModel
 
 __all__ = [
-    "ContactPrimaryBaseModel",
-    "NumberedModel",
-    "Email",
-    "PhoneNumber",
     "Contact",
+    "ContactPrimaryBaseModel",
+    "Email",
+    "NumberedModel",
+    "PhoneNumber",
 ]

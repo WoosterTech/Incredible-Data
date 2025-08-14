@@ -113,7 +113,7 @@ class FuelLog(VehicleLog):
         elif self.gallons == 0:  # missing `gallons`
             input_dict["gallons"] = round(self.cost / self.cost_per_gallon, 2)
         else:
-            msg = "At least two of the following fields are required: gallons, cost_per_gallon, cost"  # noqa: E501
+            msg = "At least two of the following fields are required: gallons, cost_per_gallon, cost"
             raise ValueError(msg)
 
         return input_dict["gallons"], input_dict["cost_per_gallon"], input_dict["cost"]

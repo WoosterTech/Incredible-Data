@@ -3,7 +3,7 @@ To understand why this file is here, please read:
 
 http://cookiecutter-django.readthedocs.io/en/latest/faq.html#why-is-there-a-django-contrib-sites-directory-in-cookiecutter-django
 """
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from django.conf import settings
 from django.db import migrations
 
@@ -14,14 +14,15 @@ if TYPE_CHECKING:
 
 def _update_or_create_site_with_sequence(site_model: type["Model"], connection, domain, name):
     """Update or create the site with default ID and keep the DB sequence in sync."""
-    site, created = site_model.objects.update_or_create(
-        id=settings.SITE_ID,
+    
+    _site, created = site_model.objects.update_or_create(
+        id=int(settings.SITE_ID),  # pyright: ignore[reportAny]
         defaults={
             "domain": domain,
             "name": name,
         },
     )
-    if created:
+    if created and connection.vendor == "postgresql":
         # We provided the ID explicitly when creating the Site entry, therefore the DB
         # sequence to auto-generate them wasn't used and is now out of sync. If we
         # don't do anything, we'll get a unique constraint violation the next time a

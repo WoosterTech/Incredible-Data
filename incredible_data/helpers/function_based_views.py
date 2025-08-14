@@ -57,7 +57,7 @@ class DetailWidget:
         empty_value: str = "--",
         value_transform: Callable[[str], str] | None = None,
         template: str = "field_base.html",
-        linkify: bool | None = None,
+        linkify: bool | None = None,  # noqa: FBT001, RUF100
     ) -> None:
         self.field_name = field_name
         self.label = label
@@ -76,12 +76,12 @@ class DetailWidget:
     def bind(self, instance: models.Model) -> None:
         self.instance = instance
         model_cls = instance.__class__
-        field_properties = model_cls._meta.get_field(self.field_name)  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]  # noqa: SLF001
+        field_properties = model_cls._meta.get_field(self.field_name)  # noqa: SLF001
         if self.label is None:
             try:
-                self.label = field_properties.verbose_name  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+                self.label = field_properties.verbose_name
             except AttributeError as e:
-                msg = f'{type(field_properties)} does not support "verbose_name"... please explore'  # pyright: ignore[reportUnknownArgumentType]  # noqa: E501
+                msg = f'{type(field_properties)} does not support "verbose_name"... please explore'
                 raise AttributeError(msg) from e
         self.field = getattr(instance, self.field_name) or self.empty_value
 
