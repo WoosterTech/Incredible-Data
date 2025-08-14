@@ -8,7 +8,12 @@ from django import forms
 class DynamicLayoutHandler:
     def all(self):  # -> LayoutSlice:
         ...
-    def filter(self, *LayoutClasses, max_level=..., greedy=...):  # -> LayoutSlice:
+    def filter(
+        self,
+        *LayoutClasses,  # noqa: N803
+        max_level=...,
+        greedy=...,
+    ):  # -> LayoutSlice:
         ...
     def filter_by_widget(self, widget_type):  # -> LayoutSlice:
         ...

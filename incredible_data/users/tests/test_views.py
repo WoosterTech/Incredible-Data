@@ -6,8 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpRequest
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.test import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -15,9 +14,11 @@ from django.utils.translation import gettext_lazy as _
 from incredible_data.users.forms import UserAdminChangeForm
 from incredible_data.users.models import User
 from incredible_data.users.tests.factories import UserFactory
-from incredible_data.users.views import UserRedirectView
-from incredible_data.users.views import UserUpdateView
-from incredible_data.users.views import user_detail_view
+from incredible_data.users.views import (
+    UserRedirectView,
+    UserUpdateView,
+    user_detail_view,
+)
 
 pytestmark = pytest.mark.django_db
 

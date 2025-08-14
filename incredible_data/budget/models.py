@@ -1,18 +1,24 @@
 import logging
 from pathlib import Path
+from typing import cast
 
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField, ShortUUIDField
-from django_extensions.db.models import TitleSlugDescriptionModel
-from django_rubble.fields.db_fields import SimplePercentageField
+from django_extensions.db.models import (  # pyright: ignore[reportMissingTypeStubs]
+    TitleSlugDescriptionModel,
+)
+from django_rubble.fields.db_fields import (  # pyright: ignore[reportMissingTypeStubs]
+    SimplePercentageField,
+)
 from djmoney.models.fields import MoneyField
 
 logger = logging.getLogger(__name__)
-if settings.DEBUG:
+if cast("bool", settings.DEBUG):
     logger.setLevel(logging.DEBUG)
 else:
     logger.setLevel(logging.INFO)
@@ -37,8 +43,6 @@ class ReversableModel(models.Model):
         abstract = True
 
     def get_absolute_url(self):
-        from django.urls import reverse
-
         viewname = self.reverse_viewname
         reverse_kwargs = self.reverse_kwargs
 
@@ -50,7 +54,7 @@ class ReversableModel(models.Model):
 def uploaded_receipt_path(instance: models.Model, filename: str) -> str:
     filename_path = Path(filename)
     datetime_now = timezone.now()
-    return f"upload/receipts/{datetime_now:%Y}/{datetime_now:%m}/uploaded_receipt_{datetime_now:%Y%m%d-%H%M%S}{filename_path.suffix}"  # noqa: E501
+    return f"upload/receipts/{datetime_now:%Y}/{datetime_now:%m}/uploaded_receipt_{datetime_now:%Y%m%d-%H%M%S}{filename_path.suffix}"
 
 
 class Merchant(TitleSlugDescriptionModel):
@@ -139,7 +143,7 @@ class Receipt(models.Model):
 
     def __str__(self) -> str:
         if self.merchant is not None and self.transaction_date is not None:
-            return f"Receipt({self.merchant} - {self.transaction_date} - {self.grand_total})"  # noqa: E501
+            return f"Receipt({self.merchant} - {self.transaction_date} - {self.grand_total})"
         return f"uploaded file: {self.receipt_file}"
 
 
@@ -164,5 +168,5 @@ class ReceiptItem(models.Model):
 
     def __str__(self) -> str:
         if self.product_code is not None or self.description is not None:
-            return f"Item({self.description or '(no description)'}, code={self.product_code or '(no UPC)'}, price={self.total_price})"  # noqa: E501
+            return f"Item({self.description or '(no description)'}, code={self.product_code or '(no UPC)'}, price={self.total_price})"
         return f"unknown item, price={self.total_price}"

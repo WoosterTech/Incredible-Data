@@ -1,21 +1,52 @@
-ALIAS_DIR := $(USERPROFILE)\bin
-ALIAS_NAME := manage
-BAT_FILE := $(ALIAS_DIR)\$(ALIAS_NAME).bat
 
-install-alias:
-	@echo "This doesn't work!!!"
-	@echo "Installing CMD alias for $(ALIAS_NAME)..."
-	@mkdir "$(ALIAS_DIR)" 2>nul || echo "Alias dir exists"
-	@echo @echo off > "$(BAT_FILE)"
-	@echo uv run python "%~dp0\..\manage.py" %%* >> "$(BAT_FILE)"
-	@setx PATH "%PATH%;$(ALIAS_DIR)" >nul
-	@echo "Alias installed! Restart CMD to use '$(ALIAS_NAME)'."
+ENV_RUN := poetry run
+DJANGO_MANAGE := $(ENV_RUN) python manage.py
+PYTHON := $(ENV_RUN) python
 
-uninstall-alias:
-	@echo "Removing CMD alias for $(ALIAS_NAME)..."
-	@if exist "$(BAT_FILE)" (
-		@del "$(BAT_FILE)"
-		@echo "Alias removed!"
-	) else (
-		@echo "Alias not found!"
-	)
+.PHONY: help runserver migrate makemigrations test pytest-coverage lint format collectstatic shell
+
+help:
+	@echo "Common Django project commands:"
+	@echo "  make runserver        # Start Django development server"
+	@echo "  make migrate          # Apply database migrations"
+	@echo "  make makemigrations   # Create new migrations"
+	@echo "  make test             # Run all tests"
+	@echo "  make pytest-coverage  # Run tests with coverage (HTML report)"
+	@echo "  make lint             # Run ruff linting"
+	@echo "  make format           # Auto-format code with ruff"
+	@echo "  make collectstatic    # Collect static files"
+	@echo "  make shell            # Open Django shell"
+
+runserver:
+	$(DJANGO_MANAGE) runserver
+
+migrate:
+	$(DJANGO_MANAGE) migrate
+
+makemigrations:
+	$(DJANGO_MANAGE) makemigrations
+
+test:
+	$(ENV_RUN) pytest
+
+coverage:
+	$(ENV_RUN) coverage run -m pytest
+	$(ENV_RUN) coverage html
+
+lint:
+	$(ENV_RUN) ruff check .
+
+format:
+	$(ENV_RUN) ruff format .
+
+collectstatic:
+	$(DJANGO_MANAGE) collectstatic --noinput
+
+shell:
+	$(DJANGO_MANAGE) shell
+
+precommit:
+	$(ENV_RUN) pre-commit run
+
+deptrycheck:
+	$(ENV_RUN) deptry .

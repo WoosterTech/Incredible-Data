@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
+from typing import Protocol
 
-from django.db.models.fields.files import FieldFile
 from shortuuid import uuid
 
 logger = logging.getLogger(__name__)
@@ -25,6 +25,10 @@ def short_uuid(
     return str(uuid(alphabet=alphabet))[:5]
 
 
-def create_media_name(field_file: FieldFile) -> str:
+class FieldFileProtocol(Protocol):
+    name: str
+
+
+def create_media_name(field_file: FieldFileProtocol) -> str:
     """Get only the filename (`stem`) from a FieldFile."""
     return Path(field_file.name).stem

@@ -68,39 +68,6 @@ class AutoSlugField(UniqueFieldMixin, SlugField):
         ...
 
 class RandomCharField(UniqueFieldMixin, CharField):
-    """
-    RandomCharField
-
-    By default, sets editable=False, blank=True, unique=False.
-
-    Required arguments:
-
-    length
-        Specifies the length of the field
-
-    Optional arguments:
-
-    unique
-        If set to True, duplicate entries are not allowed (default: False)
-
-    lowercase
-        If set to True, lowercase the alpha characters (default: False)
-
-    uppercase
-        If set to True, uppercase the alpha characters (default: False)
-
-    include_alpha
-        If set to True, include alpha characters (default: True)
-
-    include_digits
-        If set to True, include digit characters (default: True)
-
-    include_punctuation
-        If set to True, include punctuation characters (default: False)
-
-    keep_default
-        If set to True, keeps the default initialization value (default: False)
-    """
     def __init__(self, *args, **kwargs) -> None: ...
     def random_char_generator(self, chars):  # -> Generator[str, Any, Never]:
         ...
@@ -114,11 +81,6 @@ class RandomCharField(UniqueFieldMixin, CharField):
         ...
 
 class CreationDateTimeField(DateTimeField):
-    """
-    CreationDateTimeField
-
-    By default, sets editable=False, blank=True, auto_now_add=True
-    """
     def __init__(self, *args, **kwargs) -> None: ...
     def get_internal_type(self):  # -> Literal['DateTimeField']:
         ...
@@ -126,13 +88,6 @@ class CreationDateTimeField(DateTimeField):
         ...
 
 class ModificationDateTimeField(CreationDateTimeField):
-    """
-    ModificationDateTimeField
-
-    By default, sets editable=False, blank=True, auto_now=True
-
-    Sets value to now every time the object is saved.
-    """
     def __init__(self, *args, **kwargs) -> None: ...
     def get_internal_type(self):  # -> Literal['DateTimeField']:
         ...
@@ -144,15 +99,6 @@ class ModificationDateTimeField(CreationDateTimeField):
 class UUIDVersionError(Exception): ...
 
 class UUIDFieldMixin:
-    """
-    UUIDFieldMixin
-
-    By default uses UUID version 4 (randomly generated UUID).
-
-    The field support all uuid versions which are natively supported by the uuid python module, except version 2.
-    For more information see: https://docs.python.org/lib/module-uuid.html
-    """
-
     DEFAULT_MAX_LENGTH = ...
     def __init__(
         self,
@@ -177,14 +123,6 @@ class UUIDFieldMixin:
         ...
 
 class ShortUUIDField(UUIDFieldMixin, CharField):
-    """
-    ShortUUIDFied
-
-    Generates concise (22 characters instead of 36), unambiguous, URL-safe UUIDs.
-
-    Based on `shortuuid`: https://github.com/stochastic-technologies/shortuuid
-    """
-
     DEFAULT_MAX_LENGTH = ...
     def __init__(self, *args, **kwargs) -> None: ...
     def create_uuid(self):  # -> str:

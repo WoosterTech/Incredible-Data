@@ -13,4 +13,12 @@
         "editor.formatOnSave": true,
         "editor.rulers": [100]
     },
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests",
+        "incredible_data/helpers/tests",
+        "incredible_data/users/tests",
+        "incredible_data/budget/tests"
+    ],
+    "python.testing.unittestEnabled": false,
 }

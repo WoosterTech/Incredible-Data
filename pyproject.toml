@@ -151,6 +151,14 @@ django-types = "^0.22.0"
 [tool.poetry.group.test]
 optional = true
 
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.2"
+pytest-sugar = "^1.0.0"
+coverage = "^7.4.4"
+factory-boy = "^3.3.0"
+django-coverage-plugin = "^3.1.0"
+pytest-django = "^4.9.0"
+
 [tool.deptry]
 pep621_dev_dependency_groups = ["dev", "test"]
 extend_exclude = [".*/tests/", ".*/conftest.py", ".*/helpers/test_functions.py"]
@@ -197,15 +205,7 @@ python-benedict = "benedict"
 python-slugify = "slugify"
 django-phonenumber-field = "phonenumber_field"
 django-allauth = "allauth"
-
-
-[tool.poetry.group.test.dependencies]
-pytest = "^8.3.2"
-pytest-sugar = "^1.0.0"
-coverage = "^7.4.4"
-factory-boy = "^3.3.0"
-django-coverage-plugin = "^3.1.0"
-pytest-django = "^4.9.0"
+python-bridge = "bridge"
 
 [tool.poetry.group.bridge]
 optional = true
