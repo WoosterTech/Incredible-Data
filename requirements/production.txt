@@ -356,9 +356,9 @@ django-redis==5.4.0 ; python_version >= "3.10" and python_version < "4.0" \
 django-rubble==0.5.2 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:6d11a8cfb95d443213245203741fedd69215f05b4fe0e534d26f14d60e613e7c \
     --hash=sha256:9aa8213f34aa872f95830a63c2f20c35b09dafb436d1807ebac7959e356a3118
-django-simple-history==3.7.0 ; python_version >= "3.10" and python_version < "4.0" \
-    --hash=sha256:282cb2c4aa63f51547f17da7f2130abaa81ba01694676d19b88d52c94a57a52c \
-    --hash=sha256:ac3b7ca8b0d33f7ea6be8fe7fc98cf43415efa500ff5dfe736fbd1ebc0cf39f9
+django-simple-history==3.10.1 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:040f0c2286bed730312aa15f0acee9e7e6f839c4bcd721693251aa7ec5b65d95 \
+    --hash=sha256:e12c27abfcd7e801a9d274d94542549ce8c617b0b384ae69afb161b56cd02ba4
 django-storages[s3]==1.14.3 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:31f263389e95ce3a1b902fb5f739a7ed32895f7d8b80179fe7453ecc0dfe102e \
     --hash=sha256:95a12836cd998d4c7a4512347322331c662d9114c4344f932f5e9c0fce000608
