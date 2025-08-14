@@ -1,6 +1,6 @@
 # pyright: reportAny=false
 import http
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, cast, override
 
 from django import forms
 from django.contrib.auth.models import Permission
@@ -19,13 +19,14 @@ class DummyUserStampedCreateView(UserStampedCreateView):
 
 
 class UserTestCase(TestCase):
+    @override
     def setUp(self):
-        self.user: User = User.objects.create_user(
+        self.user: User = User.objects.create_user(  # pyright: ignore[reportUnknownMemberType, reportUninitializedInstanceVariable]
             email="testuser@example.com",
             password="testpassword",  # noqa: S106
         )
         self.user.user_permissions.add(*Permission.objects.all())
-        self.client = Client()
+        self.client: Client = Client()
 
     def test_user_created(self):
         user = User.objects.get(email="testuser@example.com")
