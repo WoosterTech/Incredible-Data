@@ -1,0 +1,69 @@
+name: Bump Version with Commitizen
+
+on:
+  push:
+    branches:
+      - binary
+  issue_comment:
+    types: [created]
+
+jobs:
+  prerelease:
+    if: github.event.issue.pull_request != null && contains(github.event.comment.body, '/prerelease')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract prerelease value
+        id: prerelease
+        run: |
+          echo "value=$(echo '${{ github.event.comment.body }}' | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create prerelease flag
+        run: |
+          echo "${{ steps.prerelease.outputs.value }}" > .prerelease_flag
+  bump-version:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && contains(github.ref, 'refs/heads/binary')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+      - name: Install Commitizen
+        run: |
+          poetry add --dev commitizen
+      - name: Update Build Info
+        run: |
+          poetry run python devtools/bump_build.py
+          git add .
+      - name: Check for prerelease flag
+        id: prerelease
+        run: |
+          if [ -f .prerelease_flag ]; then
+            PRERELEASE=$(cat .prerelease_flag)
+            echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
+            rm .prerelease_flag
+            git add .
+          else
+            echo "prerelease=" >> $GITHUB_OUTPUT
+          fi
+      - name: Bump version with Commitizen
+        run: |
+          if [ -n "${{ steps.prerelease.outputs.prerelease }}" ]; then
+            poetry run cz bump --yes --prerelease "${{ steps.prerelease.outputs.prerelease }}"
+          else
+            poetry run cz bump --yes
+          fi
+      - name: Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(release): bump version [skip ci]"
+          git push
