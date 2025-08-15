@@ -1,9 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.template.loader import render_to_string
-from django.urls import reverse  # pyright: ignore[reportUnknownVariableType]
+from django.urls import reverse
 from django.utils.safestring import mark_safe
-
-# Create your views here.
 
 
 def rating_widget(request: HttpRequest) -> HttpResponse:

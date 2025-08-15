@@ -127,6 +127,7 @@ pydantic-settings = "^2.7.1"
 case-converter = "^1.2.0"
 toml = "^0.10.2"
 attrmagic = {git = "https://github.com/WoosterTech/AttrMagic.git"}
+django-filter = "^25.1"
 
 [tool.poetry.group.dev]
 optional = true

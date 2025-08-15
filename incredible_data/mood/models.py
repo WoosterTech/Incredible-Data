@@ -1,8 +1,11 @@
 import datetime as dt
+import json
+from collections.abc import Iterable
 from typing import TYPE_CHECKING, TypeAlias, cast, final, override
 
 from django.conf import settings
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -46,10 +49,38 @@ class MetricType(models.Model):
         default=True,
         help_text="Indicates if a higher score is better (True) or a lower score is better (False).",
     )
+    min_value = models.IntegerField(
+        default=0, help_text="Minimum allowed value for this metric type."
+    )
+    max_value = models.IntegerField(
+        default=10, help_text="Maximum allowed value for this metric type."
+    )
+    scale_definition = models.TextField(
+        blank=True,
+        default="",
+        help_text="Optional scale definition (e.g., JSON or description).",
+    )
 
     @override
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def range(self) -> range:
+        return range(self.min_value, self.max_value + 1)
+
+    def get_scale_definition(self) -> dict[str, str | None] | None:
+        try:
+            return json.loads(self.scale_definition)
+        except json.JSONDecodeError:
+            return None
+
+    def get_choices(self) -> Iterable[tuple[str, str | None]]:
+        definition = self.get_scale_definition()
+        if definition is None:
+            yield from [(str(i), None) for i in self.range]
+        else:
+            yield from definition.items()
 
 
 @final
@@ -115,3 +146,16 @@ class Metric(models.Model):
     @override
     def __str__(self) -> str:
         return f"{self.metric_type.name}({self.score_value})"
+
+    @override
+    def clean(self):
+        super().clean()
+        if self.metric_type:
+            min_val = self.metric_type.min_value
+            max_val = self.metric_type.max_value
+            if not (min_val <= self.score_value <= max_val):
+                raise ValidationError(
+                    {
+                        "score_value": f"Value must be between {min_val} and {max_val} for metric type '{self.metric_type.name}'."
+                    }
+                )
