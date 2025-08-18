@@ -1,8 +1,11 @@
 import datetime as dt
 import json
+import random
 from collections.abc import Iterable
+from enum import Enum
 from typing import TYPE_CHECKING, TypeAlias, cast, final, override
 
+from colorfield.fields import ColorField
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
@@ -10,6 +13,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from incredible_data.mood.manager import UserScopedManager
+
+from . import get_color_palette
 
 if TYPE_CHECKING:
     from incredible_data.users.models import User
@@ -44,6 +49,9 @@ class Mood(models.Model):
         return f"{self.timestamp:%Y-%m-%d %H:%M} {self.entered_by}"  # - Anxiety: {self.anxiety}, Energy: {self.energy}"
 
 
+METRIC_COLOR_PALETTE = get_color_palette()
+
+
 @final
 class MetricType(models.Model):
     name = models.CharField(_("name"), max_length=100, unique=True)
@@ -64,6 +72,7 @@ class MetricType(models.Model):
         default="",
         help_text="Optional scale definition (e.g., JSON or description).",
     )
+    graph_color = ColorField(choices=METRIC_COLOR_PALETTE)
 
     @override
     def __str__(self) -> str:

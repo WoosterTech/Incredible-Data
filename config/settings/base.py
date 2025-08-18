@@ -132,6 +132,7 @@ THIRD_PARTY_APPS = [
     "django_rubble",
     "dbbackup",
     "django_filters",
+    "colorfield",
 ]
 
 LOCAL_APPS = [
@@ -433,6 +434,23 @@ DEFAULT_CURRENCY = "USD"
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_CONFIG = {
+    "MOOD_GRAPH_COLORS": (
+        [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "purple",
+            "orange",
+            "pink",
+            "brown",
+            "gray",
+            "black",
+            "white",
+        ],
+        "Available colors for mood graphs",
+        list,
+    ),
     # "Morning Start": (dt.time(6, 0), "hello"),
     # "Morning End": (dt.time(12, 0), "hello"),
     # "Afternoon Start": (dt.time(12, 0), "hello"),
