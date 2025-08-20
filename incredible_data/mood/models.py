@@ -3,11 +3,14 @@ import json
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, TypeAlias, cast, final, override
 
+from colorfield.fields import ColorField
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from incredible_data.mood.manager import UserScopedManager
 
 if TYPE_CHECKING:
     from incredible_data.users.models import User
@@ -30,6 +33,8 @@ class Mood(models.Model):
     )
 
     notes = models.TextField(blank=True, help_text="Optional notes.")
+
+    objects = UserScopedManager["Mood"]()
 
     @final
     class Meta:
@@ -60,6 +65,7 @@ class MetricType(models.Model):
         default="",
         help_text="Optional scale definition (e.g., JSON or description).",
     )
+    graph_color = ColorField()
 
     @override
     def __str__(self) -> str:
@@ -71,7 +77,7 @@ class MetricType(models.Model):
 
     def get_scale_definition(self) -> dict[str, str | None] | None:
         try:
-            return json.loads(self.scale_definition)
+            return cast("dict[str, str | None]", json.loads(self.scale_definition))
         except json.JSONDecodeError:
             return None
 
@@ -105,6 +111,8 @@ class Entry(models.Model):
     time_of_day = models.IntegerField(
         choices=TimeOfDay.choices, default=None, null=True, blank=True
     )
+
+    objects = UserScopedManager["Entry"]()
 
     if TYPE_CHECKING:
         metric_set: "models.QuerySet[Metric]"  # pyright: ignore[reportUninitializedInstanceVariable]

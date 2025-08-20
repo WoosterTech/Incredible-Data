@@ -4,7 +4,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import ClassVar, Self
 
-from attrmagic import ClassBase
+from pydantic import BaseModel
 
 PROJECT_BASE_PATH = Path(__file__).parent.parent / "incredible_data"
 
@@ -44,7 +44,7 @@ def git_output(command: GitCommand, *options: str, commit: str = "HEAD") -> str:
     return result.decode("utf-8").strip()
 
 
-class GitInfo(ClassBase):
+class GitInfo(BaseModel):
     commit_count: int
     commit_hash: str
 

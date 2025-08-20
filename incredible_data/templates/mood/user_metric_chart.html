@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Metric Values Over Time</h2>
+  <canvas id="metricChart" width="800" height="400"></canvas>
+  <script src="https://unpkg.com/chart.js@4.5.0/dist/chart.umd.js"></script>
+  <script src="https://unpkg.com/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script>
+    function renderMetricChart(chartData) {
+      const datasets = chartData.datasets.map(ds => ({
+        ...ds,
+        data: ds.data.map(point => ({
+          x: point.date,
+          y: point.value
+        }))
+      }));
+      const config = {
+        type: 'line',
+        data: {
+          datasets
+        },
+        options: {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day'
+              }
+            }
+          }
+        }
+      };
+      console.log(datasets[0].data);
+      new Chart(document.getElementById('metricChart'), config);
+    }
+
+    fetch('/api/mood/chart/')
+      .then(response => response.json())
+      .then(data => {
+        renderMetricChart(data);
+      });
+  </script>
+{% endblock content %}

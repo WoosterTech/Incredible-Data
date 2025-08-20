@@ -21,10 +21,12 @@ from django.contrib.admin.options import (
     get_content_type_for_model,
 )
 from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
-from django.db.models import Model
+from django.db.models import Model, QuerySet
 from django.db.models.options import Options
 from django.forms import ModelForm
 from django.template.response import TemplateResponse
+
+from incredible_data.mood.manager import UserScopedManager
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -64,9 +66,16 @@ class ModelAdminContext(TypedDict, Generic[_ModelT]):
     inline_admin_formsets: list[InlineAdminFormSet]
 
 
-class GenericModelAdmin(ModelAdmin, Generic[_ModelT]):  # pyright: ignore[reportMissingTypeArgument]
-    class Meta:
-        abstract: bool = True
+if TYPE_CHECKING:
+
+    class GenericModelAdmin(ModelAdmin[_ModelT], Generic[_ModelT]):
+        class Meta:
+            abstract: bool = True
+else:
+
+    class GenericModelAdmin(ModelAdmin, Generic[_ModelT]):
+        class Meta:
+            abstract: bool = True
 
 
 class GenericTabularInline(TabularInline, Generic[_ModelT]):  # pyright: ignore[reportMissingTypeArgument]
@@ -95,7 +104,7 @@ class UserStampedAdmin(GenericModelAdmin[_ModelT], Generic[_ModelT]):
         if not change:
             setattr(obj, self.created_by_field, user)
 
-        super().save_model(request, obj, form, change)  # pyright: ignore[reportUnknownMemberType]
+        super().save_model(request, obj, form, change)
 
     def _has_editable_inline_admin_formsets(
         self, context: ModelAdminContext[_ModelT]
@@ -135,7 +144,7 @@ class UserStampedAdmin(GenericModelAdmin[_ModelT], Generic[_ModelT]):
         form_url = add_preserved_filters(
             {"preserved_filters": preserved_filters, "opts": self.opts}, url=form_url
         )
-        view_on_site_url = self.get_view_on_site_url(obj)  # pyright: ignore[reportUnknownMemberType]
+        view_on_site_url = self.get_view_on_site_url(obj)
         has_editable_inline_admin_formsets = self._has_editable_inline_admin_formsets(
             context
         )
@@ -144,17 +153,17 @@ class UserStampedAdmin(GenericModelAdmin[_ModelT], Generic[_ModelT]):
             {
                 "add": add,
                 "change": change,
-                "has_view_permission": self.has_view_permission(request, obj),  # pyright: ignore[reportUnknownMemberType]
+                "has_view_permission": self.has_view_permission(request, obj),
                 "has_add_permission": self.has_add_permission(request),
-                "has_change_permission": self.has_change_permission(request, obj),  # pyright: ignore[reportUnknownMemberType]
-                "has_delete_permission": self.has_delete_permission(request, obj),  # pyright: ignore[reportUnknownMemberType]
+                "has_change_permission": self.has_change_permission(request, obj),
+                "has_delete_permission": self.has_delete_permission(request, obj),
                 "has_editable_inline_admin_formsets": has_editable_inline_admin_formsets,
                 "has_file_field": self._has_file_field(context),
                 "has_absolute_url": view_on_site_url is not None,
                 "absolute_url": view_on_site_url,
                 "form_url": form_url,
                 "opts": self.opts,
-                "content_type_id": get_content_type_for_model(self.model).pk,  # pyright: ignore[reportUnknownMemberType, reportAny, reportUnknownArgumentType]
+                "content_type_id": get_content_type_for_model(self.model).pk,  # pyright: ignore[reportAny]
                 "save_as": self.save_as,
                 "save_on_top": self.save_on_top,
                 "to_field_var": TO_FIELD_VAR,
@@ -192,3 +201,16 @@ class UserStampedAdmin(GenericModelAdmin[_ModelT], Generic[_ModelT]):
             f"admin/{app_label}/change_form.html",
             "admin/change_form.html",
         ]
+
+    @override
+    def get_queryset(self, request: "HttpRequest") -> "QuerySet[_ModelT]":
+        if request.user.is_superuser:
+            return super().get_queryset(request)
+
+        model = self.model
+
+        model_manager = model.objects
+
+        assert isinstance(model_manager, UserScopedManager)
+
+        return model_manager.fetch_user_records(request)

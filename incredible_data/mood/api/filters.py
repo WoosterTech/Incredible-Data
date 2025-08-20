@@ -1,21 +1,47 @@
+import logging
 from typing import final
 
 from django_filters import rest_framework as filters
 
-from incredible_data.mood.models import MetricType
+from incredible_data.mood.models import Entry, Metric, MetricType
+
+logger = logging.getLogger(__name__)
 
 
 @final
 class MetricTypeFilter(filters.FilterSet):
-    name = filters.CharFilter(lookup_expr="icontains")
-    min_value = filters.NumberFilter(lookup_expr="eq")
-    max_value = filters.NumberFilter(lookup_expr="eq")
-    min_value__gte = filters.NumberFilter(field_name="min_value", lookup_expr="gte")
-    min_value__lte = filters.NumberFilter(field_name="min_value", lookup_expr="lte")
-    max_value__gte = filters.NumberFilter(field_name="max_value", lookup_expr="gte")
-    max_value__lte = filters.NumberFilter(field_name="max_value", lookup_expr="lte")
+    min_value = filters.NumericRangeFilter()
+    max_value = filters.NumericRangeFilter()
 
     @final
     class Meta:
         model = MetricType
-        fields = ["is_score", "higher_is_better"]
+        fields = {
+            "name": ["iexact", "icontains"],
+            "is_score": ["exact"],
+            "higher_is_better": ["exact"],
+        }
+
+
+@final
+class MetricFilter(filters.FilterSet):
+    date = filters.DateFromToRangeFilter(field_name="entry__created_on")
+    o = filters.OrderingFilter(fields=(("metric_type__name", "metric_type"),))
+
+    @final
+    class Meta:
+        model = Metric
+        fields = ["entry", "metric_type"]
+
+
+@final
+class EntryFilter(filters.FilterSet):
+    date = filters.DateFromToRangeFilter(field_name="created_on")
+    o = filters.OrderingFilter(
+        fields=(("time_of_day", "time_of_day"), ("created_on", "created_on"))
+    )
+
+    @final
+    class Meta:
+        model = Entry
+        fields = ["time_of_day"]

@@ -1,0 +1,4 @@
+{
+    "include": ["incredible_data"],
+    "extraPaths": ["typings"]
+}
