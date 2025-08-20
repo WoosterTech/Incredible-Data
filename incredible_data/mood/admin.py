@@ -41,7 +41,7 @@ class MoodAdmin(UserStampedAdmin[mood_models.Mood]):
 class MetricTypeAdmin(GenericModelAdmin[mood_models.MetricType]):
     """Admin interface for the MetricType model."""
 
-    list_display = ("name", "is_score")
+    list_display = ("name", "is_score", "graph_color")
     search_fields = ("name",)
     ordering = ("name",)
     list_filter = ("is_score",)
