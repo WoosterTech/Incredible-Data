@@ -35,6 +35,8 @@ class MoodAdmin(UserStampedAdmin[mood_models.Mood]):
     )
     created_by_field = "entered_by"
 
+    
+
 
 @final
 @admin.register(mood_models.MetricType)
@@ -91,6 +93,12 @@ class EntryAdmin(UserStampedAdmin[mood_models.Entry]):
         ),
     )
 
+    @override
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(created_by=request.user)
 
 @final
 @admin.register(mood_models.Metric)
