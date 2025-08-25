@@ -3,5 +3,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+  {{ form.media.css }}
   {% crispy form %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  {{ form.media.js }}
 {% endblock content %}
