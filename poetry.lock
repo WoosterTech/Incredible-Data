@@ -1464,6 +1464,27 @@ reference = "HEAD"
 resolved_reference = "b63ac891788fa0d159e4210f6b9e65a5fd964921"
 
 [[package]]
+name = "django-select2"
+version = "8.4.1"
+description = "This is a Django_ integration of Select2_."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_select2-8.4.1-py3-none-any.whl", hash = "sha256:1df5e6788cc032795c1be0f2e2a2ea7a5a1dd89878575217a2c23f25d7301fbf"},
+    {file = "django_select2-8.4.1.tar.gz", hash = "sha256:e6cdc0ae647b91b1bed610628893d10dea50a96fffba8e83af27f35dd6003572"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+django-appconf = ">=0.6.0"
+
+[package.extras]
+docs = ["sphinx"]
+selenium = ["selenium"]
+test = ["pytest", "pytest-cov", "pytest-django", "selenium"]
+
+[[package]]
 name = "django-storages"
 version = "1.14.6"
 description = "Support for many storage backends in Django"
@@ -4977,4 +4998,4 @@ dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "b78810dff57811798749d10208c0c4d812cf70b8fa0d78c3195d0e2a71bc88ee"
+content-hash = "2d129dbad259359dfaf500716e17fe240e820f3db68fb018fbcc8c9f4e62ebf3"

@@ -4,7 +4,7 @@ import logging
 from collections.abc import Iterable
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import TYPE_CHECKING, Any, cast, final, override
+from typing import TYPE_CHECKING, Any, final, override
 
 from django.db import models, transaction
 from django.db.models import BaseConstraint, Count, F, Max, Sum, UniqueConstraint
@@ -31,11 +31,11 @@ logger.setLevel(logging.DEBUG)
 
 
 def fourteen_days() -> date:
-    return timezone.now() + timedelta(days=14)
+    return timezone.now().date() + timedelta(days=14)
 
 
 def thirty_days() -> date:
-    return timezone.now() + timedelta(days=30)
+    return timezone.now().date() + timedelta(days=30)
 
 
 @final
@@ -50,7 +50,7 @@ class Order(BaseNumberedModel):
         default=fourteen_days,
     )
     notes = models.TextField(_("order notes"), blank=True)
-    slug = AutoSlugField(populate_from=["customer", "number"])
+    slug = AutoSlugField(populate_from=["customer", "number"])  # pyright: ignore[reportCallIssue]
     number_config = NumberConfig(prefix="MHC", width=4, start_value=1)
 
     class Meta:
@@ -62,6 +62,13 @@ class Order(BaseNumberedModel):
 
     def get_absolute_url(self):
         return reverse("business:order-detail", kwargs={"slug": self.slug})
+
+    def get_create_project_url(self):
+        customer = self.customer
+        return (
+            reverse("business:project-create")
+            + f"?customer={customer.pk}&order={self.pk}"  # pyright: ignore[reportAny]
+        )
 
 
 @final
@@ -87,7 +94,7 @@ class Invoice(StampedModel, StatusModel, NumberedModel):
         Order, verbose_name=_("order"), on_delete=models.PROTECT, blank=True, null=True
     )
 
-    slug = AutoSlugField(populate_from="number", slugify_function=slugify)
+    slug = AutoSlugField(populate_from="number", slugify_function=slugify)  # pyright: ignore[reportCallIssue]
 
     if TYPE_CHECKING:
 
@@ -160,11 +167,11 @@ class InvoiceLineManager(models.Manager["InvoiceLine"]):
         if line.rank <= distance:
             return
 
-        invoice = cast("Invoice", line.invoice)
+        invoice = line.invoice
 
         invoice_qs = self.filter(invoice=invoice).order_by("rank")
-        current_rank = cast("int", line.rank)
-        new_rank = cast("int", line.rank - distance)
+        current_rank = line.rank
+        new_rank = line.rank - distance
         lines_to_change = invoice_qs.filter(rank__gte=new_rank)
 
         msg = f"Moving line {line.rank} to {new_rank} in invoice {invoice.number}"
@@ -186,7 +193,7 @@ class InvoiceLine(models.Model):
     rank = models.PositiveSmallIntegerField(_("rank"), blank=True)
     description = models.CharField(_("description"), max_length=100)
     quantity = models.DecimalField(
-        _("quantity"), max_digits=15, decimal_places=5, default=1
+        _("quantity"), max_digits=15, decimal_places=5, default=Decimal("1")
     )
     unit_price = MoneyField(_("unit price"), max_digits=19, decimal_places=4, default=0)
     invoice = models.ForeignKey(
@@ -213,7 +220,7 @@ class InvoiceLine(models.Model):
     ) -> None:
         if TYPE_CHECKING:
             assert isinstance(self.invoice, Invoice)
-        if self.rank is None:
+        if self.rank is None:  # pyright: ignore[reportUnnecessaryComparison]
             max_rank = self.invoice.max_rank()
             self.rank = max_rank + 1
         super().save(*args, **kwargs)  # pyright: ignore[reportAny]
@@ -226,8 +233,8 @@ class InvoiceLine(models.Model):
         *args: Any,  # pyright: ignore[reportExplicitAny, reportAny]
         **kwargs: Any,  # pyright: ignore[reportExplicitAny, reportAny]
     ) -> tuple[int, dict[str, int]]:
-        invoice = cast("Invoice", self.invoice)
-        this_rank = cast("int", self.rank)
+        invoice = self.invoice
+        this_rank = self.rank
 
         deleted = super().delete(*args, **kwargs)  # pyright: ignore[reportAny]
 

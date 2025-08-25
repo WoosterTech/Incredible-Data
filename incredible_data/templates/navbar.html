@@ -32,6 +32,11 @@
                    data-bs-toggle="dropdown"
                    aria-expanded="false">Business</a>
                 <ul class="dropdown-menu">
+                  {% if perms.customers %}
+                    <li>
+                      <a class="dropdown-item" href="{% url 'customers:customer-list' %}">Customers</a>
+                    </li>
+                  {% endif %}
                   <li>
                     <a class="dropdown-item" href="{% url 'business:order-list' %}">Orders</a>
                   </li>

@@ -130,6 +130,7 @@ attrmagic = { git = "https://github.com/WoosterTech/AttrMagic.git" }
 django-filter = "^25.1"
 pydantic-extra-types = "^2.10.5"
 django-colorfield = "^0.14.0"
+django-select2 = "^8.4.1"
 
 [tool.poetry.group.dev]
 optional = true
