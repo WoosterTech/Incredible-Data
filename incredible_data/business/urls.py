@@ -1,4 +1,3 @@
-# ruff: noqa: E501
 from django.urls import path
 from neapolitan.views import Role
 
@@ -8,7 +7,9 @@ from .views import (
     ProjectView,
     invoice_create_view,
     invoice_detail_view,
+    order_create_view,
     order_detail_view,
+    order_edit_view,
     printable_invoice,
     project_create_view,
     project_detail_view,
@@ -23,6 +24,8 @@ urlpatterns = [
     path("project/<slug:slug>/edit/", project_edit_view, name="project-update"),
     path("project/<slug:slug>/", project_detail_view, name="project-detail"),
     *ProjectView.get_urls(roles=[Role.DELETE, Role.LIST]),
+    path("order/new/", order_create_view, name="order-create"),
+    path("order/<slug:slug>/edit/", order_edit_view, name="order-update"),
     path("order/<slug:slug>/", order_detail_view, name="order-detail"),
     *OrderView.get_urls(roles=[Role.DELETE, Role.LIST, Role.UPDATE]),
     path("invoice/new/", invoice_create_view, name="invoice-create"),

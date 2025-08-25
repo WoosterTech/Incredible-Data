@@ -4,7 +4,7 @@ name = "incredible-data"
 dynamic = ["version"]
 description = ""
 readme = "README.md"
-requires-python = ">=3.12,<4.0"
+requires-python = ">=3.12,<3.13"
 
 
 # ==== pytest ====
@@ -75,7 +75,6 @@ version = "0.7.0b2"
 
 
 [tool.poetry.dependencies]
-python = ">=3.12,<4.0"
 python-slugify = "^8.0.4"
 pillow = "^10.3.0"
 argon2-cffi = "^23.1.0"
@@ -91,7 +90,7 @@ django = ">=5.2.2,<5.3"
 django-environ = "^0.11.2"
 django-model-utils = "^4.5.0"
 django-extensions = "^3.2.3"
-django-allauth = {version = "^65.9.0", extras = ["mfa"]}
+django-allauth = { version = "^65.9.0", extras = ["mfa"] }
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2024.2"
 django-phonenumber-field = { extras = ["phonenumberslite"], version = "^8.0.0" }
@@ -127,10 +126,11 @@ django-storages = { extras = ["s3"], version = "^1.14.3" }
 pydantic-settings = "^2.7.1"
 case-converter = "^1.2.0"
 toml = "^0.10.2"
-attrmagic = {git = "https://github.com/WoosterTech/AttrMagic.git"}
+attrmagic = { git = "https://github.com/WoosterTech/AttrMagic.git" }
 django-filter = "^25.1"
 pydantic-extra-types = "^2.10.5"
 django-colorfield = "^0.14.0"
+django-select2 = "^8.4.1"
 
 [tool.poetry.group.dev]
 optional = true

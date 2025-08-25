@@ -1,8 +1,8 @@
-# ruff: noqa: E501, ERA001
+# ruff: noqa: ERA001
 import logging
 
 from django.conf import settings
-from django.conf.urls.static import static  # pyright: ignore[reportUnknownVariableType]
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -30,6 +30,7 @@ urlpatterns: list[URLPattern | URLResolver] = [
     path("budget/", include("incredible_data.budget.budget_urls", namespace="budget")),
     path("business/", include("incredible_data.business.urls", namespace="business")),
     path("bins/", include("incredible_data.bins.urls", namespace="bins")),
+    path("customers/", include("incredible_data.customers.urls", namespace="customers")),
     path("mood/", include("incredible_data.mood.urls", namespace="mood")),
     path("qr_code/", include("qr_code.urls", namespace="qr_code")),
     # Media files
@@ -38,6 +39,11 @@ urlpatterns: list[URLPattern | URLResolver] = [
 if settings.DEBUG:  # pyright: ignore[reportAny]
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
+
+# Select2 URLS
+urlpatterns += [
+    path("select2/", include("django_select2.urls")),
+]
 
 # API URLS
 urlpatterns += [

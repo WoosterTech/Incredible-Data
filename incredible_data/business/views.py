@@ -1,24 +1,39 @@
+import abc
 import logging
 from collections.abc import Iterable
 from http import HTTPMethod
-from typing import Any, Generic, TypedDict, TypeVar, cast, final, override
+from typing import (
+    Any,
+    Generic,
+    Protocol,
+    TypedDict,
+    TypeVar,
+    cast,
+    final,
+    override,
+    runtime_checkable,
+)
 
+from django import forms
 from django.contrib import messages
+from django.db import models
 from django.db.models import Model
 from django.http import HttpRequest
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import (
     path,
-    reverse,  # pyright: ignore[reportUnknownVariableType]
+    reverse,
     reverse_lazy,  # pyright: ignore[reportAny]
 )
 from django.utils.functional import Promise
 from django.utils.safestring import SafeString
 from neapolitan.views import Role
+from pydantic import BaseModel
 
 from incredible_data.business.forms.business_accounting_forms import (
     InvoiceForm,
+    OrderForm,
     ProjectForm,
 )
 from incredible_data.business.tables.business_accounting_tables import InvoiceTable
@@ -131,39 +146,75 @@ def project_detail_view(request: HttpRequest, slug: str) -> HttpResponse:
     return render(request, "business/detail.html", context)
 
 
+class InitialBase(BaseModel, abc.ABC):  # pyright: ignore[reportUnsafeMultipleInheritance]
+    pass
+
+
+@runtime_checkable
+class CRUDModel(Protocol):
+    def get_absolute_url(self) -> str: ...
+
+
+def process_form(
+    request: HttpRequest,
+    form_cls: type[forms.ModelForm],
+    instance: models.Model | None = None,
+    redirect_to: str | None = None,
+) -> "HttpResponse":
+    model = form_cls._meta.model  # noqa: SLF001
+    assert model is not None, "Model is not defined"
+    model_name = model.__name__
+    form = (
+        form_cls(request.POST, instance=instance)
+        if instance is not None
+        else form_cls(request.POST)
+    )
+    if form.is_valid():
+        obj = cast("models.Model", form.save(commit=True))
+        assert isinstance(obj, CRUDModel), (
+            f"{model_name} does not have a get_absolute_url method"
+        )
+        redirect_url = redirect_to or obj.get_absolute_url()
+        messages.info(request, f"{model_name} '{obj}' saved.")
+        return redirect(redirect_url)
+
+    return render(request, "object_form.html", {"form": form})
+
+
+def get_next(params: dict[str, str | Any]) -> str:  # pyright: ignore[reportExplicitAny]
+    next_url = params.pop("next", None)
+    if isinstance(next_url, list):
+        next_url = str(next_url[0])  # pyright: ignore[reportUnknownArgumentType]
+    return next_url
+
+
 def project_create_view(request: HttpRequest) -> HttpResponse:
     current_user = request.user
+    initial: dict[str, str | list[str] | Any] = request.GET.dict()  # pyright: ignore[reportExplicitAny]
+    next_url = get_next(initial)
     if request.method == HTTPMethod.POST:
-        form = ProjectForm(request.POST)
-        if form.is_valid():
-            new_project = cast("Project", form.save(commit=True))
-            redirect_url = new_project.get_absolute_url()
-            messages.info(request, f"Project '{new_project}' created.")
-            return HttpResponseRedirect(redirect_url)
+        return process_form(request, ProjectForm, redirect_to=next_url)
 
-        return render(request, "object_form.html", {"form": form})
+    initial.update({"created_by": current_user.pk, "modified_by": current_user.pk})
 
-    form = ProjectForm(
-        initial={"created_by": current_user, "modified_by": current_user}
-    )
+    form = ProjectForm(initial=initial)
 
     return render(request, "object_form.html", {"form": form})
 
 
 def project_edit_view(request: HttpRequest, slug: str) -> HttpResponse:
     current_user = request.user
+    query_params: dict[str, str | list[str] | Any] = request.GET.dict()  # pyright: ignore[reportExplicitAny]
+    next_url = get_next(query_params)
     project = _get_project(slug=slug)
     if request.method == HTTPMethod.POST:
-        form = ProjectForm(request.POST, instance=project)
-        if form.is_valid():
-            saved_project = cast("Project", form.save(commit=True))
-            redirect_url = saved_project.get_absolute_url()
-            messages.info(request, f"Project '{saved_project}' updated.")
-            return HttpResponseRedirect(redirect_url)
+        return process_form(
+            request, ProjectForm, instance=project, redirect_to=next_url
+        )
 
-        return render(request, "object_form.html", {"form": form})
+    query_params["modified_by"] = current_user.pk
 
-    form = ProjectForm(instance=project, initial={"modified_by": current_user})
+    form = ProjectForm(instance=project, initial=query_params)
 
     return render(request, "object_form.html", {"form": form})
 
@@ -187,11 +238,40 @@ class OrderListView(SingleTableListView):
     model = Order
     table_class = OrderTable
     template_name = "base_list_tables2.html"
-    actions = [("New", reverse_lazy("admin:business_order_add"))]
+    actions = [("New", reverse_lazy("business:order-create"))]
 
 
 class OrderDetailView(DetailView[Order]):
     pass
+
+
+def order_create_view(request: HttpRequest) -> HttpResponse:
+    current_user = request.user
+    query_dict: dict[str, str | list[str] | Any] = request.GET.dict()  # pyright: ignore[reportExplicitAny]
+    next_url = get_next(query_dict)
+    if request.method == HTTPMethod.POST:
+        return process_form(request, OrderForm, redirect_to=next_url)
+
+    query_dict.update({"created_by": current_user.pk, "modified_by": current_user.pk})
+
+    form = OrderForm(initial=query_dict)
+
+    return render(request, "object_form.html", {"form": form})
+
+
+def order_edit_view(request: HttpRequest, slug: str) -> HttpResponse:
+    order = _get_order(slug)
+    current_user = request.user
+    query_dict: dict[str, str | list[str] | Any] = request.GET.dict()  # pyright: ignore[reportExplicitAny]
+    redirect_to = get_next(query_dict)
+    if request.method == HTTPMethod.POST:
+        return process_form(request, OrderForm, instance=order, redirect_to=redirect_to)
+
+    query_dict.update({"modified_by": current_user.pk})
+
+    form = OrderForm(instance=order, initial=query_dict)
+
+    return render(request, "object_form.html", {"form": form})
 
 
 def order_detail_view(request: HttpRequest, slug: str) -> HttpResponse:
@@ -199,8 +279,12 @@ def order_detail_view(request: HttpRequest, slug: str) -> HttpResponse:
 
     action_links: list[ActionLink] = [
         {
-            "href": reverse("admin:business_order_change", args=(order.pk,)),  # pyright: ignore[reportAny]
+            "href": reverse("business:order-update", args=(order.slug,)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
             "label": "Edit",
+        },
+        {
+            "href": order.get_create_project_url(),
+            "label": "New Project",
         },
         {"href": reverse("business:order-list"), "label": "List"},
     ]
