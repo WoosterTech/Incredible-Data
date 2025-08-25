@@ -21,4 +21,5 @@
         "incredible_data/budget/tests"
     ],
     "python.testing.unittestEnabled": false,
+    "python.languageServer": "None",
 }
