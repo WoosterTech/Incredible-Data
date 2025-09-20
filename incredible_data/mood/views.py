@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.decorators import user_passes_test
 
 from incredible_data.mood.api.serializers import (
     ChartSerializer,
@@ -22,6 +23,15 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 logger = logging.getLogger(__name__)
+
+
+@user_passes_test(lambda u: u.is_staff, login_url="/admin/login/", redirect_field_name="next")
+def entry_create_redirect(request):
+    create_url = reverse("admin:mood_entry_add")
+    # Preserve query params (for prepopulated fields)
+    if request.META.get("QUERY_STRING"):
+        create_url = f"{create_url}?{request.META['QUERY_STRING']}"
+    return redirect(create_url)
 
 
 def rating_widget(request: HttpRequest) -> HttpResponse:
