@@ -8,5 +8,6 @@ app_name = "mood"
 urlpatterns = [
     path("rating-widget/", views.rating_widget, name="rating_widget"),
     path("user-metric-chart/", TemplateView.as_view(template_name="mood/user_metric_chart.html"), name="user_metric_chart"),
+    path("add/", views.entry_create_redirect, name="entry_create_redirect"),
 ]
 # fmt: on
