@@ -6,37 +6,8 @@
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   <div class="form-controls">
     <div id="date-inputs">
-      <label>
-        Start:
-        <input type="date"
-               id="startDate"
-               name="start"
-               value="{{ request.GET.start|default:'' }}"
-               hx-trigger="change"
-               hx-post="/api/v2/mood/clear_period"
-               hx-target="#period" />
-      </label>
-      <label>
-        End:
-        <input type="date"
-               id="endDate"
-               name="end"
-               value="{{ request.GET.end|default:'' }}"
-               hx-trigger="change"
-               hx-post="/api/v2/mood/clear_period"
-               hx-target="#period" />
-      </label>
+      {% include "mood/partials/date_inputs.html" with start_date=request.GET.start|default:'' end_date=request.GET.end|default:'' %}
     </div>
-    <label>
-      Period:
-      <select id="period"
-              name="period"
-              hx-get="/api/v2/mood/period_choices"
-              hx-trigger="load"
-              hx-swap="innerHTML">
-        <option value="">Loading...</option>
-      </select>
-    </label>
   </div>
   <button id="updateChart">Update Chart</button>
   <canvas id="metricChart" width="800" height="400"></canvas>

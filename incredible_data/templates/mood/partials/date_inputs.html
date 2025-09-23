@@ -1,0 +1,30 @@
+<label>
+    Start:
+    <input type="date"
+           id="startDate"
+           name="start"
+           value="{{ start_date }}"
+           hx-trigger="change"
+           hx-post="{% url 'api-2.0.0:clear_period' %}"
+           hx-target="#period" />
+</label>
+<label>
+    End:
+    <input type="date"
+           id="endDate"
+           name="end"
+           value="{{ end_date }}"
+           hx-trigger="change"
+           hx-post="{% url 'api-2.0.0:clear_period' %}"
+           hx-target="#period" />
+</label>
+<label>
+    Period:
+    <select id="period"
+            name="period"
+            hx-get="{% url 'api-2.0.0:period_choices' %}"
+            hx-trigger="load"
+            hx-swap="innerHTML">
+        <option value="">Loading...</option>
+    </select>
+</label>

@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from django.db.models import Prefetch, Q
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from ninja import Query
 from ninja.router import Router
 
@@ -119,7 +120,7 @@ def list_trends(
 @router.get("/period_choices")
 def period_choices(request: "HttpRequest") -> "HttpResponse":
     options = '<option value="">-- Select Period --</option>'
-    for value, label in TimeRangeChoice:
+    for value, label in TimeRangeChoice.choices:
         if value != "custom":  # Don't show custom as an option
             options += f'<option value="{value}">{label}</option>'
 
@@ -133,16 +134,14 @@ def update_dates(request: "HttpRequest", period: TimeRangeChoice | None = None):
 
     start_date, end_date = get_dates(period)
 
-    return HttpResponse(f"""
-        <label>Start:
-        <input type="date" id="startDate" name="start" value="{start_date}"
-               hx-trigger="change" hx-post="/api/v2/mood/clear_period" hx-target="#period">
-        </label>
-        <label>End:
-        <input type="date" id="endDate" name="end" value="{end_date}"
-               hx-trigger="change" hx-post="/api/v2/mood/clear_period" hx-target="#period">
-        </label>
-    """)
+    return TemplateResponse(
+        request,
+        "mood/partials/date_inputs.html",
+        {
+            "start_date": start_date,
+            "end_date": end_date,
+        },
+    )
 
 
 @router.post("/clear_period")

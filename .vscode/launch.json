@@ -16,6 +16,19 @@
         "DJANGO_READ_ENV_FILE": "true"
       },
       "justMyCode": false
+    },
+    {
+      "name": "Django: unix",
+      "type": "debugpy",
+      "request": "launch",
+      "args": ["runserver", "8763"],
+      "django": true,
+      "autoStartBrowser": false,
+      "program": "${workspaceFolder}/manage.py",
+      "env": {
+        "DJANGO_READ_ENV_FILE": "true"
+      },
+      "justMyCode": false
     }
   ]
 }
