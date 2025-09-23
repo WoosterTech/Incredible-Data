@@ -67,6 +67,9 @@ class MetricType(models.Model):
     )
     graph_color = ColorField()
 
+    if TYPE_CHECKING:
+        metric_set: "models.QuerySet[Metric]"  # pyright: ignore[reportUninitializedInstanceVariable]
+
     @override
     def __str__(self) -> str:
         return self.name
@@ -119,7 +122,7 @@ class Entry(models.Model):
 
     @final
     class Meta:
-        ordering = ["-created_on"]
+        ordering = ["effective_date", "time_of_day", "created_on"]
         verbose_name_plural = "Entries"
 
     @override

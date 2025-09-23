@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from attrmagic import ClassBase, SimpleRoot
+from attrmagic import ClassBase, SimpleListRoot
 from pydantic import AnyUrl, ConfigDict
 
 from .settings_models import SettingsModel
@@ -15,7 +15,7 @@ class Server(ClassBase):
     description: str | None = None
 
 
-class Servers(SimpleRoot[Server]): ...
+class Servers(SimpleListRoot[Server]): ...
 
 
 class Spectacular(DRFBase):

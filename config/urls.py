@@ -1,4 +1,4 @@
-# ruff: noqa: E501, ERA001
+# ruff: noqa: ERA001
 import logging
 
 from django.conf import settings
@@ -12,6 +12,8 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
+
+from .router_ninja import api as ninja_api
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +44,8 @@ if settings.DEBUG:  # pyright: ignore[reportAny]
 # API URLS
 urlpatterns += [
     # API base url
-    path("api/", include("config.api_router")),
+    path("api/v2/", ninja_api.urls),
+    path("api/v1/", include("config.api_router")),
     # DRF auth token
     path("auth-token/", obtain_auth_token),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),

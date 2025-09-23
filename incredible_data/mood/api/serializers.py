@@ -180,18 +180,20 @@ class EntrySerializer(ExpandableFieldsMixin, GenericModelSerializer[Entry]):  # 
 class DataSerializer(serializers.Serializer):
     date = serializers.DateField()
     value = serializers.IntegerField()
+    time_of_day = serializers.ChoiceField(choices=Entry.TimeOfDay.choices)
 
 
 @final
 class DatasetSerializer(serializers.Serializer):
     label = serializers.CharField()
     borderColor = serializers.CharField(source="border_color")  # noqa: N815
-    data_list = DataSerializer(many=True)
+    data_list = DataSerializer(source="data", many=True)
     fill = serializers.BooleanField(default=True)
     tension = serializers.FloatField(default=0.1)
 
     @override
     def to_representation(self, instance: dict[str, Any]) -> dict[str, Any]:  # pyright: ignore[reportExplicitAny]
+        logger.debug("Serializing dataset: %s", instance)
         rep = super().to_representation(instance)  # pyright: ignore[reportAny]
         rep["data"] = rep.pop("data_list", [])  # pyright: ignore[reportAny]
         return rep  # pyright: ignore[reportAny]
@@ -203,3 +205,25 @@ class ChartSerializer(serializers.Serializer):
     title = serializers.CharField(default="Basic Chart")
     labels = serializers.ListField(child=serializers.DateField())
     datasets = DatasetSerializer(many=True)
+
+    # djangorestframework-stubs does not match package, is missing "*"
+    @override
+    def is_valid(self, *, raise_exception: bool = False) -> bool:  # pyright: ignore[reportIncompatibleMethodOverride]
+        assert hasattr(self, "initial_data"), (
+            "Cannot call `.is_valid()` as no `data=` keyword argument was "
+            "passed when instantiating the serializer instance."
+        )
+
+        if not hasattr(self, "_validated_data"):
+            try:
+                self._validated_data = self.run_validation(self.initial_data)
+            except ValidationError as exc:
+                self._validated_data = {}
+                self._errors = exc.detail
+            else:
+                self._errors = {}
+
+        if self._errors and raise_exception:
+            raise ValidationError(self.errors)
+
+        return not bool(self._errors)

@@ -2,13 +2,73 @@
 
 {% block content %}
   <h2>Metric Values Over Time</h2>
+  {% csrf_token %}
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <div class="form-controls">
+    <div id="date-inputs">
+      <label>
+        Start:
+        <input type="date"
+               id="startDate"
+               name="start"
+               value="{{ request.GET.start|default:'' }}"
+               hx-trigger="change"
+               hx-post="/api/v2/mood/clear_period"
+               hx-target="#period" />
+      </label>
+      <label>
+        End:
+        <input type="date"
+               id="endDate"
+               name="end"
+               value="{{ request.GET.end|default:'' }}"
+               hx-trigger="change"
+               hx-post="/api/v2/mood/clear_period"
+               hx-target="#period" />
+      </label>
+    </div>
+    <label>
+      Period:
+      <select id="period"
+              name="period"
+              hx-get="/api/v2/mood/period_choices"
+              hx-trigger="load"
+              hx-swap="innerHTML">
+        <option value="">Loading...</option>
+      </select>
+    </label>
+  </div>
+  <button id="updateChart">Update Chart</button>
   <canvas id="metricChart" width="800" height="400"></canvas>
   <script src="https://unpkg.com/chart.js@4.5.0/dist/chart.umd.js"></script>
   <script src="https://unpkg.com/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.js"></script>
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   <script>
+    let chartInstance = null;
+
+    function getQueryParams() {
+      const params = new URLSearchParams();
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const period = document.getElementById('period').value;
+      if (startDate) params.append('start', startDate);
+      if (endDate) params.append('end', endDate);
+      if (period) params.append('period', period);
+      return params.toString();
+    }
+
+    function fetchAndRenderChart() {
+      const query = getQueryParams();
+      console.log(`Fetching data with query: ${query}`);
+      fetch(`/api/v2/mood/trends?${query}`)
+        .then(response => response.json())
+        .then(data => renderMetricChart(data));
+    }
+
+    document.getElementById('updateChart').onclick = fetchAndRenderChart;
+
+
     function renderMetricChart(chartData) {
-      const datasets = chartData.datasets.map(ds => ({
+      const datasets = chartData.map(ds => ({
         ...ds,
         data: ds.data.map(point => ({
           x: point.date,
@@ -32,13 +92,33 @@
         }
       };
       console.log(datasets[0].data);
-      new Chart(document.getElementById('metricChart'), config);
+      if (!chartInstance) {
+        chartInstance = new Chart(document.getElementById('metricChart'), config);
+      } else {
+        chartInstance.data = config.data;
+        chartInstance.options = config.options;
+        chartInstance.update();
+      }
     }
 
-    fetch('/api/mood/chart/')
-      .then(response => response.json())
-      .then(data => {
-        renderMetricChart(data);
-      });
+    // Handle period selection changes
+    document.addEventListener('change', function(event) {
+      if (event.target.id === 'period' && event.target.value) {
+        fetch(`/api/v2/mood/update_dates`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            },
+            body: `period=${encodeURIComponent(event.target.value)}`
+          })
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('date-inputs').innerHTML = html;
+          });
+      }
+    });
+
+    fetchAndRenderChart();
   </script>
 {% endblock content %}

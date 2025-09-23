@@ -2,7 +2,9 @@ import logging
 from typing import final
 
 from django_filters import rest_framework as filters
+from rest_framework import serializers
 
+from incredible_data.helpers.filtering.filterset import FilterSet
 from incredible_data.mood.models import Entry, Metric, MetricType
 
 logger = logging.getLogger(__name__)
@@ -45,3 +47,13 @@ class EntryFilter(filters.FilterSet):
     class Meta:
         model = Entry
         fields = ["time_of_day"]
+
+
+@final
+class ChartFilter(filters.FilterSet):
+    date = filters.DateFromToRangeFilter(field_name="created_on")
+
+    @final
+    class Meta:
+        model = Entry
+        fields = ["created_on", "time_of_day"]

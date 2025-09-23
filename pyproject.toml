@@ -1,10 +1,13 @@
 [project]
 authors = [{ "name" = "Karl Wooster", "email" = "karl@woostertech.com" }]
 name = "incredible-data"
-dynamic = ["version"]
+dynamic = ["version", "dependencies"]
 description = ""
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
+
+[project.optional-dependencies]
+ninja = ["django-ninja>=1.4,<2"]
 
 
 # ==== pytest ====
@@ -140,13 +143,13 @@ Werkzeug = { extras = ["watchdog"], version = "^3.0.2" }
 ipdb = "^0.13.13"
 watchfiles = "^0.21.0"
 ruff = "^0.11.12"
+basedpyright = "^1.29.2"
 djlint = "^1.34.1"
 pre-commit = "^3.7.0"
 commitizen = "^3.24.0"
 django-upgrade = "^1.21.0"
 deptry = "^0.21.1"
 types-toml = "^0.10.8.20240310"
-basedpyright = "^1.29.2"
 djangorestframework-types = "^0.9.0"
 django-types = "^0.22.0"
 
@@ -208,6 +211,9 @@ python-slugify = "slugify"
 django-phonenumber-field = "phonenumber_field"
 django-allauth = "allauth"
 python-bridge = "bridge"
+
+[tool.uv.sources]
+simple-chartjs = { git = "https://github.com/WoosterTech/simple-chartjs.git" }
 
 [tool.poetry.group.bridge]
 optional = true
