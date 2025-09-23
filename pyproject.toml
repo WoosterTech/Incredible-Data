@@ -142,7 +142,6 @@ optional = true
 Werkzeug = { extras = ["watchdog"], version = "^3.0.2" }
 ipdb = "^0.13.13"
 watchfiles = "^0.21.0"
-basedpyright = "^1.29.2"
 ruff = "^0.13.1"
 basedpyright = "^1.29.2"
 djlint = "^1.34.1"
