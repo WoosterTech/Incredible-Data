@@ -2,14 +2,15 @@ import logging
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.decorators import user_passes_test
 
 from incredible_data.mood.api.serializers import (
     ChartSerializer,
@@ -25,8 +26,10 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@user_passes_test(lambda u: u.is_staff, login_url="/admin/login/", redirect_field_name="next")
-def entry_create_redirect(request):
+@user_passes_test(
+    lambda u: u.is_staff, login_url="/admin/login/", redirect_field_name="next"
+)
+def entry_create_redirect(request: "HttpRequest") -> "HttpResponse":
     create_url = reverse("admin:mood_entry_add")
     # Preserve query params (for prepopulated fields)
     if request.META.get("QUERY_STRING"):
@@ -34,7 +37,7 @@ def entry_create_redirect(request):
     return redirect(create_url)
 
 
-def rating_widget(request: HttpRequest) -> HttpResponse:
+def rating_widget(request: "HttpRequest") -> "HttpResponse":
     query_dict = request.GET
     name = query_dict.get("name")
     value = int(query_dict.get("value", 0))
