@@ -16,15 +16,6 @@ class MetricForm(forms.ModelForm):
         disabled=True,
         widget=forms.HiddenInput(),
     )
-    score_value = forms.IntegerField(
-        widget=forms.NumberInput(
-            attrs={
-                "class": "form-control",
-                "min": "0",
-                "max": "10",
-            }
-        )
-    )
 
     def __init__(self, *args: Any, **kwargs: object):  # pyright: ignore[reportAny, reportExplicitAny]
         super().__init__(*args, **kwargs)  # pyright: ignore[reportAny]
@@ -40,6 +31,20 @@ class MetricForm(forms.ModelForm):
 
             self.metric_name = metric_type.name
             self.metric_help_text = metric_type.help_text
+
+            # Generate choices from min_value to max_value
+            choices = [
+                (value, str(value))
+                for value in range(metric_type.min_value, metric_type.max_value + 1)
+            ]
+
+            # Update score_value field to use Select widget with dynamic choices
+            self.fields["score_value"] = forms.ChoiceField(
+                choices=choices,
+                widget=forms.Select(attrs={"class": "form-select"}),
+                initial=metric_type.min_value
+                + (metric_type.max_value - metric_type.min_value) // 2,
+            )
         else:
             self.metric_name = "Unknown Metric"
             self.metric_help_text = ""
