@@ -1,12 +1,11 @@
 import random
-from collections.abc import Iterable, Sequence
-from enum import Enum
+from collections.abc import Iterable
 from typing import Any, NamedTuple, cast
 
-from attrmagic import ClassBase, SimpleDict, SimpleRoot
-from constance import config
+from attrmagic import ClassBase, SimpleListRoot
+from constance import config  # pyright: ignore[reportMissingTypeStubs]
 from pydantic import field_validator
-from pydantic_extra_types.color import COLORS_BY_NAME, Color, ColorType
+from pydantic_extra_types.color import COLORS_BY_NAME, Color
 
 __all__ = ["COLOR_CHOICES"]
 
@@ -21,7 +20,7 @@ class PaletteTuple(NamedTuple):
     name: str
 
 
-class ColorChoices(SimpleRoot[Color]):
+class ColorChoices(SimpleListRoot[Color]):
     @field_validator("root", mode="before")
     @classmethod
     def validate_root(cls, data: Any) -> Any:  # pyright: ignore[reportExplicitAny, reportAny]
