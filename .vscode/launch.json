@@ -13,7 +13,20 @@
       "autoStartBrowser": false,
       "program": "${workspaceFolder}\\manage.py",
       "env": {
-        "DJANGO_READ_ENV_FILE": "true"
+        "DJANGO_READ_DOT_ENV_FILE": "false"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Django: ALL Code",
+      "type": "debugpy",
+      "request": "launch",
+      "args": ["runserver", "8763"],
+      "django": true,
+      "autoStartBrowser": false,
+      "program": "${workspaceFolder}\\manage.py",
+      "env": {
+        "DJANGO_READ_DOT_ENV_FILE": "false"
       },
       "justMyCode": false
     }

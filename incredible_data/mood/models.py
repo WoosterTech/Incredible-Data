@@ -1,13 +1,17 @@
 import datetime as dt
 import json
+import logging
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, TypeAlias, cast, final, override
+from typing import TYPE_CHECKING, Any, Self, TypeAlias, cast, final, override
 
 from colorfield.fields import ColorField
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from incredible_data.mood.manager import UserScopedManager
@@ -17,6 +21,9 @@ if TYPE_CHECKING:
 
     UserForeignKey: TypeAlias = "models.ForeignKey[User]"
 
+logger = logging.getLogger(__name__)
+
+_AnyUser: TypeAlias = AbstractUser | AnonymousUser
 AUTH_USER_MODEL = cast("str", settings.AUTH_USER_MODEL)
 
 
@@ -28,7 +35,7 @@ class Mood(models.Model):
     timestamp = models.DateTimeField(
         auto_now_add=True, help_text="The date and time when the mood was recorded."
     )
-    entered_by: "UserForeignKey" = models.ForeignKey(
+    entered_by: "models.ForeignKey[User]" = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT
     )
 
@@ -43,6 +50,13 @@ class Mood(models.Model):
     @override
     def __str__(self) -> str:
         return f"{self.timestamp:%Y-%m-%d %H:%M} {self.entered_by}"  # - Anxiety: {self.anxiety}, Energy: {self.energy}"
+
+
+class ActiveForQuerySet(models.QuerySet["MetricType"]):
+    def active_for_user(self, user: "_AnyUser") -> Self:
+        metric_types = self.filter(active_for=user)
+        logger.debug("Active metric types for user %s: %s", user, metric_types)
+        return metric_types
 
 
 @final
@@ -67,6 +81,18 @@ class MetricType(models.Model):
     )
     graph_color = ColorField()
 
+    active_for: "models.ManyToManyField[User, Any]" = models.ManyToManyField(  # pyright: ignore[reportExplicitAny]
+        AUTH_USER_MODEL,
+        blank=True,
+        help_text="Users for whom this metric type is active.",
+    )
+
+    if TYPE_CHECKING:
+        objects: ActiveForQuerySet  # pyright: ignore[reportIncompatibleVariableOverride]
+        id: models.BigAutoField  # pyright: ignore[reportUninitializedInstanceVariable]
+    else:
+        objects = ActiveForQuerySet.as_manager()
+
     @override
     def __str__(self) -> str:
         return self.name
@@ -89,6 +115,13 @@ class MetricType(models.Model):
             yield from definition.items()
 
 
+def today() -> dt.date:
+    now = timezone.now().astimezone(timezone.get_default_timezone())
+    now_date = now.date()
+    logger.debug("today() called, current date: %s", now_date)
+    return now_date
+
+
 @final
 class Entry(models.Model):
     created_by: "UserForeignKey" = models.ForeignKey(
@@ -97,25 +130,69 @@ class Entry(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True, help_text="Optional notes.")
     effective_date = models.DateField(
-        default=dt.date.today,
+        default=today,
         help_text="The date this entry is effective for.",
+    )
+    metrics: "models.ManyToManyField[MetricType, Metric]" = models.ManyToManyField(
+        MetricType, through="Metric"
     )
 
     class TimeOfDay(models.IntegerChoices):
-        MORNING = 1, _("Morning")
-        AFTERNOON = 2, _("Afternoon")
-        EVENING = 3, _("Evening")
+        MORNING = 1, _("Morning [0500-11:59]")
+        AFTERNOON = 2, _("Afternoon [1200-16:59]")
+        EVENING = 3, _("Evening [1700-20:59]")
+        NIGHT = 4, _("Night [2100-04:59]")
 
         __empty__ = _("Unspecified")
 
+        def range(self) -> tuple[int, int]:
+            match self:
+                case self.MORNING:
+                    return (5, 12)
+                case self.AFTERNOON:
+                    return (12, 17)
+                case self.EVENING:
+                    return (17, 21)
+                case self.NIGHT:
+                    return (21, 5)
+
+        @classmethod
+        def from_hour(cls, hour: int) -> Self:
+            for time_of_day in cls:
+                start, end = time_of_day.range()
+                if start < end:
+                    if start <= hour < end:
+                        return time_of_day
+                elif hour >= start or hour < end:
+                    return time_of_day
+            msg = f"No TimeOfDay found for hour {hour}"
+            raise ValueError(msg)
+
+        @classmethod
+        def get_current(cls) -> "Entry.TimeOfDay":
+            now = timezone.now().astimezone(timezone.get_default_timezone())
+            hour = now.hour
+            time_of_day = cls.from_hour(hour)
+            logger.debug(
+                "Current hour: %d, TimeOfDay: %d [%s]",
+                hour,
+                time_of_day,
+                time_of_day.label,
+            )
+            return time_of_day
+
     time_of_day = models.IntegerField(
-        choices=TimeOfDay.choices, default=None, null=True, blank=True
+        choices=TimeOfDay.choices,
+        default=TimeOfDay.get_current,
+        null=True,
+        blank=True,
     )
 
     objects = UserScopedManager["Entry"]()
 
     if TYPE_CHECKING:
         metric_set: "models.QuerySet[Metric]"  # pyright: ignore[reportUninitializedInstanceVariable]
+        id: models.BigAutoField  # pyright: ignore[reportUninitializedInstanceVariable]
 
     @final
     class Meta:
@@ -125,6 +202,9 @@ class Entry(models.Model):
     @override
     def __str__(self) -> str:
         return f"Entry by {self.created_by} on {self.effective_date}"
+
+    def get_absolute_url(self):
+        return reverse("mood:entry-detail", args=(self.id,))
 
     @admin.display(description=_("Metric Values"))
     def value_display(self) -> str:
@@ -158,12 +238,11 @@ class Metric(models.Model):
     @override
     def clean(self):
         super().clean()
-        if self.metric_type:
-            min_val = self.metric_type.min_value
-            max_val = self.metric_type.max_value
-            if not (min_val <= self.score_value <= max_val):
-                raise ValidationError(
-                    {
-                        "score_value": f"Value must be between {min_val} and {max_val} for metric type '{self.metric_type.name}'."
-                    }
-                )
+        min_val = self.metric_type.min_value
+        max_val = self.metric_type.max_value
+        if not (min_val <= self.score_value <= max_val):
+            raise ValidationError(
+                {
+                    "score_value": f"Value must be between {min_val} and {max_val} for metric type '{self.metric_type.name}'."
+                }
+            )

@@ -90,7 +90,7 @@ django = ">=5.2.2,<5.3"
 django-environ = "^0.11.2"
 django-model-utils = "^4.5.0"
 django-extensions = "^3.2.3"
-django-allauth = { version = "^65.9.0", extras = ["mfa"] }
+django-allauth = "==65.12.0"
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2024.2"
 django-phonenumber-field = { extras = ["phonenumberslite"], version = "^8.0.0" }
