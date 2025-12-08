@@ -13,6 +13,18 @@
     "editor.formatOnSave": true,
     "editor.rulers": [100]
   },
+  "[html]": {
+    "editor.defaultFormatter": "monosans.djlint",
+    "editor.formatOnSave": true
+  },
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint",
+    "editor.formatOnSave": true
+  },
+  "djlint.useEditorIndentation": false,
+  "djlint.formatCss": true,
+  "djlint.formatJs": true,
+  "djlint.closeVoidTags": true,
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "tests",

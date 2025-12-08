@@ -143,3 +143,19 @@ def mood_entry_detail(request: "HttpRequest", entry: Entry) -> "HttpResponse":
             "metrics": entry.metric_set.all(),
         },
     )
+
+
+@login_required
+@permission_required("mood.view_entry", raise_exception=True)
+def mood_entry_list(request: "HttpRequest") -> "HttpResponse":
+    user = cast("User", request.user)
+    entries = Entry.objects.filter(created_by=user).order_by("-effective_date")
+
+    return render(
+        request,
+        "mood/mood_entry_list.html",
+        {
+            "user": user,
+            "entries": entries,
+        },
+    )
