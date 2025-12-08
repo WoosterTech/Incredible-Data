@@ -130,3 +130,16 @@ def mood_entry(request: "HttpRequest") -> "HttpResponse":
             "formset": formset,
         },
     )
+
+
+@login_required
+@permission_required("mood.view_entry", raise_exception=True)
+def mood_entry_detail(request: "HttpRequest", entry: Entry) -> "HttpResponse":
+    return render(
+        request,
+        "mood/mood_entry_detail.html",
+        {
+            "entry": entry,
+            "metrics": entry.metric_set.all(),
+        },
+    )

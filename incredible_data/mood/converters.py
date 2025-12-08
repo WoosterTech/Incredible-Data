@@ -1,5 +1,5 @@
 import logging
-from typing import Generic, TypeVar, final, override
+from typing import Generic, TypeVar, final
 
 from django.db import models
 from django.shortcuts import get_object_or_404
@@ -36,15 +36,13 @@ class ModelIdConverter(Generic[_ModelT]):
 
 
 @final
-class EntryIdConverter(ModelIdConverter[Entry]):
+class EntryIdConverter:
     regex: str = IntConverter.regex
     model = Entry
 
-    @override
     def to_python(self, value: str | int) -> Entry:
         return get_object_or_404(Entry, id=int(value))
 
-    @override
     def to_url(self, value: Entry | int) -> str:
         if isinstance(value, Entry):
             logger.debug("Entry.id type: %s", type(value.id))

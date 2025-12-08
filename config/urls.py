@@ -1,23 +1,30 @@
 # ruff: noqa: ERA001
 import logging
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth.decorators import login_not_required
+
+# TODO: basedpyright not seeing login_not_required
+from django.contrib.auth.decorators import (
+    login_not_required,  # pyright: ignore[reportAttributeAccessIssue, reportUnknownVariableType]
+)
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
-from django.urls.resolvers import URLPattern, URLResolver
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+if TYPE_CHECKING:
+    from django.urls.resolvers import URLPattern, URLResolver
+
 logger = logging.getLogger(__name__)
 
 # fmt: off
-urlpatterns: list[URLPattern | URLResolver] = [
-    path("", login_not_required(TemplateView.as_view(template_name="pages/home.html")), name="home"),
+urlpatterns: "list[URLPattern | URLResolver]" = [
+    path("", login_not_required(TemplateView.as_view(template_name="pages/home.html")), name="home"),  # pyright: ignore[reportUnknownArgumentType]
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # path("grappelli/", include("grappelli.urls")),
     # Django Admin, use {% url 'admin:index' %}
@@ -69,7 +76,7 @@ if settings.DEBUG:  # pyright: ignore[reportAny]
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls)), *urlpatterns]
 
-neapolitan_urlpatterns = []
+neapolitan_urlpatterns: "list[URLPattern | URLResolver]" = []
 
 
 urlpatterns.extend(neapolitan_urlpatterns)

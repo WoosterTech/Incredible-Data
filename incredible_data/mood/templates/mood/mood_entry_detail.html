@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="mood-detail-container container">
+    <div class="mood-detail-card">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Mood Entry</h2>
+        <a href="{% url 'mood:entry_create_redirect' %}"
+           class="btn btn-sm btn-outline-primary">New Entry</a>
+      </div>
+      <div class="entry-info mb-4">
+        <div class="info-row">
+          <span class="info-label">Date:</span>
+          <span class="info-value">{{ entry.effective_date|date:"F d, Y" }}</span>
+        </div>
+        {% if entry.time_of_day %}
+          <div class="info-row">
+            <span class="info-label">Time of Day:</span>
+            <span class="info-value">{{ entry.get_time_of_day_display }}</span>
+          </div>
+        {% endif %}
+        <div class="info-row">
+          <span class="info-label">Created:</span>
+          <span class="info-value">{{ entry.created_on|date:"M d, Y g:i A" }}</span>
+        </div>
+      </div>
+      {% if entry.notes %}
+        <div class="notes-section mb-4">
+          <h4 class="section-title">Notes</h4>
+          <div class="notes-content">{{ entry.notes }}</div>
+        </div>
+      {% endif %}
+      <div class="metrics-section">
+        <h4 class="section-title">Metrics</h4>
+        {% if metrics %}
+          <div class="metrics-grid">
+            {% for metric in metrics %}
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span class="metric-name">{{ metric.metric_type.name }}</span>
+                  <span class="metric-value">{{ metric.score_value }}</span>
+                </div>
+                {% if metric.metric_type.help_text %}
+                  <small class="metric-help text-muted">{{ metric.metric_type.help_text }}</small>
+                {% endif %}
+                <div class="metric-range">
+                  <div class="range-bar">
+                    <div class="range-fill"
+                         style="width: {{ metric.score_value|floatformat:0|add:'0' }}0%"></div>
+                  </div>
+                  <div class="range-labels">
+                    <small>{{ metric.metric_type.min_value }}</small>
+                    <small>{{ metric.metric_type.max_value }}</small>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">No metrics recorded for this entry.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <style>
+    .mood-detail-container {
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .mood-detail-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .entry-info {
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 1rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #6c757d;
+    }
+
+    .info-value {
+      color: #212529;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #495057;
+    }
+
+    .notes-section {
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 1rem;
+    }
+
+    .notes-content {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.6;
+    }
+
+    .metrics-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .metric-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #212529;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0d6efd;
+    }
+
+    .metric-help {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .metric-range {
+      margin-top: 0.75rem;
+    }
+
+    .range-bar {
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .range-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+      transition: width 0.3s ease;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #6c757d;
+    }
+
+    @media (max-width: 600px) {
+      .mood-detail-container {
+        padding: 0.5rem;
+      }
+
+      .mood-detail-card {
+        padding: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1rem;
+      }
+
+      .info-row {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .info-label {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+{% endblock content %}
