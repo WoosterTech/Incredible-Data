@@ -1,25 +1,26 @@
 {
-    "esbonio.sphinx.confDir": "",
-    "files.associations": {
-        "*.in": "pip-requirements",
+  "esbonio.sphinx.confDir": "",
+  "files.associations": {
+    "*.in": "pip-requirements"
+  },
+  "[python]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.formatOnType": true,
+    "editor.wordBasedSuggestions": "off",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
     },
-    "[python]": {
-        "diffEditor.ignoreTrimWhitespace": false,
-        "editor.formatOnType": true,
-        "editor.wordBasedSuggestions": "off",
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-        },
-        "editor.formatOnSave": true,
-        "editor.rulers": [100]
-    },
-    "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": [
-        "tests",
-        "incredible_data/helpers/tests",
-        "incredible_data/users/tests",
-        "incredible_data/budget/tests"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.languageServer": "None",
+    "editor.formatOnSave": true,
+    "editor.rulers": [100]
+  },
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests",
+    "incredible_data/helpers/tests",
+    "incredible_data/users/tests",
+    "incredible_data/budget/tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.languageServer": "None",
+  "terminal.integrated.defaultProfile.windows": "Command Prompt"
 }

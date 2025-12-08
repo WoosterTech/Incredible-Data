@@ -35,8 +35,6 @@ class MoodAdmin(UserStampedAdmin[mood_models.Mood]):
     )
     created_by_field = "entered_by"
 
-    
-
 
 @final
 @admin.register(mood_models.MetricType)
@@ -63,7 +61,8 @@ class MetricInline(GenericTabularInline[mood_models.Metric]):
     ) -> int:
         if obj is not None:
             return super().get_extra(request, obj, **kwargs)
-        return self.model.objects.all().count()
+        active_qs = mood_models.MetricType.objects.active_for_user(request.user)
+        return active_qs.count()
 
     @override
     def get_formset(
@@ -94,11 +93,12 @@ class EntryAdmin(UserStampedAdmin[mood_models.Entry]):
     )
 
     @override
-    def get_queryset(self, request):
+    def get_queryset(self, request: "HttpRequest"):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(created_by=request.user)
+
 
 @final
 @admin.register(mood_models.Metric)

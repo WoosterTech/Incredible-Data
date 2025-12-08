@@ -40,6 +40,7 @@ BUILD_NUMBER = git_info.commit_hash
 logger.debug(f"Current version: {VERSION}+{BUILD_NUMBER}")
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+logger.info(f"READ_DOT_ENV_FILE={READ_DOT_ENV_FILE}")
 
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env

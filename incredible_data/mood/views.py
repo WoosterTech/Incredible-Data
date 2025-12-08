@@ -1,10 +1,14 @@
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
-from django.contrib.auth.decorators import user_passes_test
+from django import forms
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required,
+)
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -15,26 +19,18 @@ from rest_framework.response import Response
 from incredible_data.mood.api.serializers import (
     ChartSerializer,
 )
+from incredible_data.mood.forms import EntryForm, MetricForm
 
-from .models import Entry
+from .models import Entry, Metric, MetricType
 
 if TYPE_CHECKING:
     import datetime as dt
 
     from rest_framework.request import Request
 
+    from incredible_data.users.models import User
+
 logger = logging.getLogger(__name__)
-
-
-@user_passes_test(
-    lambda u: u.is_staff, login_url="/admin/login/", redirect_field_name="next"
-)
-def entry_create_redirect(request: "HttpRequest") -> "HttpResponse":
-    create_url = reverse("admin:mood_entry_add")
-    # Preserve query params (for prepopulated fields)
-    if request.META.get("QUERY_STRING"):
-        create_url = f"{create_url}?{request.META['QUERY_STRING']}"
-    return redirect(create_url)
 
 
 def rating_widget(request: "HttpRequest") -> "HttpResponse":
@@ -84,3 +80,53 @@ def user_metric_chart(request: "Request") -> Response:
     ser = ChartSerializer({"labels": labels, "metrics": metrics_dict})
 
     return Response(ser.data, status=status.HTTP_200_OK)  # pyright: ignore[reportAny]
+
+
+@login_required
+@permission_required("mood.add_entry", raise_exception=True)
+def mood_entry(request: "HttpRequest") -> "HttpResponse":
+    user = cast("User", request.user)
+
+    active_metrics = MetricType.objects.active_for_user(user)
+
+    formset_initial = [{"metric_type": metric} for metric in active_metrics]
+
+    logger.debug("Initial formset_initial: %s", formset_initial)
+
+    # Create a formset with extra set to the number of active metrics
+    MetricFormSet = forms.inlineformset_factory(  # noqa: N806
+        Entry,
+        Metric,
+        form=MetricForm,
+        extra=len(active_metrics),
+        can_delete=False,
+    )
+
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        formset = MetricFormSet(request.POST, initial=formset_initial)
+
+        if form.is_valid() and formset.is_valid():
+            entry_instance = cast("Entry", form.save(commit=False))
+            entry_instance.created_by = user
+            entry_instance.save()
+
+            formset.instance = entry_instance
+            formset.save()
+
+            return redirect(entry_instance.get_absolute_url())
+    else:
+        form = EntryForm()
+        formset = MetricFormSet(initial=formset_initial)
+
+        logger.debug("Initialized MetricFormSet with %d forms", len(formset.forms))
+
+    return render(
+        request,
+        "mood/mood_entry.html",
+        {
+            "user": user,
+            "form": form,
+            "formset": formset,
+        },
+    )

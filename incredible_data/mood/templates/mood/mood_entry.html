@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="mood-entry-container container">
+    <h2 class="text-center mb-4">Log Your Mood</h2>
+    <form method="post" novalidate class="mood-entry-form">
+      {% csrf_token %}
+      <div class="mb-3">{{ form.effective_date.label_tag }} {{ form.effective_date }}</div>
+      <div class="mb-3">{{ form.time_of_day.label_tag }} {{ form.time_of_day }}</div>
+      <div class="mb-3">{{ form.notes.label_tag }} {{ form.notes }}</div>
+      <h4 class="mt-4 mb-3">Your Metrics</h4>
+      {{ formset.management_form }}
+      {% for form in formset %}
+        <div class="metric-item mb-3 p-3">
+          {{ form.metric_type }}
+          <label class="form-label fw-bold">{{ form.metric_name }}</label>
+          {% if form.metric_help_text %}<small class="d-block text-muted mb-2">{{ form.metric_help_text }}</small>{% endif %}
+          {{ form.score_value }}
+          {% if form.score_value.errors %}<div class="text-danger small">{{ form.score_value.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary w-100 mt-3 mood-submit-btn">Submit</button>
+    </form>
+  </div>
+  <style>
+    .mood-entry-container {
+      max-width: 480px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .mood-entry-form {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .metric-item {
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .mood-submit-btn {
+      font-size: 1.2rem;
+    }
+
+    textarea.form-control {
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 120px;
+    }
+
+    input[type="date"],
+    input[type="number"],
+    select.form-select {
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      width: 100%;
+    }
+
+    .metric-item input[type="number"] {
+      max-width: 120px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0.5rem;
+      }
+
+      form {
+        padding: 1rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+{% endblock content %}
