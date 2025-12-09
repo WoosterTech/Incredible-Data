@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
   <div class="mood-detail-container container">
     <div class="mood-detail-card">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Mood Entry</h2>
-        <a href="{% url 'mood:entry-create' %}"
-           class="btn btn-sm btn-outline-primary">New Entry</a>
+        <div class="button-group">
+          <a href="{% url 'mood:entry-list' %}"
+             class="btn btn-sm btn-outline-secondary"
+             title="View all entries">📋</a>
+          <a href="{% url 'mood:user_metric_chart' %}"
+             class="btn btn-sm btn-outline-secondary"
+             title="View metrics chart">📊</a>
+          <a href="{% url 'mood:entry-edit' entry.pk %}"
+             class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'mood:entry-create' %}"
+             class="btn btn-sm btn-outline-primary">New Entry</a>
+        </div>
       </div>
       <div class="entry-info mb-4">
         <div class="info-row">
@@ -27,7 +38,7 @@
       {% if entry.notes %}
         <div class="notes-section mb-4">
           <h4 class="section-title">Notes</h4>
-          <div class="notes-content">{{ entry.notes }}</div>
+          <div class="notes-content" id="notes-rendered"></div>
         </div>
       {% endif %}
       <div class="metrics-section">
@@ -76,6 +87,11 @@
       padding: 1.5rem;
     }
 
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
     .entry-info {
       border-bottom: 1px solid #e9ecef;
       padding-bottom: 1rem;
@@ -112,9 +128,44 @@
       background: #f8f9fa;
       border-radius: 8px;
       padding: 1rem;
-      white-space: pre-wrap;
-      word-wrap: break-word;
       line-height: 1.6;
+    }
+
+    .notes-content p {
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .notes-content ul,
+    .notes-content ol {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .notes-content li {
+      margin-bottom: 0.25rem;
+    }
+
+    .notes-content h1,
+    .notes-content h2,
+    .notes-content h3,
+    .notes-content h4,
+    .notes-content h5,
+    .notes-content h6 {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-content h1:first-child,
+    .notes-content h2:first-child,
+    .notes-content h3:first-child,
+    .notes-content h4:first-child,
+    .notes-content h5:first-child,
+    .notes-content h6:first-child {
+      margin-top: 0;
     }
 
     .metrics-grid {
@@ -205,4 +256,15 @@
       }
     }
   </style>
+  {% if entry.notes %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const notesMarkdown = `{{ entry.notes|escapejs }}`;
+        const notesRendered = document.getElementById('notes-rendered');
+        if (notesRendered && notesMarkdown) {
+          notesRendered.innerHTML = marked.parse(notesMarkdown);
+        }
+      });
+    </script>
+  {% endif %}
 {% endblock content %}
