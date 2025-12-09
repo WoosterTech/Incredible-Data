@@ -7,6 +7,12 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Mood Entry</h2>
         <div class="button-group">
+          <a href="{% url 'mood:entry-list' %}"
+             class="btn btn-sm btn-outline-secondary"
+             title="View all entries">📋</a>
+          <a href="{% url 'mood:user_metric_chart' %}"
+             class="btn btn-sm btn-outline-secondary"
+             title="View metrics chart">📊</a>
           <a href="{% url 'mood:entry-edit' entry.pk %}"
              class="btn btn-sm btn-outline-secondary">Edit</a>
           <a href="{% url 'mood:entry-create' %}"
@@ -122,9 +128,44 @@
       background: #f8f9fa;
       border-radius: 8px;
       padding: 1rem;
-      white-space: pre-wrap;
-      word-wrap: break-word;
       line-height: 1.6;
+    }
+
+    .notes-content p {
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .notes-content ul,
+    .notes-content ol {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .notes-content li {
+      margin-bottom: 0.25rem;
+    }
+
+    .notes-content h1,
+    .notes-content h2,
+    .notes-content h3,
+    .notes-content h4,
+    .notes-content h5,
+    .notes-content h6 {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-content h1:first-child,
+    .notes-content h2:first-child,
+    .notes-content h3:first-child,
+    .notes-content h4:first-child,
+    .notes-content h5:first-child,
+    .notes-content h6:first-child {
+      margin-top: 0;
     }
 
     .metrics-grid {

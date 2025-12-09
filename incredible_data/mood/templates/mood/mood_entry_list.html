@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
   <div class="mood-list-container container">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="mb-0">My Mood Entries</h2>
@@ -19,32 +20,52 @@
     {% if entries %}
       <div class="entries-list">
         {% for entry in entries %}
-          <a href="{% url 'mood:entry-detail' entry.pk %}" class="entry-card">
-            <div class="entry-header">
-              <div class="entry-date">
-                <div class="date-day">{{ entry.effective_date|date:"d" }}</div>
-                <div class="date-month">{{ entry.effective_date|date:"M" }}</div>
-              </div>
-              <div class="entry-info">
-                <div class="entry-title">
-                  {% if entry.time_of_day %}
-                    {{ entry.get_time_of_day_display }} {%
-                    else %} Entry
+          <div class="entry-card">
+            <a href="{% url 'mood:entry-detail' entry.pk %}" class="entry-card-link">
+              <div class="entry-header">
+                <div class="entry-date">
+                  <div class="date-day">{{ entry.effective_date|date:"d" }}</div>
+                  <div class="date-month">{{ entry.effective_date|date:"M" }}</div>
+                </div>
+                <div class="entry-info flex-grow-1">
+                  <div class="entry-title">
+                    {% if entry.time_of_day %}
+                      {{ entry.get_time_of_day_display }}
+                    {% else %}
+                      Entry
+                    {% endif %}
+                    <span class="entry-created-inline">• {{ entry.created_on|date:"g:i A" }}</span>
+                  </div>
+                  {% if entry.metric_set.all %}
+                    <div class="entry-metrics-compact">
+                      {% for metric in entry.metric_set.all %}
+                        <span class="metric-compact" title="{{ metric.metric_type.name }}">
+                          <span class="metric-name-short">{{ metric.metric_type.name }}</span>
+                          <span class="metric-value-compact">{{ metric.score_value }}</span>
+                        </span>
+                      {% endfor %}
+                    </div>
                   {% endif %}
                 </div>
-                <div class="entry-created">{{ entry.created_on|date:"g:i A" }}</div>
+                <div class="entry-arrow">›</div>
               </div>
-              <div class="entry-arrow">›</div>
-            </div>
-            {% if entry.metric_set.all %}
-              <div class="entry-metrics">
-                {% for metric in entry.metric_set.all %}
-                  <span class="metric-badge">{{ metric.metric_type.name }}: {{ metric.score_value }}</span>
-                {% endfor %}
+            </a>
+            {% if entry.notes %}
+              <div class="notes-toggle-wrapper">
+                <button type="button"
+                        class="notes-toggle-btn"
+                        onclick="event.preventDefault(); event.stopPropagation(); toggleNotes({{ entry.pk }})">
+                  <span class="notes-preview-text">📝 View notes</span>
+                  <span class="toggle-icon" id="toggle-icon-{{ entry.pk }}">▼</span>
+                </button>
+                <div class="notes-full-content" id="notes-{{ entry.pk }}">
+                  <div class="notes-rendered">
+                    {# djlint:off #}<script type="text/markdown" id="markdown-{{ entry.pk }}">{{ entry.notes }}</script>{# djlint:on #}
+                  </div>
+                </div>
               </div>
             {% endif %}
-            {% if entry.notes %}<div class="entry-preview">{{ entry.notes|truncatewords:15 }}</div>{% endif %}
-          </a>
+          </div>
         {% endfor %}
       </div>
     {% else %}
@@ -80,8 +101,6 @@
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       padding: 1rem;
-      text-decoration: none;
-      color: inherit;
       transition: all 0.2s ease;
       border: 1px solid transparent;
     }
@@ -89,14 +108,25 @@
     .entry-card:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       border-color: #0d6efd;
-      transform: translateY(-2px);
+    }
+
+    .entry-card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      margin: -1rem -1rem 0 -1rem;
+      padding: 1rem;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .entry-card-link:hover {
+      background: #f8f9fa;
     }
 
     .entry-header {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 0.75rem;
     }
 
     .entry-date {
@@ -130,7 +160,44 @@
       font-weight: 600;
       font-size: 1.1rem;
       color: #212529;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .entry-created-inline {
+      font-weight: 400;
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+
+    .entry-metrics-compact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .metric-compact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: #f8f9fa;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.813rem;
+      border: 1px solid #dee2e6;
+    }
+
+    .metric-name-short {
+      color: #6c757d;
+      font-weight: 500;
+    }
+
+    .metric-value-compact {
+      color: #0d6efd;
+      font-weight: 700;
+      font-size: 0.938rem;
     }
 
     .entry-created {
@@ -142,6 +209,83 @@
       font-size: 1.5rem;
       color: #adb5bd;
       flex-shrink: 0;
+    }
+
+    .notes-toggle-wrapper {
+      margin-top: 0.75rem;
+      border-top: 1px solid #e9ecef;
+      padding-top: 0.75rem;
+    }
+
+    .notes-toggle-btn {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+      color: #495057;
+    }
+
+    .notes-toggle-btn:hover {
+      background: #e9ecef;
+      border-color: #adb5bd;
+    }
+
+    .notes-preview-text {
+      flex: 1;
+      text-align: left;
+      font-style: italic;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .toggle-icon {
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+
+    .toggle-icon.expanded {
+      transform: rotate(180deg);
+    }
+
+    .notes-full-content {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      display: none;
+    }
+
+    .notes-rendered {
+      line-height: 1.6;
+      font-size: 0.875rem;
+    }
+
+    .notes-rendered p {
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-rendered p:last-child {
+      margin-bottom: 0;
+    }
+
+    .notes-rendered ul,
+    .notes-rendered ol {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .notes-rendered li {
+      margin-bottom: 0.25rem;
     }
 
     .entry-metrics {
@@ -162,12 +306,13 @@
     }
 
     .entry-preview {
-      color: #6c757d;
+      color: #495057;
       font-size: 0.875rem;
       line-height: 1.5;
       border-top: 1px solid #e9ecef;
       padding-top: 0.75rem;
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
+      font-style: italic;
     }
 
     .empty-state {
@@ -224,4 +369,25 @@
       }
     }
   </style>
+  <script>
+    function toggleNotes(entryId) {
+      const notesContent = document.getElementById('notes-' + entryId);
+      const toggleIcon = document.getElementById('toggle-icon-' + entryId);
+      const notesRendered = notesContent.querySelector('.notes-rendered');
+
+      if (notesContent.style.display === 'none') {
+        // Render markdown if not already done
+        if (!notesRendered.innerHTML || notesRendered.innerHTML.includes('script')) {
+          const markdownScript = document.getElementById('markdown-' + entryId);
+          const markdown = markdownScript.textContent;
+          notesRendered.innerHTML = marked.parse(markdown);
+        }
+        notesContent.style.display = 'block';
+        toggleIcon.classList.add('expanded');
+      } else {
+        notesContent.style.display = 'none';
+        toggleIcon.classList.remove('expanded');
+      }
+    }
+  </script>
 {% endblock content %}
