@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import (
     login_required,
     permission_required,
 )
+from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -141,6 +142,48 @@ def mood_entry_detail(request: "HttpRequest", entry: Entry) -> "HttpResponse":
         {
             "entry": entry,
             "metrics": entry.metric_set.all(),
+        },
+    )
+
+
+@login_required
+@permission_required("mood.change_entry", raise_exception=True)
+def mood_entry_edit(request: "HttpRequest", entry: Entry) -> "HttpResponse":
+    user = cast("User", request.user)
+
+    # Ensure user can only edit their own entries
+    if entry.created_by != user:
+        msg = "You do not have permission to edit this entry."
+        raise PermissionDenied(msg)
+
+    # Create a formset with existing metrics
+    MetricFormSet = forms.inlineformset_factory(  # noqa: N806
+        Entry,
+        Metric,
+        form=MetricForm,
+        extra=0,
+        can_delete=False,
+    )
+
+    if request.method == "POST":
+        form = EntryForm(request.POST, instance=entry)
+        formset = MetricFormSet(request.POST, instance=entry)
+
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+            return redirect(entry.get_absolute_url())
+    else:
+        form = EntryForm(instance=entry)
+        formset = MetricFormSet(instance=entry)
+
+    return render(
+        request,
+        "mood/mood_entry_edit.html",
+        {
+            "entry": entry,
+            "form": form,
+            "formset": formset,
         },
     )
 

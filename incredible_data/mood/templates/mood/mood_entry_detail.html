@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
   <div class="mood-detail-container container">
     <div class="mood-detail-card">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Mood Entry</h2>
-        <a href="{% url 'mood:entry-create' %}"
-           class="btn btn-sm btn-outline-primary">New Entry</a>
+        <div class="button-group">
+          <a href="{% url 'mood:entry-edit' entry.pk %}"
+             class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'mood:entry-create' %}"
+             class="btn btn-sm btn-outline-primary">New Entry</a>
+        </div>
       </div>
       <div class="entry-info mb-4">
         <div class="info-row">
@@ -27,7 +32,7 @@
       {% if entry.notes %}
         <div class="notes-section mb-4">
           <h4 class="section-title">Notes</h4>
-          <div class="notes-content">{{ entry.notes }}</div>
+          <div class="notes-content" id="notes-rendered"></div>
         </div>
       {% endif %}
       <div class="metrics-section">
@@ -74,6 +79,11 @@
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       padding: 1.5rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
     }
 
     .entry-info {
@@ -205,4 +215,15 @@
       }
     }
   </style>
+  {% if entry.notes %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const notesMarkdown = `{{ entry.notes|escapejs }}`;
+        const notesRendered = document.getElementById('notes-rendered');
+        if (notesRendered && notesMarkdown) {
+          notesRendered.innerHTML = marked.parse(notesMarkdown);
+        }
+      });
+    </script>
+  {% endif %}
 {% endblock content %}

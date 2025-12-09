@@ -4,7 +4,11 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css" />
   <div class="mood-entry-container container">
-    <h2 class="text-center mb-4">Log Your Mood</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Edit Mood Entry</h2>
+      <a href="{% url 'mood:entry-detail' entry.pk %}"
+         class="btn btn-sm btn-outline-secondary">Cancel</a>
+    </div>
     <form method="post" novalidate class="mood-entry-form">
       {% csrf_token %}
       <div class="mb-3">{{ form.effective_date.label_tag }} {{ form.effective_date }}</div>
@@ -17,14 +21,21 @@
       {{ formset.management_form }}
       {% for form in formset %}
         <div class="metric-item mb-3 p-3">
+          {{ form.id }}
           {{ form.metric_type }}
-          <label class="form-label fw-bold">{{ form.metric_name }}</label>
-          {% if form.metric_help_text %}<small class="d-block text-muted mb-2">{{ form.metric_help_text }}</small>{% endif %}
+          <label class="form-label fw-bold">{{ form.instance.metric_type.name }}</label>
+          {% if form.instance.metric_type.help_text %}
+            <small class="d-block text-muted mb-2">{{ form.instance.metric_type.help_text }}</small>
+          {% endif %}
           {{ form.score_value }}
           {% if form.score_value.errors %}<div class="text-danger small">{{ form.score_value.errors }}</div>{% endif %}
         </div>
       {% endfor %}
-      <button type="submit" class="btn btn-primary w-100 mt-3 mood-submit-btn">Submit</button>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary flex-grow-1 mood-submit-btn">Save Changes</button>
+        <a href="{% url 'mood:entry-detail' entry.pk %}"
+           class="btn btn-outline-secondary">Cancel</a>
+      </div>
     </form>
   </div>
   <style>

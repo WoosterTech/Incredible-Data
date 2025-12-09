@@ -13,5 +13,6 @@ urlpatterns = [
     path("user-metric-chart/", TemplateView.as_view(template_name="mood/user_metric_chart.html"), name="user_metric_chart"),
     path("add/", views.mood_entry, name="entry-create"),
     path("<entry:entry>/", views.mood_entry_detail, name="entry-detail"),
+    path("<entry:entry>/edit/", views.mood_entry_edit, name="entry-edit"),
 ]
 # fmt: on
