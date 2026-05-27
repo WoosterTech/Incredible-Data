@@ -156,14 +156,14 @@ test = ["astroid (>=2,<4)", "pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
 name = "attrmagic"
-version = "0.2.0"
+version = "0.2.3"
 description = "Query-like access to nested attributes"
 optional = false
-python-versions = "<4.0,>=3.11"
+python-versions = "<4.0,>=3.12"
 groups = ["main"]
 files = [
-    {file = "attrmagic-0.2.0-py3-none-any.whl", hash = "sha256:1aac5641ba8400f811395ce9cc7401a95544e6dd768a85bbf0ba0e05ee832c2b"},
-    {file = "attrmagic-0.2.0.tar.gz", hash = "sha256:737be1351ccd2b2c841b9aa8b106dab87d156cba5b10e3c433621c61070f3bf8"},
+    {file = "attrmagic-0.2.3-py3-none-any.whl", hash = "sha256:64378f96665f01aecc175d067a692d9b3aa8931897c71fcdb463446a670d0ce3"},
+    {file = "attrmagic-0.2.3.tar.gz", hash = "sha256:e7a96a16f072ffd9e1b88553e2c1238583436256013a167b1154d0b5f6d5bcf8"},
 ]
 
 [package.dependencies]
